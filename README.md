@@ -1,8 +1,34 @@
-# React + Vite
+# How do I..?
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## How do I start developing?
+You need to fork the repo.
+After you've forked the repo you'll need to create a new branch from the main branch. This is done by clicking on the 'Current branch' dropdown in github desktop and then selecting the 'New branch option'
 
-Currently, two official plugins are available:
+From this point you'll need to create a branch related to what you're doing, these should be named using the following convention:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+type/description-of-change
+
+So we'll have the following types:
+feature/ - for new features \
+bugfix/ - for bug fixes (but if you find a bug you should fix it in your feature branch) \
+hotfix/ - for urgent fixes to the website \
+docs/ - for documentation changes \
+refactor/ - for code restructuring \
+test/ - for adding/modifying test files
+
+So we'll have branches like
+
+feature/adding-frontend-templates
+feature/adding-database-handling
+hotfix/fixing-database-handling
+
+## How do I run the code?
+After cloning this repo (that you better have forked) you'll need to open the terminal in Webstorm (the Jetbrains Javascript IDE) and enter the command
+
+```npm install```
+
+Once you've installed all of the dependencies required to build the project you'll be able to start the local webserver by entering the command
+
+```npm run dev```
+
+Once you run this vite will build the app and you'll have a working webapp running on a javascript server.
