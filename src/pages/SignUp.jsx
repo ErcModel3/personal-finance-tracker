@@ -121,9 +121,9 @@ const SignUp = () => {
           <button type="submit" className="signup-button">Sign Up</button>
         </form>
         
-        <div className="signup-footer">
+        {/* <div className="signup-footer">
           <p>Already have an account? <Link to="/login">Log In</Link></p>
-        </div>
+        </div> */}
       </div>
     </div>
   );
