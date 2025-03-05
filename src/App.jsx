@@ -1,9 +1,14 @@
 import { useState } from 'react'
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+import ReactDOM from 'react-dom/client';
 
-function App() {
+// Imports for all of the pages and components
+import SignUp from "./pages/SignUp";
+
+function Home() {
   const [count, setCount] = useState(0)
 
   return (
@@ -28,8 +33,28 @@ function App() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
+      <div>
+        <Link to="/signup">
+          <button>Go to Sign Up</button>
+        </Link>
+      </div>
     </>
   )
 }
 
-export default App
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/signup" element={<SignUp />} />
+        {/* Add more routes here */}
+      </Routes>
+    </BrowserRouter>
+  )
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+
+export default App;
