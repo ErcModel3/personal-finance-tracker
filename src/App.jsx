@@ -5,14 +5,15 @@ import viteLogo from '/vite.svg'
 import './App.css'
 import ReactDOM from 'react-dom/client';
 
-// Imports for all of the pages and components to go here
+// Imports for all of the pages and components
+import SignUp from "./pages/SignUp";
 
 function Home() {
   const [count, setCount] = useState(0)
 
   return (
     <>
-    <div>
+      <div>
         <a href="https://vite.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
         </a>
@@ -32,6 +33,11 @@ function Home() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
+      <div>
+        <Link to="/signup">
+          <button>Go to Sign Up</button>
+        </Link>
+      </div>
     </>
   )
 }
@@ -41,6 +47,8 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/signup" element={<SignUp />} />
+        {/* Add more routes here */}
       </Routes>
     </BrowserRouter>
   )
