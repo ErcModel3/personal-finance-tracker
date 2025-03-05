@@ -1,14 +1,18 @@
 import { useState } from 'react'
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+import ReactDOM from 'react-dom/client';
 
-function App() {
+// Imports for all of the pages and components to go here
+
+function Home() {
   const [count, setCount] = useState(0)
 
   return (
     <>
-      <div>
+    <div>
         <a href="https://vite.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
         </a>
@@ -32,4 +36,17 @@ function App() {
   )
 }
 
-export default App
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+      </Routes>
+    </BrowserRouter>
+  )
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+
+export default App;
