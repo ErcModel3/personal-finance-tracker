@@ -20,6 +20,43 @@ const SignUp = () => {
     });
   };
   
+  const validateForm = () => {
+    const newErrors = {};
+    
+    if (!formData.fullName.trim()) {
+      newErrors.fullName = 'Full name is required';
+    }
+    
+    if (!formData.email.trim()) {
+      newErrors.email = 'Email is required';
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = 'Email is invalid';
+    }
+    
+    if (!formData.password) {
+      newErrors.password = 'Password is required';
+    } else if (formData.password.length < 8) {
+      newErrors.password = 'Password must be at least 8 characters';
+    }
+    
+    if (formData.password !== formData.confirmPassword) {
+      newErrors.confirmPassword = 'Passwords do not match';
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+  
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    
+    if (validateForm()) {
+      // Submit the form data to your API
+      console.log('Form submitted successfully', formData);
+      // You would typically handle API calls here
+    }
+  };
+  
   return (
     <div className="signup-container">
       <div className="signup-card">
