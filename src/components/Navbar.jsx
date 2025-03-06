@@ -20,6 +20,7 @@ const Navbar = () => {
                     <button className="nav-link" onClick={() => handleNavigation('/')}>Home</button>
                     <button className="nav-link" onClick={() => handleNavigation('/features')}>Features</button>
                     <button className="nav-link" onClick={() => handleNavigation('/signup')}>Sign Up</button>
+                    <button className="nav-link" onClick={() => handleNavigation('/login')}>Login</button>
                 </div>
             </div>
         </nav>
