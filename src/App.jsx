@@ -6,6 +6,7 @@ import './App.css'
 import ReactDOM from 'react-dom/client';
 
 // Imports for all of the pages and components
+import Navbar from './components/Navbar';
 import SignUp from "./pages/SignUp";
 
 function Home() {
@@ -13,6 +14,7 @@ function Home() {
 
   return (
     <>
+        <Navbar />
       <div>
         <a href="https://vite.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
