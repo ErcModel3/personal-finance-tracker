@@ -7,6 +7,8 @@ import ReactDOM from 'react-dom/client';
 
 // Imports for all of the pages and components
 import SignUp from "./pages/SignUp";
+import SignIn from "./pages/SignIn.jsx";
+
 
 function Home() {
   const [count, setCount] = useState(0)
@@ -37,6 +39,9 @@ function Home() {
         <Link to="/signup">
           <button>Go to Sign Up</button>
         </Link>
+          <Link to="/signin" style={{ marginLeft: '10px' }}>
+              <button>Go to Sign In</button>
+          </Link>
       </div>
     </>
   )
@@ -48,6 +53,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/signin" element={<SignIn />} />
         {/* Add more routes here */}
       </Routes>
     </BrowserRouter>
