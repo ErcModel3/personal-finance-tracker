@@ -26,7 +26,10 @@ const SignIn = () => {
         e.preventDefault();
         console.log('Form submitted', formData);
         // To do: Add link to supabase once backend is finished
-        const {data, error} = await supabaseClient.auth.signInWithPassword(formData);
+        const {data, error} = await supabaseClient.auth.signInWithPassword({
+            email: formData.email,
+            password: formData.password
+        });
         if (error){
             console.log(error);
             return null;
