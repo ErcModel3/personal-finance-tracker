@@ -74,7 +74,7 @@ const SignUp = () => {
             <div className="form-group">
               <label htmlFor="phoneNumber">Phone Number</label>
               <input
-                type="tel"
+                type="number"
                 id="phoneNumber"
                 name="phoneNumber"
                 value={formData.phoneNumber}
