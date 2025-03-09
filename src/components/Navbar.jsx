@@ -1,6 +1,6 @@
 import React from 'react';
-import './Navbar.css'
-import { Link } from 'react-router-dom'
+import './Navbar.css';
+import { Link } from 'react-router-dom';
 
 const Navbar = () => {
     const handleNavigation = (path) => {
@@ -9,18 +9,18 @@ const Navbar = () => {
 
     return (
         <nav className="navbar navbar-expand-lg fixed-top">
-            <div className="container-fluid">
+            <div className="container">
                 {/* Left side: Budgeting App title */}
-                <a className="navbar-brand" href="#">
+                <Link className="navbar-brand" to="/">
                     FinTrack
-                </a>
+                </Link>
 
                 {/* Right side: Navigation buttons */}
                 <div className="navbar-nav ms-auto"> {/* ms-auto aligns the nav items to the right */}
-                    <button className="nav-link" onClick={() => handleNavigation('/')}>Home</button>
-                    <button className="nav-link" onClick={() => handleNavigation('/features')}>Features</button>
-                    <button className="nav-link" onClick={() => handleNavigation('/signup')}>Sign Up</button>
-                    <button className="nav-link" onClick={() => handleNavigation('/login')}>Login</button>
+                    <Link className="nav-link" to="/">Home</Link>
+                    <Link className="nav-link" to="/features">Features</Link>
+                    <Link className="nav-link" to="/signup">Sign Up</Link>
+                    <Link className="nav-link" to="/login">Login</Link>
                 </div>
             </div>
         </nav>
