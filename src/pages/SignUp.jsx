@@ -8,6 +8,7 @@ const SignUp = () => {
     email: '',
     country: '',
     phoneNumber: '',
+    dateOfBirth: '', // Add dateOfBirth to state
     password: '',
     confirmPassword: ''
   });
@@ -82,6 +83,18 @@ const SignUp = () => {
                     value={formData.phoneNumber}
                     onChange={handleChange}
                     placeholder="Enter your phone number"
+                />
+              </div>
+
+              {/* Add Date of Birth field here */}
+              <div className="form-group">
+                <label htmlFor="dateOfBirth">Date of Birth</label>
+                <input
+                    type="date"
+                    id="dateOfBirth"
+                    name="dateOfBirth"
+                    value={formData.dateOfBirth}
+                    onChange={handleChange}
                 />
               </div>
 
