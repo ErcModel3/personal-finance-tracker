@@ -7,22 +7,16 @@
 }
 
 .signup-container {
-  display: flex;
-  flex: 1;
-  padding: 2rem 4rem;
-  width: 80%;
-  min-width: 800px; /* To do: fix issue with scaling*/
-  margin: 0 auto; /* Center the container */
+  position: absolute;
+  top: 60px; /* Adjust this value to match your navbar height */
+  left: 0;
+  width: 100%;
+  height: calc(100vh - 60px); /* Subtract navbar height */
+  background-color: white;
 }
-
 .signup-left {
-  flex: 1;
-  padding: 2rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-  margin-top: 2rem;
+  text-align: center;
+  margin-bottom: 2rem;
 }
 
 .signup-title {
@@ -38,8 +32,10 @@
 }
 
 .signup-right {
-  flex: 2;
-  padding: 2rem;
+  width: 100%;
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center;     /* Center vertically */
 }
 
 .signup-form {
