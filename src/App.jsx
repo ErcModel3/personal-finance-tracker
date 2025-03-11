@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom/client';
 import SignUp from "./pages/SignUp";
 import Navbar from "./Features/Navbar.jsx";
 import WelcomePart from "./Features/WelcomePart.jsx";
-import ReviewSection from "./Features/ReviewSection.jsx";
+//import ReviewSection from "./Features/ReviewSection.jsx";
 
 //Re-formatted page and component imports
 import MonthlySpending from "./pages/Dashboard.jsx";
@@ -25,7 +25,7 @@ function Home() {
           <WelcomePart/>
           <MonthlySpending/>
           <img src={imgUrl} alt="X"/>
-          <ReviewSection/>
+          <Reviews/>
           <Footer/>
       </div>
     </>
