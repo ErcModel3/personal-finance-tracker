@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import './SignUp.css';
 import supabaseClient from "/src/auth/Client.js"
+import {useNavigate} from "react-router-dom";
 
 const SignUp = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -33,6 +35,7 @@ const SignUp = () => {
     }
     if (data){
       console.log("User Created Successfully");
+      navigate("/dashboard");
     }
   };
   
