@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom/client';
 import SignUp from "./pages/SignUp";
 
 //Re-formatted page and component imports
-import MonthlySpending from "./pages/Dashboard.jsx";
+import MonthlySpending from "./pages/WelcomePage.jsx";
 import Reviews from "./pages/Reviews.jsx";
 import Welcome from "./pages/Welcome.jsx";
 
