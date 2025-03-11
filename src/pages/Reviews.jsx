@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./StylesCheatsheet.module.css";
+import styles from "./Styles.module.css";
 
 function StarRating() {
     return (
@@ -75,7 +75,7 @@ function ReviewCard({ name, text }) {
     );
 }
 
-function ReviewsSection() {
+function Reviews() {
     const reviews = [
         { name: "Alice Smith", text: "Great product, excellent service" },
         { name: "Bob Johnson", text: "Highly recommend this company" },
@@ -100,4 +100,4 @@ function ReviewsSection() {
     );
 }
 
-export default ReviewsSection;
+export default Reviews;

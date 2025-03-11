@@ -8,6 +8,7 @@ import ReviewSection from "./Features/ReviewSection.jsx";
 
 //Re-formatted page and component imports
 import MonthlySpending from "./pages/Dashboard.jsx";
+import Reviews from "./pages/Reviews.jsx";
 import Footer from "./components/Footer.jsx";
 
 // Imports all graphics
