@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './SignUp.css';
+import supabaseClient from "/src/auth/Client.js"
 
 const SignUp = () => {
   const [formData, setFormData] = useState({
@@ -19,10 +20,20 @@ const SignUp = () => {
     });
   };
   
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log('Form submitted', formData);
     // To do: Add link to supabase once backend is finished
+    let {data, error} = await supabaseClient.auth.signUp({
+      email: formData.email,
+      password: formData.password,
+    });
+    if (error){
+      console.log(error);
+    }
+    if (data){
+      console.log("User Created Successfully");
+    }
   };
   
   return (
