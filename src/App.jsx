@@ -1,15 +1,14 @@
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import './App.css'
 import ReactDOM from 'react-dom/client';
-// Imports for all of the pages and components
 import SignUp from "./pages/SignUp";
 import Navbar from "./Features/Navbar.jsx";
-import Footer from "./Features/Footer.jsx";
 import WelcomePart from "./Features/WelcomePart.jsx";
 import ReviewSection from "./Features/ReviewSection.jsx";
 
-//Re-formatted page imports
+//Re-formatted page and component imports
 import MonthlySpending from "./pages/Dashboard.jsx";
+import Footer from "./components/Footer.jsx";
 
 // Imports all graphics
 import imgUrl from './assets/Graph_Photos.png'
