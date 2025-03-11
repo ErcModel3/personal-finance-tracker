@@ -1,0 +1,34 @@
+.navbar {
+    background-color: #27AE60; /* Green background */
+    padding: 10px 20px; /* Spacing inside the navbar */
+}
+
+/* Brand/Title on the left */
+.navbar-brand {
+    color: #FFFFFF; /* White text */
+    font-size: 24px; /* Larger font size */
+    font-weight: bold; /* Bold text */
+}
+
+/* Navigation buttons */
+.navbar-nav {
+    display: flex;
+    align-items: center;
+}
+
+.nav-link {
+    background-color: #27AE60; /* Green background */
+    color: #FFFFFF; /* White text */
+    margin: 0 10px; /* Spacing between buttons */
+    border: 1px solid #FFFFFF; /* White border */
+    border-radius: 5px; /* Rounded corners */
+    padding: 8px 16px; /* Button padding */
+    cursor: pointer; /* Pointer cursor on hover */
+    font-size: 16px; /* Button text size */
+    transition: background-color 0.3s ease; /* Smooth hover transition */
+}
+
+/* Hover effect for buttons */
+.nav-link:hover {
+    background-color: #1E8449; /* Slightly darker green on hover */
+}
