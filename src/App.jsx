@@ -6,9 +6,12 @@ import SignUp from "./pages/SignUp";
 import Navbar from "./Features/Navbar.jsx";
 import Footer from "./Features/Footer.jsx";
 import WelcomePart from "./Features/WelcomePart.jsx";
-import MonthlySpending from "./Features/MonthlySpending.jsx";
 import ReviewSection from "./Features/ReviewSection.jsx";
-// Import of Photos
+
+//Re-formatted page imports
+import MonthlySpending from "./pages/Dashboard.jsx";
+
+// Imports all graphics
 import imgUrl from './assets/Graph_Photos.png'
 
 
