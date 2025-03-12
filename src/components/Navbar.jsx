@@ -1,8 +1,9 @@
 import React from 'react';
 import './Navbar.css';
-import { Link } from 'react-router-dom';
+import {Link} from 'react-router-dom';
 
 const Navbar = () => {
+
     return (
         <nav className="navbar navbar-expand-lg fixed-top">
             <div className="container">
@@ -16,7 +17,7 @@ const Navbar = () => {
                     <Link className="nav-link" to="/">Home</Link>
                     <Link className="nav-link" to="/features">Features</Link>
                     <Link className="nav-link" to="/signup">Sign Up</Link>
-                    <Link className="nav-link" to="/signin">Login</Link>
+                    <Link className="nav-link" to="/signin">Sign In</Link>
                 </div>
             </div>
         </nav>

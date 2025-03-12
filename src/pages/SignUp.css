@@ -7,22 +7,16 @@
 }
 
 .signup-container {
-  display: flex;
-  flex: 1;
-  padding: 2rem 4rem;
-  width: 80%; 
-  min-width: 800px; /* To do: fix issue with scaling*/
-  margin: 0 auto; /* Center the container */
+  position: absolute;
+  top: 60px; /* Adjust this value to match your navbar height */
+  left: 0;
+  width: 100%;
+  height: calc(100vh - 60px); /* Subtract navbar height */
+  background-color: white;
 }
-
 .signup-left {
-  flex: 1;
-  padding: 2rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-  margin-top: 2rem;
+  text-align: center;
+  margin-bottom: 2rem;
 }
 
 .signup-title {
@@ -38,8 +32,10 @@
 }
 
 .signup-right {
-  flex: 2;
-  padding: 2rem;
+  width: 100%;
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center;     /* Center vertically */
 }
 
 .signup-form {
@@ -70,6 +66,29 @@
   color: black;
 }
 
+/* Date input specific styling to match other inputs */
+input[type="date"] {
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  background-color: white;
+  width: 100%;
+  font-family: inherit;
+  color: #333;
+}
+
+/* Ensures the date picker icon looks consistent */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+/* Style for date placeholder text */
+input[type="date"]:invalid {
+  color: #999;
+}
+
 .form-group input::placeholder {
   color: #999;
 }
@@ -89,6 +108,8 @@
   font-size: 1rem;
   cursor: pointer;
   transition: background-color 0.2s;
+  display: flex;
+  justify-content: center;
 }
 
 .footer-link {
@@ -106,7 +127,7 @@
     padding: 1rem;
     width: 90%;
   }
-    
+
   .form-button-container {
     justify-content: center;
   }
