@@ -1,11 +1,8 @@
 import React from 'react';
 import './Navbar.css';
-import { Link } from 'react-router-dom';
+import {Link} from 'react-router-dom';
 
 const Navbar = () => {
-    const handleNavigation = (path) => {
-        window.location.href = path; // Navigate to the specified path
-    };
 
     return (
         <nav className="navbar navbar-expand-lg fixed-top">
