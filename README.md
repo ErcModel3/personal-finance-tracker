@@ -14,7 +14,7 @@ bugfix/ - for bug fixes (but if you find a bug you should fix it in your feature
 hotfix/ - for urgent fixes to the website \
 docs/ - for documentation changes \
 refactor/ - for code restructuring \
-test/ - for adding/modifying test files
+testing/ - for adding/modifying test files
 
 So we'll have branches like
 
