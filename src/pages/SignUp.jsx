@@ -27,17 +27,22 @@ const SignUp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form submitted', formData);
-    // To do: Add link to supabase once backend is finished
-    let {data, error} = await supabaseClient.auth.signUp({
+
+    // This creates a user in auth.users
+    // Your trigger should then copy the user ID and email to public.profiles
+    let { data, error } = await supabaseClient.auth.signUp({
       email: formData.email,
       password: formData.password,
     });
-    if (error){
-      console.log(error);
+
+    if (error) {
+      console.log('Signup error:', error);
+      return;
     }
-    if (data){
+
+    if (data?.user) {
       alert("User successfully signed up! Please validate your email before you sign in.");
+      // At this point, your trigger should have already created an entry in public.profiles
     }
   };
 
