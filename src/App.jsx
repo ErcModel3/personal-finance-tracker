@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css'
 import SignUp from "./pages/SignUp";
+
 import SignIn from "./pages/SignIn";
 import Dashboard from "./pages/Dashboard.jsx";
 import Wrapper from "./pages/Wrapper.jsx";
@@ -17,6 +18,7 @@ import Footer from "./components/Footer.jsx";
 import imgUrl from './assets/Graph_Photos.png'
 
 function Home() {
+
     return (
         <>
             <p className="read-the-docs">
@@ -31,6 +33,7 @@ function Home() {
             </div>
         </>
     )
+
 }
 
 function App() {
