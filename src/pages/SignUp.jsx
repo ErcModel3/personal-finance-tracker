@@ -3,6 +3,7 @@ import './SignUp.css';
 import {useNavigate} from "react-router-dom";
 import supabaseClient from "/src/auth/Client.js"
 import Navbar from "../components/Navbar.jsx";
+import Footer from "../components/Footer.jsx";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -140,6 +141,7 @@ const SignUp = () => {
               </div>
             </form>
           </div>
+          <Footer/>
         </div>
       </div>
   );
