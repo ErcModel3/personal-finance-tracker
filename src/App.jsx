@@ -10,6 +10,8 @@ import MonthlySpending from "./Features/MonthlySpending.jsx";
 import ReviewSection from "./Features/ReviewSection.jsx";
 // Import of Photos
 import imgUrl from './assets/Graph_Photos.png'
+import {ExpenseForm} from "./Features/ExpenseForm.jsx";
+import ExpesnseFormHeader from "./Features/ExpesnseFormHeader.jsx";
 
 
 function Home() {
@@ -18,6 +20,8 @@ function Home() {
       <p className="read-the-docs">
       </p>
       <div>
+          <ExpesnseFormHeader/>
+          <ExpenseForm/>
           <Navbar/>
           <WelcomePart/>
           <MonthlySpending/>
