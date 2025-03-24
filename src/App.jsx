@@ -16,6 +16,7 @@ import Footer from "./components/Footer.jsx";
 
 // Imports all graphics
 import imgUrl from './assets/Graph_Photos.png'
+import {ExpenseForm} from "./Features/ExpenseForm.jsx";
 
 function Home() {
 
@@ -46,6 +47,7 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/signup" element={<SignUp />} />
                 <Route path="/signin" element={<SignIn />}/>
+                <Route path="/Expenses" element={<ExpenseForm />} />
                 <Route path="/dashboard" element={
                     <Wrapper>
                         <Dashboard />
