@@ -1,0 +1,288 @@
+.app {
+    background-color: #f5f5f5;
+    min-height: 100vh;
+    font-family: Roboto, sans-serif;
+}
+
+.topBar {
+    background-color: #27ae60;
+    align-items: center;
+    height: 80px;
+    padding: 20px;
+    display: flex;
+    box-shadow: 0 0 6px #0000001f;
+}
+
+.logoCircle {
+    background-color: #0000001a;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+}
+
+.title {
+    color: #f5f5f5f5;
+    flex: 1;
+    margin-left: 20px;
+    font-size: 28px;
+}
+
+.navigation {
+    gap: 40px;
+    margin-right: 20px;
+    display: flex;
+}
+
+.notificationButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin-left: 20px;
+}
+
+@media (width <= 640px) {
+    .navigation {
+        display: none;
+    }
+}
+
+.navItemactive,
+.navItem {
+    color: #f5f5f5f5;
+    cursor: pointer;
+    font-size: 16px;
+    background: none;
+    border: none;
+    padding: 0;
+}
+
+.heroSection {
+    text-align: center;
+    background-color: #2b5d9f;
+    padding: 60px 0;
+}
+
+.heroContent {
+    max-width: 520px;
+    margin: 0 auto;
+}
+
+.heroTitle {
+    color: #f5f5f5;
+    margin-bottom: 24px;
+    font-size: 40px;
+    font-weight: 700;
+}
+
+@media (width <= 640px) {
+    .heroTitle {
+        font-size: 32px;
+    }
+}
+
+.heroDescription {
+    color: #f5f5f5;
+    margin-bottom: 24px;
+    font-size: 16px;
+}
+
+.primaryButton {
+    color: #f5f5f5;
+    cursor: pointer;
+    background-color: #27ae60;
+    border: none;
+    border-radius: 8px;
+    width: 240px;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.metricsSection {
+    padding: 60px 170px;
+}
+
+@media (width <= 991px) {
+    .metricsSection {
+        padding: 40px;
+    }
+}
+
+@media (width <= 640px) {
+    .metricsSection {
+        padding: 20px;
+    }
+}
+
+.metricsHeader {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.metricsTitle {
+    margin-bottom: 24px;
+    font-size: 40px;
+    font-weight: 700;
+}
+
+@media (width <= 640px) {
+    .metricsTitle {
+        font-size: 32px;
+    }
+}
+
+.metricsDescription {
+    color: #000;
+    font-size: 16px;
+}
+
+.metricsCards {
+    gap: 20px;
+    margin-bottom: 40px;
+    display: flex;
+}
+
+@media (width <= 991px) {
+    .metricsCards {
+        flex-direction: column;
+    }
+}
+
+.metricCard {
+    border: 1px solid #0000001a;
+    border-radius: 6px;
+    flex: 1;
+    padding: 16px;
+}
+
+.metricLabel {
+    color: #00000080;
+    margin-bottom: 4px;
+    font-size: 16px;
+}
+
+.metricValue {
+    font-size: 28px;
+    font-weight: 500;
+}
+
+
+.reviewsSection {
+    text-align: center;
+    padding: 60px 170px;
+}
+
+@media (width <= 991px) {
+    .reviewsSection {
+        padding: 40px;
+    }
+}
+
+@media (width <= 640px) {
+    .reviewsSection {
+        padding: 20px;
+    }
+}
+
+.reviewsHeader {
+    margin-bottom: 40px;
+}
+
+.reviewsTitle {
+    margin-bottom: 24px;
+    font-size: 40px;
+    font-weight: 700;
+}
+
+@media (width <= 640px) {
+    .reviewsTitle {
+        font-size: 32px;
+    }
+}
+
+.reviewsDescription {
+    margin-bottom: 24px;
+    font-size: 16px;
+}
+
+.reviewsGrid {
+    gap: 40px;
+    padding: 20px 0;
+    display: flex;
+}
+
+@media (width <= 991px) {
+    .reviewsGrid {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+.reviewCard {
+    background-color: #0000000d;
+    border-radius: 6px;
+    flex: 1;
+    padding: 16px;
+}
+
+@media (width <= 991px) {
+    .reviewCard {
+        min-width: 300px;
+    }
+}
+
+.reviewHeader {
+    align-items: center;
+    margin-bottom: 16px;
+    display: flex;
+}
+
+.reviewerAvatar {
+    background-color: #0000001a;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    margin-right: 8px;
+}
+
+.reviewerName {
+    text-align: left;
+    flex: 1;
+    font-size: 14px;
+}
+
+.reviewText {
+    text-align: left;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    height: 72px;
+    font-size: 16px;
+    overflow: hidden;
+}
+
+.footer {
+    text-align: center;
+    padding: 60px;
+}
+
+.footerLinks {
+    justify-content: center;
+    gap: 60px;
+    display: flex;
+}
+
+@media (width <= 640px) {
+    .footerLinks {
+        flex-direction: column;
+        gap: 20px;
+    }
+}
+
+.footerLink {
+    cursor: pointer;
+    font-size: 20px;
+    background: none;
+    border: none;
+    padding: 0;
+}

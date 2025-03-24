@@ -1,11 +1,8 @@
 import React from 'react';
 import './Navbar.css';
-import { Link } from 'react-router-dom';
+import {Link} from 'react-router-dom';
 
 const Navbar = () => {
-    const handleNavigation = (path) => {
-        window.location.href = path; // Navigate to the specified path
-    };
 
     return (
         <nav className="navbar navbar-expand-lg fixed-top">
@@ -20,7 +17,7 @@ const Navbar = () => {
                     <Link className="nav-link" to="/">Home</Link>
                     <Link className="nav-link" to="/features">Features</Link>
                     <Link className="nav-link" to="/signup">Sign Up</Link>
-                    <Link className="nav-link" to="/login">Login</Link>
+                    <Link className="nav-link" to="/signin">Sign In</Link>
                 </div>
             </div>
         </nav>

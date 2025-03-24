@@ -1,0 +1,89 @@
+/* Navbar.css */
+
+/* Navbar container */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background-color: #27AE60;
+    padding: 10px 0;
+}
+
+/* Inner container for centering */
+.navbar .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px; /* Adjust based on your preferred container width */
+    margin: 0 auto;
+    padding: 0 20px;
+=======
+.navbar {
+    background-color: #27AE60; /* Green background */
+    padding: 10px 20px; /* Spacing inside the navbar */
+>>>>>>> main
+}
+
+/* Brand/Title on the left */
+.navbar-brand {
+<<<<<<< HEAD
+    color: #FFFFFF;
+    font-size: 24px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+/* Navigation links container */
+=======
+    color: #FFFFFF; /* White text */
+    font-size: 24px; /* Larger font size */
+    font-weight: bold; /* Bold text */
+}
+
+/* Navigation buttons */
+>>>>>>> main
+.navbar-nav {
+    display: flex;
+    align-items: center;
+}
+.ms-auto {
+    margin-left: auto; /* This ensures items are pushed to the right */
+}
+
+.nav-link {
+    background-color: #27AE60;
+    color: #FFFFFF;
+    margin: 0 5px;
+    border: 1px solid #FFFFFF;
+    border-radius: 5px;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.nav-link:hover {
+    background-color: #1E8449;
+=======
+.nav-link {
+    background-color: #27AE60; /* Green background */
+    color: #FFFFFF; /* White text */
+    margin: 0 10px; /* Spacing between buttons */
+    border: 1px solid #FFFFFF; /* White border */
+    border-radius: 5px; /* Rounded corners */
+    padding: 8px 16px; /* Button padding */
+    cursor: pointer; /* Pointer cursor on hover */
+    font-size: 16px; /* Button text size */
+    transition: background-color 0.3s ease; /* Smooth hover transition */
+}
+
+/* Hover effect for buttons */
+.nav-link:hover {
+    background-color: #1E8449; /* Slightly darker green on hover */
+>>>>>>> main
+}}

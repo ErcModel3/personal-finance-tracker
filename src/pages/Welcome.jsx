@@ -1,7 +1,7 @@
 import React from "react";
-import styles from "./StylesCheatsheet.module.css";
+import styles from "./Styles.module.css";
 
-function WelcomePart() {
+function Welcome() {
     return (
         <section className={styles.heroSection}>
             <div className={styles.heroContent}>
@@ -17,4 +17,4 @@ function WelcomePart() {
     );
 }
 
-export default WelcomePart;
+export default Welcome;
