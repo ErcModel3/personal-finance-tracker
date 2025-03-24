@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './SignUp.css';
 import supabaseClient from "/src/auth/Client.js"
 import {useNavigate} from "react-router-dom";
+import Footer from "../components/Footer.jsx";
 
 const SignIn = () => {
     const navigate = useNavigate();
@@ -80,6 +81,7 @@ const SignIn = () => {
                         </div>
                     </form>
                 </div>
+                <Footer/>
             </div>
         </div>
     );
