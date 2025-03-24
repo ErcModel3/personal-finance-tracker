@@ -1,0 +1,32 @@
+name: Run Vitest (CI)
+on: [pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [23.10.0]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Apply Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Get dependencies
+        run: 'npm ci'
+
+      - name: Run tests with coverage
+        run: npm test
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: coverage
