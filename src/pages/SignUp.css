@@ -11,7 +11,7 @@
   top: 60px; /* Adjust this value to match your navbar height */
   left: 0;
   width: 100%;
-  height: calc(100vh - 60px); /* Subtract navbar height */
+  height: calc(100vh - 6px); /* Subtract navbar height */
   background-color: white;
 }
 .signup-left {

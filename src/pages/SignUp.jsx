@@ -28,8 +28,6 @@ const SignUp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // This creates a user in auth.users
-    // Your trigger should then copy the user ID and email to public.profiles
     let { data, error } = await supabaseClient.auth.signUp({
       email: formData.email,
       password: formData.password,
@@ -42,7 +40,29 @@ const SignUp = () => {
 
     if (data?.user) {
       alert("User successfully signed up! Please validate your email before you sign in.");
-      // At this point, your trigger should have already created an entry in public.profiles
+
+      // Small delay to ensure the trigger has completed
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      // Update the profile with additional information
+      const { data: profileData, error: profileError } = await supabaseClient
+          .from('profiles')
+          .update({
+            fullName: formData.fullName,
+            phone: formData.phoneNumber,
+            dob: formData.dateOfBirth,
+            country: formData.country
+          })
+          .eq('id', data.user.id)
+          .select(); // Add this to return the updated data
+
+      if (profileError) {
+        console.log('Error adding details to profile:', profileError);
+      }
+
+      if (profileData) {
+        console.log('Successfully updated profile:', profileData);
+      }
     }
   };
 
