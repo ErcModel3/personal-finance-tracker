@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Chart } from 'chart.js/auto';
 
 const BudgetPieChart = ({ budgetData }) => {
@@ -16,8 +16,8 @@ const BudgetPieChart = ({ budgetData }) => {
             const ctx = chartRef.current.getContext('2d');
 
             // Doing the maths for spent vs budgeted values
-            const netIncome = budgetData.monthlySalary - budgetData.tax + budgetData.bonus;
-            const remaining = netIncome - budgetData.amountSpent;
+            const netIncome = budgetData.monthlySalary ?? 0- (budgetData.tax ?? 0)+ (budgetData.bonus ?? 0);
+            const remaining = netIncome - (budgetData.amountSpent ?? 0);
 
             // Creating the actual pie chart
             chartInstance.current = new Chart(ctx, {

@@ -44,7 +44,7 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/signup" element={<SignUp />} />
                 <Route path="/signin" element={<SignIn />}/>
-                <Route path="/Data" element={<Data/>}/>
+                <Route path="/data" element={<Data/>}/>
                 <Route path="/dashboard" element={
                     <Wrapper>
                         <Dashboard />
