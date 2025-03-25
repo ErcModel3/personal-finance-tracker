@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
-import './SignUp.css';
+import './SignIn.css';
 import supabaseClient from "/src/auth/Client.js"
 import {useNavigate} from "react-router-dom";
+
+import Navbar from "../components/Navbar.jsx";
+import Footer from "../components/Footer.jsx";
 
 const SignIn = () => {
     const navigate = useNavigate();
@@ -42,6 +45,7 @@ const SignIn = () => {
 
     return (
         <div className="signup-page">
+            <Navbar/>
             <div className="signup-container">
                 <div className="signup-left">
                     <h1 className="signup-title">Sign In</h1>
@@ -80,7 +84,9 @@ const SignIn = () => {
                         </div>
                     </form>
                 </div>
+                <Footer/>
             </div>
+
         </div>
     );
 };

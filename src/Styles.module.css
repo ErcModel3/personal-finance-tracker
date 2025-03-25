@@ -286,3 +286,39 @@
     border: none;
     padding: 0;
 }
+
+.chartContainer {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* If you don't already have these styles, add them as well */
+.metricsSection {
+    padding: 40px 20px;
+    background-color: #f8f9fa;
+}
+
+.metricsHeader {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.metricsTitle {
+    font-size: 24px;
+    margin-bottom: 8px;
+}
+
+.metricsDescription {
+    color: #6c757d;
+}
+
+/* Force white background on ALL elements */
+body, html, .footer, .footerLinks, .footerLink {
+    background-color: white !important;
+    color: black !important; /* Ensures text remains readable */
+}
