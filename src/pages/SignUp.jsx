@@ -37,8 +37,7 @@ const SignUp = () => {
       console.log(error);
     }
     if (data){
-      console.log("User Created Successfully");
-      navigate("/dashboard");
+      alert("User successfully signed up! Please validate your email before you sign in.");
     }
   };
 

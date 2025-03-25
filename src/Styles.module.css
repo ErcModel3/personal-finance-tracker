@@ -286,6 +286,7 @@
     border: none;
     padding: 0;
 }
+<<<<<<< HEAD:src/Styles.module.css
 
 .chartContainer {
     width: 100%;
@@ -316,3 +317,10 @@
 .metricsDescription {
     color: #6c757d;
 }
+=======
+/* Force white background on ALL elements */
+body, html, .footer, .footerLinks, .footerLink {
+    background-color: white !important;
+    color: black !important; /* Ensures text remains readable */
+}
+>>>>>>> main:src/components/Component.module.css

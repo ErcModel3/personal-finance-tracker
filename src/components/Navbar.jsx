@@ -15,7 +15,6 @@ const Navbar = () => {
                 {/* Right side: Navigation buttons */}
                 <div className="navbar-nav ms-auto"> {/* ms-auto aligns the nav items to the right */}
                     <Link className="nav-link" to="/">Home</Link>
-                    <Link className="nav-link" to="/features">Features</Link>
                     <Link className="nav-link" to="/signup">Sign Up</Link>
                     <Link className="nav-link" to="/signin">Sign In</Link>
                 </div>
