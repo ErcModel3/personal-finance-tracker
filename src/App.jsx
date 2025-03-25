@@ -20,7 +20,6 @@ import {ExpenseForm} from "./Features/ExpenseForm.jsx";
 
 
 function Home() {
-
     return (
         <>
             <p className="read-the-docs">
