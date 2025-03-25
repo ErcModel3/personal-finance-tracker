@@ -12,7 +12,7 @@ import SignIn from "./pages/SignIn";
 import Wrapper from "./pages/Wrapper.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import Reviews from "./pages/Reviews.jsx";
-import Welcome from "./auth/Welcome.jsx";
+import Welcome from "./pages/Welcome.jsx";
 import MonthlySpending from "./pages/WelcomePage.jsx";
 
 //Import financial and associated changes
