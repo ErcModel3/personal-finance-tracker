@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import './SignIn.css';
 import supabaseClient from "/src/auth/Client.js"
 import {useNavigate} from "react-router-dom";
-import Footer from "../components/Footer.jsx";
 
 import Navbar from "../components/Navbar.jsx";
 import Footer from "../components/Footer.jsx";
