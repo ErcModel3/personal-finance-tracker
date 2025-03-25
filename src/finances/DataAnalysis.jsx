@@ -1,6 +1,10 @@
 import React, { useEffect, useRef } from "react";
 import { Chart, ArcElement, Tooltip, Legend } from 'chart.js/auto';
-import styles from "./Data.module.css";
+import { CategoryScale } from "chart.js";
+
+import styles from "../Styles.module.css"
+// import { Data } from "../components/BudgetPieChart.jsx"; // Needs re adding
+
 import Navbar from "../components/Navbar.jsx";
 import Footer from "../components/Footer.jsx";
 
