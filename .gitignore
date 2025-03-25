@@ -26,3 +26,4 @@ dist-ssr
 # Added by Alexk
 .env
 .env.local
+coverage/
