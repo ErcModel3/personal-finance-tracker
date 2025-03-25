@@ -286,3 +286,8 @@
     border: none;
     padding: 0;
 }
+/* Force white background on ALL elements */
+body, html, .footer, .footerLinks, .footerLink {
+    background-color: white !important;
+    color: black !important; /* Ensures text remains readable */
+}

@@ -18,8 +18,8 @@ import Footer from "./components/Footer.jsx";
 import imgUrl from './assets/Graph_Photos.png'
 import {ExpenseForm} from "./Features/ExpenseForm.jsx";
 
-function Home() {
 
+function Home() {
     return (
         <>
             <p className="read-the-docs">
@@ -34,10 +34,6 @@ function Home() {
             </div>
         </>
     )
-
-
-
-
 }
 
 function App() {
