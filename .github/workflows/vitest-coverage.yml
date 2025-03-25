@@ -1,5 +1,5 @@
 name: Run Vitest Coverage (CI)
-#on: [pull_request]
+on: [pull_request]
 
 jobs:
   build:
@@ -24,6 +24,10 @@ jobs:
 
       - name: Run tests with coverage
         run: npm test
+        env:
+        VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+        VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+
 
       - name: Upload coverage report
         uses: actions/upload-artifact@v3
