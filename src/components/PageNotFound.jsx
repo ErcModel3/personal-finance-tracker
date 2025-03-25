@@ -1,4 +1,3 @@
-// src/pages/NotFound.jsx
 function NotFound() {
     return (
         <div className="not-found">
