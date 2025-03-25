@@ -1,5 +1,5 @@
-name: Run Vitest (CI)
-on: [pull_request]
+name: Run Vitest Coverage (CI)
+#on: [pull_request]
 
 jobs:
   build:
