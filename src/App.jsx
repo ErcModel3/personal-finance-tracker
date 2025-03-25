@@ -11,6 +11,7 @@ import MonthlySpending from "./pages/WelcomePage.jsx";
 import Reviews from "./pages/Reviews.jsx";
 import Welcome from "./pages/Welcome.jsx";
 
+import Data from "./finances/DataAnalysis.jsx";
 import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
 
@@ -43,6 +44,7 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/signup" element={<SignUp />} />
                 <Route path="/signin" element={<SignIn />}/>
+                <Route path="/Data" element={<Data/>}/>
                 <Route path="/dashboard" element={
                     <Wrapper>
                         <Dashboard />
