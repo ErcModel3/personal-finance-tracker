@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import supabaseClient from "../auth/Client.js";
+import supabaseClient from "./Client.js";
 import { Navigate } from "react-router-dom";
 
 // eslint-disable-next-line react/prop-types
