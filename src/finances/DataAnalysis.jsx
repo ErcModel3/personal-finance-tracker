@@ -1,13 +1,9 @@
-import React, { useEffect, useRef } from "react";
 import { Chart, ArcElement, Tooltip, Legend } from 'chart.js/auto';
-import { CategoryScale } from "chart.js";
 
-import styles from "../Styles.module.css"
-// import { Data } from "../components/BudgetPieChart.jsx"; // Needs re adding
-
+import styles from "../Styles.module.css";
+import BudgetPieChart from "../components/BudgetPieChart.jsx";
 import Navbar from "../components/Navbar.jsx";
 import Footer from "../components/Footer.jsx";
-
 
 Chart.register(ArcElement, Tooltip, Legend);
 
@@ -33,7 +29,8 @@ const DataAnalysis = () => {
                     <button className={styles.primaryButton}>Download Report</button>
                 </div>
             </div>
-            {/* Financial Summary Section */}
+
+            {/*Financial breakdown components*/}
             <div className={styles.metricsSection}>
                 <div className={styles.metricsHeader}>
                     <h2 className={styles.metricsTitle}>Financial Summary</h2>
@@ -58,6 +55,17 @@ const DataAnalysis = () => {
                         <div className={styles.metricValue}>£{budgetData.budgetSet}</div>
                         <div>from Gross Salary</div>
                     </div>
+                </div>
+            </div>
+
+            {/*Pie chart bit*/}
+            <div className={styles.metricsSection}>
+                <div className={styles.metricsHeader}>
+                    <h2 className={styles.metricsTitle}>Title rass</h2>
+                    <p className={styles.metricsDescription}>Rassmon</p>
+                </div>
+                <div className={styles.chartContainer}>
+                    <BudgetPieChart budgetData={budgetData} />
                 </div>
             </div>
             <Footer />
