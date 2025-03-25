@@ -61,8 +61,8 @@ const DataAnalysis = () => {
             {/*Pie chart bit*/}
             <div className={styles.metricsSection}>
                 <div className={styles.metricsHeader}>
-                    <h2 className={styles.metricsTitle}>Title rass</h2>
-                    <p className={styles.metricsDescription}>Rassmon</p>
+                    <h2 className={styles.metricsTitle}>Spending Overview</h2>
+                    <p className={styles.metricsDescription}>How much money you've spent at, a glance</p>
                 </div>
                 <div className={styles.chartContainer}>
                     <BudgetPieChart budgetData={budgetData} />
