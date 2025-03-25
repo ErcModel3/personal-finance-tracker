@@ -9,7 +9,7 @@ import Footer from "./components/Footer.jsx";
 //Import pages
 import SignUp from "./pages/SignUp";
 import SignIn from "./pages/SignIn";
-import Wrapper from "./pages/Wrapper.jsx";
+import Wrapper from "./auth/Wrapper.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import Reviews from "./pages/Reviews.jsx";
 import Welcome from "./pages/Welcome.jsx";
