@@ -7,7 +7,7 @@ import Footer from "../components/Footer.jsx";
 
 // Import Reports
 import BudgetPieChart from "../finance_modules/BudgetPieChart.jsx";
-import SpendingCategoryPieChart, {SpendingCategoryBarChart} from "../finance_modules/SpendingCategoryPieChart.jsx";
+import SpendingCategoryPieChart, {SpendingCategoryBarChart} from "../finance_modules/SpendingCategoryCharts.jsx";
 import SpendingMonthlyBarChart from "../finance_modules/SpendingMonthlyBarChart.jsx";
 
 Chart.register(ArcElement, Tooltip, Legend);
