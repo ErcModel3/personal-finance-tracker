@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { Chart } from 'chart.js/auto';
 
-const SpendingCategoryPieChart = ({ budgetData }) => {
+const SpendingCategoryPieChart = ({ SpendingCategoryData }) => {
     const chartRef = useRef(null);
     const chartInstance = useRef(null);
 
@@ -15,9 +15,7 @@ const SpendingCategoryPieChart = ({ budgetData }) => {
             // Create the chart context because that's something that needs to happen
             const ctx = chartRef.current.getContext('2d');
 
-            // Doing the maths for spent vs budgeted values
-            const netIncome = budgetData.monthlySalary ?? 0- (budgetData.tax ?? 0)+ (budgetData.bonus ?? 0);
-            const remaining = netIncome - (budgetData.amountSpent ?? 0);
+            //TO DO - add processing / splitting code here
 
             // Creating the actual pie chart
             chartInstance.current = new Chart(ctx, {
@@ -26,11 +24,28 @@ const SpendingCategoryPieChart = ({ budgetData }) => {
                     labels: ['Spent', 'Remaining'],
                     datasets: [
                         {
-                            data: [budgetData.amountSpent, remaining],
-                            backgroundColor: ['#27AE60', '#2B5D9F'],
-                            hoverBackgroundColor: ['#27AE60C0', '#2B5D9FC0'],
-                            // Same values but hover uses last 2 digits to make it C0% of the standard colour
-                            borderWidth: 1
+                            data: [SpendingCategoryData],
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(255, 159, 64, 0.2)',
+                                'rgba(255, 205, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(153, 102, 255, 0.2)',
+                            ],
+                            borderColor: [
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(255, 159, 64, 1)',
+                                'rgba(255, 205, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(153, 102, 255, 1)',
+                            ],
+                            borderWidth: 1,
+                            // backgroundColor: ['#27AE60', '#2B5D9F'],
+                            // hoverBackgroundColor: ['#27AE60C0', '#2B5D9FC0'],
+                            // // Same values but hover uses last 2 digits to make it C0% of the standard colour
+                            // borderWidth: 1
                         }
                     ]
                 },
@@ -61,7 +76,7 @@ const SpendingCategoryPieChart = ({ budgetData }) => {
                 chartInstance.current.destroy();
             }
         };
-    }, [budgetData]); // Re-run when budgetData changes
+    }, [SpendingCategoryData]); // Re-run when SpendingCategoryData changes
 
     return (
         <div style={{ width: '100%', height: '300px' }}>
