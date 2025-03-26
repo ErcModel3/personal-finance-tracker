@@ -20,31 +20,21 @@
     max-width: 1200px; /* Adjust based on your preferred container width */
     margin: 0 auto;
     padding: 0 20px;
-=======
+}
+
 .navbar {
     background-color: #27AE60; /* Green background */
     padding: 10px 20px; /* Spacing inside the navbar */
->>>>>>> main
 }
 
 /* Brand/Title on the left */
 .navbar-brand {
-<<<<<<< HEAD
-    color: #FFFFFF;
-    font-size: 24px;
-    font-weight: bold;
-    text-decoration: none;
-}
-
-/* Navigation links container */
-=======
     color: #FFFFFF; /* White text */
     font-size: 24px; /* Larger font size */
     font-weight: bold; /* Bold text */
 }
 
 /* Navigation buttons */
->>>>>>> main
 .navbar-nav {
     display: flex;
     align-items: center;
@@ -69,7 +59,8 @@
 
 .nav-link:hover {
     background-color: #1E8449;
-=======
+}
+
 .nav-link {
     background-color: #27AE60; /* Green background */
     color: #FFFFFF; /* White text */
@@ -85,5 +76,4 @@
 /* Hover effect for buttons */
 .nav-link:hover {
     background-color: #1E8449; /* Slightly darker green on hover */
->>>>>>> main
-}}
+}
