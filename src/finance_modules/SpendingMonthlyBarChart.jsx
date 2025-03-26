@@ -21,7 +21,7 @@ const SpendingMonthlyBarChart = ({ MoneySpentMonthly }) => {
                 data: {
                     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
                     datasets: [{
-                        label: 'balls',
+                        label: [],
                         data: MoneySpentMonthly,
                         backgroundColor: [
                             'rgba(255, 99, 132, 0.2)',
@@ -30,7 +30,6 @@ const SpendingMonthlyBarChart = ({ MoneySpentMonthly }) => {
                             'rgba(75, 192, 192, 0.2)',
                             'rgba(54, 162, 235, 0.2)',
                             'rgba(153, 102, 255, 0.2)',
-                            'rgba(201, 203, 207, 0.2)'
                         ],
                         borderColor: [
                             'rgba(255, 99, 132, 1)',
@@ -39,11 +38,17 @@ const SpendingMonthlyBarChart = ({ MoneySpentMonthly }) => {
                             'rgba(75, 192, 192, 1)',
                             'rgba(54, 162, 235, 1)',
                             'rgba(153, 102, 255, 1)',
-                            'rgba(201, 203, 207, 1)'
                         ],
                         borderWidth: 1
                     }]
                 },
+                options: {
+                    plugins: {
+                        legend: {
+                            display: false,
+                        }
+                    }
+                }
             });
         }
 
