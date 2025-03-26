@@ -15,7 +15,7 @@ Chart.register(ArcElement, Tooltip, Legend);
 const DataAnalysis = () => {
 
     // Sample data (TO REPLACE with db entries)
-    const MoneySpentMonthly = [122, 635, 539, 860, 841, 526, 535, 440, 930, 839, 420, 78];
+    const MoneySpentMonthly = [122, 635, 539, 40, 841, 526, 535, 440, 930, 839, 420, 78];
 
     const budgetData = {
         monthlySalary: 5000,
