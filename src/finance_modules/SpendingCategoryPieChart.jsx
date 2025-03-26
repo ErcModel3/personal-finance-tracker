@@ -1,6 +1,9 @@
 import { useEffect, useRef } from "react";
 import { Chart } from 'chart.js/auto';
 
+// TO DO split file into having two different functions, one that returns a bar chart with the SpendingCategoryData
+// TO DO and another that returns a pie chart from the same SpendingCategoryData
+
 const SpendingCategoryPieChart = ({ SpendingCategoryData }) => {
     const chartRef = useRef(null);
     const chartInstance = useRef(null);
