@@ -7,7 +7,7 @@ import Footer from "../components/Footer.jsx";
 
 // Import Reports
 import BudgetPieChart from "../finance_modules/BudgetPieChart.jsx";
-import SpendingCategoryPieChart from "../finance_modules/SpendingCategoryPieChart.jsx";
+import SpendingCategoryPieChart, {SpendingCategoryBarChart} from "../finance_modules/SpendingCategoryPieChart.jsx";
 import SpendingMonthlyBarChart from "../finance_modules/SpendingMonthlyBarChart.jsx";
 
 Chart.register(ArcElement, Tooltip, Legend);
@@ -84,10 +84,13 @@ const DataAnalysis = () => {
                 </div>
                 <div className={styles.metricsHeader}>
                     <h2 className={styles.metricsTitle}>Spending Per Category</h2>
-                    <p className={styles.metricsDescription}>How much money you've spent, broken down</p>
+                    <p className={styles.metricsDescription}>How much money you've spent per spending category, as a pie chart or a bar chart</p>
                 </div>
                 <div className={styles.chartContainer}>
                     <SpendingCategoryPieChart SpendingCategoryData={SpendingCategoryData} />
+                </div>
+                <div className={styles.chartContainer}>
+                    <SpendingCategoryBarChart SpendingCategoryData={SpendingCategoryData} />
                 </div>
                 <div className={styles.metricsHeader}>
                     <h2 className={styles.metricsTitle}>Spending Per Month</h2>

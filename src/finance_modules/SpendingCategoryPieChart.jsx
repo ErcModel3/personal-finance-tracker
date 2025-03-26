@@ -1,9 +1,6 @@
 import { useEffect, useRef } from "react";
 import { Chart } from 'chart.js/auto';
 
-// TO DO split file into having two different functions, one that returns a bar chart with the SpendingCategoryData
-// TO DO and another that returns a pie chart from the same SpendingCategoryData
-
 const SpendingCategoryPieChart = ({ SpendingCategoryData }) => {
     const chartRef = useRef(null);
     const chartInstance = useRef(null);
@@ -15,19 +12,21 @@ const SpendingCategoryPieChart = ({ SpendingCategoryData }) => {
         }
 
         if (chartRef.current) {
-            // Create the chart context because that's something that needs to happen
+            // Create the chart context
             const ctx = chartRef.current.getContext('2d');
 
-            //TO DO - add processing / splitting code here
+            // Process data from the object format to arrays for the chart
+            const labels = Object.keys(SpendingCategoryData);
+            const data = Object.values(SpendingCategoryData).map(value => parseFloat(value));
 
             // Creating the actual pie chart
             chartInstance.current = new Chart(ctx, {
                 type: 'pie',
                 data: {
-                    labels: ['Spent', 'Remaining'],
+                    labels: labels,
                     datasets: [
                         {
-                            data: [SpendingCategoryData],
+                            data: data,
                             backgroundColor: [
                                 'rgba(255, 99, 132, 0.2)',
                                 'rgba(255, 159, 64, 0.2)',
@@ -35,6 +34,7 @@ const SpendingCategoryPieChart = ({ SpendingCategoryData }) => {
                                 'rgba(75, 192, 192, 0.2)',
                                 'rgba(54, 162, 235, 0.2)',
                                 'rgba(153, 102, 255, 0.2)',
+                                'rgba(201, 203, 207, 0.2)'
                             ],
                             borderColor: [
                                 'rgba(255, 99, 132, 1)',
@@ -43,12 +43,9 @@ const SpendingCategoryPieChart = ({ SpendingCategoryData }) => {
                                 'rgba(75, 192, 192, 1)',
                                 'rgba(54, 162, 235, 1)',
                                 'rgba(153, 102, 255, 1)',
+                                'rgba(201, 203, 207, 1)'
                             ],
                             borderWidth: 1,
-                            // backgroundColor: ['#27AE60', '#2B5D9F'],
-                            // hoverBackgroundColor: ['#27AE60C0', '#2B5D9FC0'],
-                            // // Same values but hover uses last 2 digits to make it C0% of the standard colour
-                            // borderWidth: 1
                         }
                     ]
                 },
@@ -80,6 +77,98 @@ const SpendingCategoryPieChart = ({ SpendingCategoryData }) => {
             }
         };
     }, [SpendingCategoryData]); // Re-run when SpendingCategoryData changes
+
+    return (
+        <div style={{ width: '100%', height: '300px' }}>
+            <canvas ref={chartRef}></canvas>
+        </div>
+    );
+};
+
+export const SpendingCategoryBarChart = ({ SpendingCategoryData }) => {
+    const chartRef = useRef(null);
+    const chartInstance = useRef(null);
+
+    useEffect(() => {
+        if (chartInstance.current) {
+            chartInstance.current.destroy();
+        }
+
+        if (chartRef.current) {
+            const ctx = chartRef.current.getContext('2d');
+
+            // Process data from the object format to arrays for the chart
+            const labels = Object.keys(SpendingCategoryData);
+            const data = Object.values(SpendingCategoryData).map(value => parseFloat(value));
+
+            // Creating the bar chart
+            chartInstance.current = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Spending by Category',
+                            data: data,
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(255, 159, 64, 0.2)',
+                                'rgba(255, 205, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(153, 102, 255, 0.2)',
+                                'rgba(201, 203, 207, 0.2)'
+                            ],
+                            borderColor: [
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(255, 159, 64, 1)',
+                                'rgba(255, 205, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(201, 203, 207, 1)'
+                            ],
+                            borderWidth: 1,
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '£' + value;
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.dataset.label || '';
+                                    const value = context.raw || 0;
+                                    return `${label}: £${value}`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        return () => {
+            if (chartInstance.current) {
+                chartInstance.current.destroy();
+            }
+        };
+    }, [SpendingCategoryData]);
 
     return (
         <div style={{ width: '100%', height: '300px' }}>
