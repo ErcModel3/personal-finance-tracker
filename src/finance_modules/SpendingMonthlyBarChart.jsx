@@ -12,26 +12,38 @@ const SpendingMonthlyBarChart = ({ MoneySpentMonthly }) => {
         }
 
         if (chartRef.current) {
-
             // Create the chart context because that's something that needs to happen
             const ctx = chartRef.current.getContext('2d');
 
             // Creating the bar chart
             chartInstance.current = new Chart(ctx, {
                 type: 'bar',
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                datasets: [{
-                    data: MoneySpentMonthly,
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(255, 159, 64, 0.2)',
-                        'rgba(255, 205, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(201, 203, 207, 0.2)'
-                    ]},
-                ]
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [{
+                        label: 'balls',
+                        data: MoneySpentMonthly,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(255, 159, 64, 0.2)',
+                            'rgba(255, 205, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(201, 203, 207, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(255, 159, 64, 1)',
+                            'rgba(255, 205, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(201, 203, 207, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
             });
         }
 
@@ -46,9 +58,6 @@ const SpendingMonthlyBarChart = ({ MoneySpentMonthly }) => {
     return (
         <div style={{ width: '100%', height: '300px' }}>
             <canvas ref={chartRef}></canvas>
-
-            <p id={MoneySpentMonthly} ></p>
-
         </div>
     );
 };
