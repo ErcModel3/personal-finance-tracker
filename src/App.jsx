@@ -5,6 +5,7 @@ import './App.css'
 //Import components
 import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
+import NotFound from "./components/NotFound.jsx";
 
 //Import pages
 import SignUp from "./pages/SignUp";
@@ -71,6 +72,7 @@ function App() {
                     </Wrapper>
                 } />
                 {/* Add more routes here */}
+                <Route path="*" element={<NotFound />} />
             </Routes>
         </BrowserRouter>
     )

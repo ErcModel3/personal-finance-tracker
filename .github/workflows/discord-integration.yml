@@ -11,5 +11,5 @@ jobs:
         uses: Ilshidur/action-discord@master
         with:
           args: |
-            @everyone ${{ github.actor }} has raised a pull request!
+            ${{ github.actor }} has raised a pull request
             Please review: ${{ github.event.pull_request.html_url }}
