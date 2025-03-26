@@ -27,17 +27,42 @@ const SignUp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form submitted', formData);
-    // To do: Add link to supabase once backend is finished
-    let {data, error} = await supabaseClient.auth.signUp({
+
+    let { data, error } = await supabaseClient.auth.signUp({
       email: formData.email,
       password: formData.password,
     });
-    if (error){
-      console.log(error);
+
+    if (error) {
+      console.log('Signup error:', error);
+      return;
     }
-    if (data){
+
+    if (data?.user) {
       alert("User successfully signed up! Please validate your email before you sign in.");
+
+      // Small delay to ensure the trigger has completed
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      // Update the profile with additional information
+      const { data: profileData, error: profileError } = await supabaseClient
+          .from('profiles')
+          .update({
+            fullName: formData.fullName,
+            phone: formData.phoneNumber,
+            dob: formData.dateOfBirth,
+            country: formData.country
+          })
+          .eq('id', data.user.id)
+          .select(); // Add this to return the updated data
+
+      if (profileError) {
+        console.log('Error adding details to profile:', profileError);
+      }
+
+      if (profileData) {
+        console.log('Successfully updated profile:', profileData);
+      }
     }
   };
 
