@@ -18,7 +18,7 @@ import MonthlySpending from "./pages/WelcomePage.jsx";
 
 //Import financial and associated changes
 import Data from "./finances/DataAnalysis.jsx";
-import BudgetPieChart from "./components/BudgetPieChart.jsx";
+import BudgetPieChart from "../finance_modules/BudgetPieChart.jsx";
 
 // Imports all graphics and other assets
 import {ExpenseForm} from "./Features/ExpenseForm.jsx";
