@@ -14,17 +14,18 @@ import Wrapper from "./auth/Wrapper.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import Reviews from "./pages/Reviews.jsx";
 import Welcome from "./pages/Welcome.jsx";
-import MonthlySpending from "./pages/WelcomePage.jsx";
 
 //Import financial and associated changes
 import Data from "./finances/DataAnalysis.jsx";
 import BudgetPieChart from "./finance_modules/BudgetPieChart.jsx";
+import SpendingMonthlyBarChart from "./finance_modules/SpendingMonthlyBarChart.jsx";
 
 // Imports all graphics and other assets
 import {ExpenseForm} from "./Features/ExpenseForm.jsx";
 
 function Home() {
     // Sample data (TO REPLACE with db entry)
+    const MoneySpentMonthly = [122, 635, 539, 40, 841, 526, 535, 440, 930, 839, 420, 78];
     const budgetData = {
         monthlySalary: 5000,
         tax: 1250,
@@ -48,6 +49,13 @@ function Home() {
                 </div>
                 <div className={styles.chartContainer}>
                     <BudgetPieChart budgetData={budgetData} />
+                </div>
+                <div className={styles.metricsHeader}>
+                    <h2 className={styles.metricsTitle}>Spending Per Month</h2>
+                    <p className={styles.metricsDescription}>How much money you've spent per month, broken down</p>
+                </div>
+                <div className={styles.chartContainer}>
+                    <SpendingMonthlyBarChart MoneySpentMonthly ={MoneySpentMonthly} />
                 </div>
                 <Reviews/>
                 <Footer/>
