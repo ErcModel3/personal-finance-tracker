@@ -6,9 +6,9 @@ import Navbar from "../components/Navbar.jsx";
 import Footer from "../components/Footer.jsx";
 
 // Import Reports
-import BudgetPieChart from "../../finance_modules/BudgetPieChart.jsx";
-import SpendingCategoryPieChart from "../../finance_modules/SpendingCategoryPieChart.jsx";
-import SpendingMonthlyBarChart from "../../finance_modules/SpendingMonthlyBarChart.jsx";
+import BudgetPieChart from "../finance_modules/BudgetPieChart.jsx";
+import SpendingCategoryPieChart from "../finance_modules/SpendingCategoryPieChart.jsx";
+import SpendingMonthlyBarChart from "../finance_modules/SpendingMonthlyBarChart.jsx";
 
 Chart.register(ArcElement, Tooltip, Legend);
 
