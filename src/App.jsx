@@ -5,7 +5,7 @@ import './App.css'
 //Import components
 import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
-import NotFound from "./components/PageNotFound.jsx";
+import NotFound from "./components/NotFound.jsx";
 
 //Import pages
 import SignUp from "./pages/SignUp";
