@@ -14,6 +14,7 @@ import Wrapper from "./auth/Wrapper.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import Reviews from "./pages/Reviews.jsx";
 import Welcome from "./pages/Welcome.jsx";
+import ContactUs from "./pages/ContactUs.jsx"; // Import ContactUs component
 
 //Import financial and associated changes
 import Data from "./finances/DataAnalysis.jsx";
@@ -74,11 +75,15 @@ function App() {
                 <Route path="/signin" element={<SignIn />}/>
                 <Route path="/data" element={<Data/>}/>
                 <Route path="/expenses" element={<ExpenseForm />} />
+                <Route path="/contact" element={<ContactUs />} /> {/* Add Contact Us route */}
                 <Route path="/dashboard" element={
                     <Wrapper>
                         <Dashboard />
                     </Wrapper>
                 } />
+                {/* Add routes for footer links */}
+                <Route path="/privacy" element={<NotFound />} /> {/* Placeholder - replace with actual Privacy Policy page */}
+                <Route path="/terms" element={<NotFound />} /> {/* Placeholder - replace with actual Terms & Conditions page */}
                 {/* Add more routes here */}
                 <Route path="*" element={<NotFound />} />
             </Routes>
