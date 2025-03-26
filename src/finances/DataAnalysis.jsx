@@ -25,13 +25,13 @@ const DataAnalysis = () => {
     };
     const MoneySpentMonthly = [122, 635, 539, 40, 841, 526, 535, 440, 930, 839, 420, 78];
     const SpendingCategoryData = {
-        "Bills":"",
-        "Eating out":"",
-        "Essential Spend":"",
-        "Groceries":"",
-        "Non-essential Spend":"",
-        "Shopping":"",
-        "Savings":""
+        "Bills":"30",
+        "Eating out":"254",
+        "Essential Spend":"132",
+        "Groceries":"95",
+        "Non-essential Spend":"45",
+        "Shopping":"64",
+        "Savings":"150"
     };
 
     return (
