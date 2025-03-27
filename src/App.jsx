@@ -14,6 +14,9 @@ import Wrapper from "./auth/Wrapper.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import Reviews from "./pages/Reviews.jsx";
 import Welcome from "./pages/Welcome.jsx";
+import ContactUs from "./pages/ContactUs.jsx"; 
+import PrivacyPolicy from "./pages/PrivacyPolicy.jsx";
+import TermsConditions from "./pages/TermsConditions.jsx"; // Import TermsConditions component
 
 //Import financial and associated changes
 import Data from "./finances/DataAnalysis.jsx";
@@ -63,7 +66,6 @@ function Home() {
             </div>
         </>
     )
-
 }
 
 function App() {
@@ -77,12 +79,14 @@ function App() {
                 <Route path="/log" element={<LogExpense />}/>
 
                 <Route path="/expenses" element={<ExpenseForm />} />
+                <Route path="/contact" element={<ContactUs />} /> 
+                <Route path="/privacy" element={<PrivacyPolicy />} /> 
+                <Route path="/terms" element={<TermsConditions />} /> {/* Terms and Conditions route */}
                 <Route path="/dashboard" element={
                     <Wrapper>
                         <Dashboard />
                     </Wrapper>
                 } />
-                {/* Add more routes here */}
                 <Route path="*" element={<NotFound />} />
             </Routes>
         </BrowserRouter>
