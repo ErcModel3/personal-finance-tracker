@@ -14,17 +14,42 @@ const LogExpense = () => {
     // Handle form submission
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Logic to save expense data
-        console.log({
-            expenseName,
-            amount,
-            category
-        });
+
+        // Input validation in JS
+        if (!expenseName.trim()) {
+            alert("Please enter an expense name");
+            return;
+        }
+
+        // More input validation around numbers
+        const amountValue = parseFloat(amount);
+        if (isNaN(amountValue) || amountValue <= 0) {
+            alert("Please enter a valid amount");
+            return;
+        }
+
+        // Creates the JSON for the db
+        const expenseData = {
+            name: expenseName.trim(),
+            amount: amountValue,
+            category: category,
+            date: new Date().toISOString(),
+            // TO DO maybe add an ID variable?
+        };
+
+        // TO DO remove this as it's just logging to the console atm
+        console.log("New expense data:");
+        console.log(JSON.stringify(expenseData, null, 2));
+
+        // TO DO Database Code here
 
         // Reset form
         setExpenseName('');
         setAmount('');
         setCategory('Bills');
+
+        // Optional: Show success message
+        alert("Expense saved successfully!");
     };
 
     // Handle cancel action
