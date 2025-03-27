@@ -36,9 +36,10 @@ const LogExpense = () => {
     };
 
     return (
-        <div className={styles.app} style={{ minHeight: 'auto' }}>
+        <div className={styles.app} style={{ minHeight: 'auto' }} style={{ paddingTop: '30px', background: 'white'}} >
             <Navbar />
-            <div className={styles.metricsSection}>
+            <div className={styles.metricsSection} style={{ paddingTop: '30px' }}>
+            {/*<div className={styles.metricsSection}>*/}
                 <div className={styles.metricsHeader}>
                     <h1 className={styles.metricsTitle}>Add New Expense</h1>
                     <p className={styles.metricsDescription}>Enter the details of your new expense below.</p>
