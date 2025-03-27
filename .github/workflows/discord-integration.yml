@@ -1,15 +1,15 @@
-#name: Discord Updates
-#on: [pull_request]
-#
-#jobs:
-#  SendDiscordWebhook:
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Discord notification
-#        env:
-#          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
-#        uses: Ilshidur/action-discord@master
-#        with:
-#          args: |
-#            ${{ github.actor }} has raised a pull request
-#            Please review: ${{ github.event.pull_request.html_url }}
+name: Discord Updates
+on: [pull_request]
+
+jobs:
+  SendDiscordWebhook:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Discord notification
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        uses: Ilshidur/action-discord@master
+        with:
+          args: |
+            ${{ github.actor }} has raised a pull request
+            Please review: ${{ github.event.pull_request.html_url }}
