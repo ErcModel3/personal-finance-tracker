@@ -36,10 +36,8 @@ const LogExpense = () => {
     };
 
     return (
-        <div className={styles.app}>
+        <div className={styles.app} style={{ minHeight: 'auto' }}>
             <Navbar />
-
-            {/* Using existing styles from your CSS where possible */}
             <div className={styles.metricsSection}>
                 <div className={styles.metricsHeader}>
                     <h1 className={styles.metricsTitle}>Add New Expense</h1>
