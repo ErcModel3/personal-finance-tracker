@@ -318,7 +318,16 @@
 }
 
 /* Force white background on ALL elements */
-body, html, .footer, .footerLinks, .footerLink {
+body, html, .footer, .footerLinks, .footerLink, 
+.app, .metricsSection, .metricCard, 
+input[type="text"], 
+.metricsHeader, .metricsTitle, .metricsDescription {
     background-color: white !important;
     color: black !important; /* Ensures text remains readable */
+}
+
+
+/* Ensure selected buttons have a distinct look while maintaining light theme */
+button[style*="background: #eee"] {
+    background-color: #eee !important;
 }
