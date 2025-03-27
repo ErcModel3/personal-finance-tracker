@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './ContactUs.css'; // Adjust the path as needed
+import './ContactUs.css'; 
 import Navbar from "../components/Navbar.jsx";
 import Footer from "../components/Footer.jsx";
 
@@ -7,7 +7,7 @@ const ContactUs = () => {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
-        subject: 'General Inquiry', // Default value
+        subject: 'General Inquiry', 
         message: ''
     });
 
