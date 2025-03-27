@@ -7,7 +7,7 @@ function Footer() {
         <footer className={styles.footer}>
             <nav className={styles.footerLinks}>
                 <Link to="/contact" className={styles.footerLink}>Contact Us</Link>
-                <Link to="/privacy" className={styles.footerLink}>Privacy Policy</Link>
+                <Link to="/policy" className={styles.footerLink}>Privacy Policy</Link>
                 <Link to="/terms" className={styles.footerLink}>Terms & Conditions</Link>
             </nav>
         </footer>
