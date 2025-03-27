@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import styles from "./Styles.module.css";
 import './App.css'
+import NotificationPage from './Features/NotificationPage.jsx';
 
 //Import components
 import Navbar from "./components/Navbar.jsx";
@@ -77,6 +78,7 @@ function App() {
                 <Route path="/signin" element={<SignIn />}/>
                 <Route path="/data" element={<Data/>}/>
                 <Route path="/log" element={<LogExpense />}/>
+                <Route path="/notifications" element={<NotificationPage/>}/>
 
                 <Route path="/expenses" element={<ExpenseForm />} />
                 <Route path="/contact" element={<ContactUs />} /> 
