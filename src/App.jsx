@@ -19,6 +19,7 @@ import Welcome from "./pages/Welcome.jsx";
 import Data from "./finances/DataAnalysis.jsx";
 import BudgetPieChart from "./finance_modules/BudgetPieChart.jsx";
 import SpendingMonthlyBarChart from "./finance_modules/SpendingMonthlyBarChart.jsx";
+import LogExpense from "./finances/LogExpense.jsx";
 
 // Imports all graphics and other assets
 import {ExpenseForm} from "./Features/ExpenseForm.jsx";
@@ -73,6 +74,8 @@ function App() {
                 <Route path="/signup" element={<SignUp />} />
                 <Route path="/signin" element={<SignIn />}/>
                 <Route path="/data" element={<Data/>}/>
+                <Route path="/log" element={<LogExpense />}/>
+
                 <Route path="/expenses" element={<ExpenseForm />} />
                 <Route path="/dashboard" element={
                     <Wrapper>
