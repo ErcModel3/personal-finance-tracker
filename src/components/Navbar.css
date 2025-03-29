@@ -77,3 +77,26 @@
 .nav-link:hover {
     background-color: #1E8449; /* Slightly darker green on hover */
 }
+
+/*NEW made by za genius Logo link styling */
+.logo-link {
+    display: inline-block;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    text-decoration: none;
+    /* Remove default link styling */
+}
+
+.logo-image {
+    height: 50px;
+    width: auto;
+    transition: opacity 0.2s ease-in-out;
+}
+
+/* Optional hover effect */
+.logo-link:hover .logo-image {
+    opacity: 0.8;
+}
+

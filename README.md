@@ -8,7 +8,7 @@ From this point you'll need to create a branch related to what you're doing, the
 
 type/description-of-change
 
-So we'll have the following types:
+So we'll have the following types: \
 feature/ - for new features \
 bugfix/ - for bug fixes (but if you find a bug you should fix it in your feature branch) \
 hotfix/ - for urgent fixes to the website \
@@ -34,5 +34,5 @@ After cloning this repo (that you better have branched from) you'll need to open
 Once you've installed all of the dependencies required to build the project you'll be able to start the local webserver by entering the command
 
 ```npm run dev```
-
+ 
 Once you run this vite will build the app and you'll have a working webapp running on a javascript server.

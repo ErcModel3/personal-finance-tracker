@@ -6,17 +6,15 @@ import Navbar from "../components/Navbar.jsx";
 import Footer from "../components/Footer.jsx";
 
 // Import Reports
-import BudgetPieChart from "../components/BudgetPieChart.jsx";
-import SpendingCategoryPieChart from "../components/SpendingCategoryPieChart.jsx";
-import SpendingMonthlyBarChart from "../components/SpendingMonthlyBarChart.jsx";
+import BudgetPieChart from "../finance_modules/BudgetPieChart.jsx";
+import SpendingCategoryPieChart, {SpendingCategoryBarChart} from "../finance_modules/SpendingCategoryCharts.jsx";
+import SpendingMonthlyBarChart from "../finance_modules/SpendingMonthlyBarChart.jsx";
 
 Chart.register(ArcElement, Tooltip, Legend);
 
 const DataAnalysis = () => {
 
-    // Sample data (TO REPLACE with db entries)
-    const MoneySpentMonthly = [122, 635, 539, 860, 841, 526, 535, 440, 930, 839, 420, 78];
-
+    // Sample data (TO REPLACE with db entries on production pages like this one)
     const budgetData = {
         monthlySalary: 5000,
         tax: 1250,
@@ -24,6 +22,16 @@ const DataAnalysis = () => {
         bonus: 500,
         budgetSet: 3000,
         grossSalary: 6250
+    };
+    const MoneySpentMonthly = [122, 635, 539, 40, 841, 526, 535, 440, 930, 839, 420, 78];
+    const SpendingCategoryData = {
+        "Bills":"30",
+        "Eating out":"254",
+        "Essential Spend":"132",
+        "Groceries":"95",
+        "Non-essential Spend":"45",
+        "Shopping":"64",
+        "Savings":"150"
     };
 
     return (
@@ -76,10 +84,13 @@ const DataAnalysis = () => {
                 </div>
                 <div className={styles.metricsHeader}>
                     <h2 className={styles.metricsTitle}>Spending Per Category</h2>
-                    <p className={styles.metricsDescription}>How much money you've spent, broken down</p>
+                    <p className={styles.metricsDescription}>How much money you've spent per spending category, as a pie chart or a bar chart</p>
                 </div>
                 <div className={styles.chartContainer}>
-                    <SpendingCategoryPieChart budgetData={budgetData} />
+                    <SpendingCategoryPieChart SpendingCategoryData={SpendingCategoryData} />
+                </div>
+                <div className={styles.chartContainer}>
+                    <SpendingCategoryBarChart SpendingCategoryData={SpendingCategoryData} />
                 </div>
                 <div className={styles.metricsHeader}>
                     <h2 className={styles.metricsTitle}>Spending Per Month</h2>
