@@ -61,7 +61,7 @@ const LogExpense = () => {
     };
 
     return (
-        <div className={styles.app} style={{ minHeight: 'auto' }} style={{ paddingTop: '30px', background: 'white'}} >
+        <div className={styles.app} style={{ paddingTop: '30px', background: 'white'}} >
             <Navbar />
             <div className={styles.metricsSection} style={{ paddingTop: '30px' }}>
             {/*<div className={styles.metricsSection}>*/}
