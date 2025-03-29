@@ -29,6 +29,39 @@ const ManageBankCards = () => {
         // TO DO Add db code in place of this function
     }, []);
 
+    // Handle editing a card
+    const handleEditCard = (card) => {
+        setSelectedCard(card);
+        console.log(`Editing card:`, JSON.stringify(card, null, 2));
+    };
+
+    const handleSaveEdit = () => {
+        if (!selectedCard.Bank_name.trim()) {
+            alert("Bank name cannot be empty");
+            return;
+        }
+        setBankCards(bankCards.map(card =>
+            card.id === selectedCard.id ? selectedCard : card
+        ));
+
+        console.log(`Saved edited card:`, JSON.stringify(selectedCard, null, 2));
+
+        // TO DO add db code to edit the selected card
+
+        setSelectedCard(null);
+    };
+
+    const handleDeleteCard = (cardId) => {
+        if (window.confirm("Are you sure you want to delete this card?")) {
+            console.log(`Deleting card with ID: ${cardId}`);
+
+            // Filter out the deleted card from the card states
+            setBankCards(bankCards.filter(card => card.id !== cardId));
+
+            // TO DO add db code to delete the card from the user
+        }
+    };
+
     return (
         <div className={styles.app}>
             <Navbar />
@@ -63,15 +96,14 @@ const ManageBankCards = () => {
                                         </div>
                                         <div className={styles.cardActions}>
                                             <button
-                                                // onClick={() => handleEditCard(card)}
+                                                onClick={() => handleEditCard(card)}
                                                 // TO DO make function
                                                 className={styles.editButton}
                                             >
                                                 Edit
                                             </button>
                                             <button
-                                                // onClick={() => handleDeleteCard(card.id)}
-                                                // TO DO make function
+                                                onClick={() => handleDeleteCard(card.id)}
                                                 className={styles.deleteButton}
                                             >
                                                 Delete
@@ -127,8 +159,7 @@ const ManageBankCards = () => {
                                     Cancel
                                 </button>
                                 <button
-                                    // onClick={handleSaveEdit}
-                                    // TO DO add function handler
+                                    onClick={handleSaveEdit}
                                     className={styles.primaryButton}
                                 >
                                     Save Changes
