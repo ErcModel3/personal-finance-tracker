@@ -24,6 +24,7 @@ import BudgetPieChart from "./finance_modules/BudgetPieChart.jsx";
 import SpendingMonthlyBarChart from "./finance_modules/SpendingMonthlyBarChart.jsx";
 import LogExpense from "./finances/LogExpense.jsx";
 import AddPaymentCard from "./finances/AddPaymentCard.jsx";
+import ManagePaymentCards from "./finances/ManagePaymentCards.jsx"
 
 // Imports all graphics and other assets
 import {ExpenseForm} from "./Features/ExpenseForm.jsx";
@@ -77,6 +78,9 @@ function App() {
                 <Route path="/log" element={<LogExpense />}/>
                 <Route path="/add-card" element={<AddPaymentCard />}/>
                 <Route path="/data" element={<Data/>}/> {/* Needs to be renamed*/}
+                <Route path="/manage-cards" element={<ManagePaymentCards />}/>
+
+
 
                 <Route path="/" element={<Home />} />
                 <Route path="/signup" element={<SignUp />} />
