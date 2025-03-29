@@ -22,7 +22,7 @@ import TermsConditions from "./pages/TermsConditions.jsx"; // Import TermsCondit
 import Data from "./finances/DataAnalysis.jsx";
 import BudgetPieChart from "./finance_modules/BudgetPieChart.jsx";
 import SpendingMonthlyBarChart from "./finance_modules/SpendingMonthlyBarChart.jsx";
-import LogExpense from "./finances/LogExpense.jsx";
+import AddExpense from "./finances/AddExpense.jsx";
 import AddPaymentCard from "./finances/AddPaymentCard.jsx";
 import ManagePaymentCards from "./finances/ManagePaymentCards.jsx"
 
@@ -75,7 +75,7 @@ function App() {
         <BrowserRouter>
             <Routes>
                 {/*Financial routing*/}
-                <Route path="/log" element={<LogExpense />}/>
+                <Route path="/log" element={<AddExpense />}/>
                 <Route path="/add-card" element={<AddPaymentCard />}/>
                 <Route path="/data" element={<Data/>}/> {/* Needs to be renamed*/}
                 <Route path="/manage-cards" element={<ManagePaymentCards />}/>
