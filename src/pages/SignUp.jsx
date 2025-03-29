@@ -37,7 +37,6 @@ const SignUp = () => {
       });
 
       if (error) {
-        console.log(error);
         alert('Signup error: ' + error);
         return;
       }
