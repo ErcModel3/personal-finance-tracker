@@ -34,7 +34,7 @@ const SignUp = () => {
     });
 
     if (error) {
-      console.log('Signup error:', error);
+      alert('Signup error: ' + error);
       return;
     }
 
@@ -57,11 +57,11 @@ const SignUp = () => {
           .select(); // Add this to return the updated data
 
       if (profileError) {
-        console.log('Error adding details to profile:', profileError);
+        alert('Signup error: ' + error);
       }
 
       if (profileData) {
-        console.log('Successfully updated profile:', profileData);
+        alert('Signup error: ' + error);
       }
     }
   };
