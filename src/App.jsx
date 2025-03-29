@@ -75,8 +75,12 @@ function App() {
         <BrowserRouter>
             <Routes>
                 {/*Financial routing*/}
-                <Route path="/log" element={<AddExpense />}/>
-                <Route path="/add-card" element={<AddPaymentCard />}/>
+                <Route path="/add-expense" element={<AddExpense />}/>
+                <Route path="/add-card" element={
+                    <Wrapper>
+                        <AddPaymentCard />
+                    </Wrapper>
+                } />
                 <Route path="/data" element={<Data/>}/> {/* Needs to be renamed*/}
                 <Route path="/manage-cards" element={<ManagePaymentCards />}/>
 
