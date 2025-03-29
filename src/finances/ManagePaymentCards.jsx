@@ -76,7 +76,7 @@ const ManageBankCards = () => {
                         <div className={styles.loadingState}>Loading your cards...</div>
                     ) : bankCards.length === 0 ? (
                         <div className={styles.emptyState}>
-                            <p>You don't have any bank cards yet.</p>
+                            <p>You don't have any cards yet, please add a new card below.</p>
                             <button
                                 className={styles.primaryButton}
                                 onClick={() => window.location.href = '/add-card'}
