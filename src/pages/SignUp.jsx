@@ -25,45 +25,52 @@ const SignUp = () => {
     });
   };
 
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    let { data, error } = await supabaseClient.auth.signUp({
-      email: formData.email,
-      password: formData.password,
-    });
+    if (formData.password === formData.confirmPassword) {
+      let { data, error } = await supabaseClient.auth.signUp({
+        email: formData.email,
+        password: formData.password,
+      });
 
-    if (error) {
-      console.log('Signup error:', error);
-      return;
-    }
-
-    if (data?.user) {
-      alert("User successfully signed up! Please validate your email before you sign in.");
-
-      // Small delay to ensure the trigger has completed
-      await new Promise(resolve => setTimeout(resolve, 500));
-
-      // Update the profile with additional information
-      const { data: profileData, error: profileError } = await supabaseClient
-          .from('profiles')
-          .update({
-            fullName: formData.fullName,
-            phone: formData.phoneNumber,
-            dob: formData.dateOfBirth,
-            country: formData.country
-          })
-          .eq('id', data.user.id)
-          .select(); // Add this to return the updated data
-
-      if (profileError) {
-        console.log('Error adding details to profile:', profileError);
+      if (error) {
+        alert('Signup error: ' + error);
+        return;
       }
 
-      if (profileData) {
-        console.log('Successfully updated profile:', profileData);
+      if (data?.user) {
+        alert("User successfully signed up! Please validate your email before you sign in.");
+
+        // Small delay to ensure the trigger has completed
+        await new Promise(resolve => setTimeout(resolve, 500));
+
+        // Update the profile with additional information
+        const { data: profileData, error: profileError } = await supabaseClient
+            .from('profiles')
+            .update({
+              fullName: formData.fullName,
+              phone: formData.phoneNumber,
+              dob: formData.dateOfBirth,
+              country: formData.country
+            })
+            .eq('id', data.user.id)
+            .select(); // Add this to return the updated data
+
+        if (profileError) {
+          alert('Signup error: ' + error);
+        }
+
+        if (profileData) {
+          alert('Signup error: ' + error);
+        }
       }
+    }else {
+      alert('passwords do not match.')
     }
+
   };
 
   return (
