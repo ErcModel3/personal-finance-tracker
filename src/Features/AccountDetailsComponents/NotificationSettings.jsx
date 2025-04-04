@@ -4,10 +4,10 @@ import NotificationInSettings from "./NotificationInSettings.jsx";
 
 function NotificationSettings() {
     return (
-        <section className={styles.section}>
-            <h2 className={styles.title}>Notifications Settings</h2>
-            <p className={styles.description}>Manage your notification preferences</p>
-            <div className={styles.cardContainer}>
+        <section className={styles.compactSection}>
+            <h2 className={styles.sectionTitle}>Notifications Settings</h2>
+            <p className={styles.sectionDescription}>Manage your notification preferences</p>
+            <div className={styles.notificationContainer}>
                 <NotificationInSettings
                     title="Email Notifications"
                     description="Receive email notifications for updates"
