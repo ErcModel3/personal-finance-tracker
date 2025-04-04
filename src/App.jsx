@@ -87,9 +87,6 @@ function App() {
                 <Route path="/data" element={<Data/>}/> {/* Needs to be renamed*/}
                 <Route path="/manage-cards" element={<ManagePaymentCards />}/>
 
-
-                <Route path="/data" element={<Data/>}/>
-                <Route path="/log" element={<LogExpense />}/>
                 <Route path="/notifications" element={<NotificationPage/>}/>
                 <Route path="/settings" element={<AccountInformation/>}/>
 
