@@ -5,10 +5,12 @@ import ClearButton from "./ClearButton.jsx";
 
 function NotificationHeader() {
     return (
-        <section className={styles.section}>
-            <NotificationInfo />
+        <div className={styles.headerWrapper}>
+            <section className={styles.section}>
+                <NotificationInfo />
+            </section>
             <ClearButton />
-        </section>
+        </div>
     );
 }
 
