@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './SignIn.css';
 import supabaseClient from "/src/auth/Client.js"
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import Navbar from "../components/Navbar.jsx";
 import Footer from "../components/Footer.jsx";
@@ -42,6 +42,16 @@ const SignIn = () => {
         }
     };
 
+    const handleForgotPassword = () => {
+        // You can implement password reset functionality here
+        alert("Password reset functionality will be implemented soon!");
+
+    };
+
+    const handleNavigateToSignUp = () => {
+        navigate("/signup");
+    };
+
     return (
         <div className="signup-page">
             <Navbar/>
@@ -76,16 +86,35 @@ const SignIn = () => {
                                 onChange={handleChange}
                                 placeholder="Enter your password"
                             />
+                            <div className="forgot-password-container">
+                                <button 
+                                    type="button" 
+                                    className="forgot-password-button" 
+                                    onClick={handleForgotPassword}
+                                >
+                                    Forgot your password?
+                                </button>
+                            </div>
                         </div>
 
                         <div className="form-button-container">
                             <button type="submit" className="signup-button">Sign In</button>
                         </div>
+                        
+                        <div className="new-user-container">
+                            <p>First time here?</p>
+                            <button 
+                                type="button" 
+                                className="signup-button create-account-button" 
+                                onClick={handleNavigateToSignUp}
+                            >
+                                Create an account
+                            </button>
+                        </div>
                     </form>
                 </div>
                 <Footer/>
             </div>
-
         </div>
     );
 };
