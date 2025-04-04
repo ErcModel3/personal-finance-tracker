@@ -1,7 +1,16 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "./Styles.module.css";
 
 function Welcome() {
+    
+    const navigate = useNavigate();
+
+ 
+    const handleGetStarted = () => {
+        navigate("/signup");
+    };
+
     return (
         <section className={styles.heroSection}>
             <div className={styles.heroContent}>
@@ -11,7 +20,12 @@ function Welcome() {
                 <p className={styles.heroDescription}>
                     Track your expenses and manage your budget effectively.
                 </p>
-                <button className={styles.primaryButton}>Get Started</button>
+                <button 
+                    className={styles.primaryButton} 
+                    onClick={handleGetStarted}
+                >
+                    Get Started
+                </button>
             </div>
         </section>
     );

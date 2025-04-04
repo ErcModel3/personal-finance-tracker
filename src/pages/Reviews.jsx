@@ -89,7 +89,6 @@ function Reviews() {
                 <p className={styles.reviewsDescription}>
                     Feedback from our valued customers
                 </p>
-                <button className={styles.primaryButton}>View All Reviews</button>
             </header>
             <div className={styles.reviewsGrid}>
                 {reviews.map((review, index) => (
