@@ -23,7 +23,9 @@ import TermsConditions from "./pages/TermsConditions.jsx"; // Import TermsCondit
 import Data from "./finances/DataAnalysis.jsx";
 import BudgetPieChart from "./finance_modules/BudgetPieChart.jsx";
 import SpendingMonthlyBarChart from "./finance_modules/SpendingMonthlyBarChart.jsx";
-import LogExpense from "./finances/LogExpense.jsx";
+import AddExpense from "./finances/AddExpense.jsx";
+import AddPaymentCard from "./finances/AddPaymentCard.jsx";
+import ManagePaymentCards from "./finances/ManagePaymentCards.jsx"
 
 // Imports all graphics and other assets
 import {ExpenseForm} from "./Features/ExpenseForm.jsx";
@@ -75,15 +77,25 @@ function App() {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/signup" element={<SignUp />} />
-                <Route path="/signin" element={<SignIn />}/>
+                {/*Financial routing*/}
+                <Route path="/add-expense" element={<AddExpense />}/>
+                <Route path="/add-card" element={
+                    <Wrapper>
+                        <AddPaymentCard />
+                    </Wrapper>
+                } />
+                <Route path="/data" element={<Data/>}/> {/* Needs to be renamed*/}
+                <Route path="/manage-cards" element={<ManagePaymentCards />}/>
+
+
                 <Route path="/data" element={<Data/>}/>
                 <Route path="/log" element={<LogExpense />}/>
                 <Route path="/notifications" element={<NotificationPage/>}/>
                 <Route path="/settings" element={<AccountInformation/>}/>
 
-
+                <Route path="/" element={<Home />} />
+                <Route path="/signup" element={<SignUp />} />
+                <Route path="/signin" element={<SignIn />}/>
                 <Route path="/expenses" element={<ExpenseForm />} />
                 <Route path="/contact" element={<ContactUs />} /> 
                 <Route path="/privacy" element={<PrivacyPolicy />} /> 

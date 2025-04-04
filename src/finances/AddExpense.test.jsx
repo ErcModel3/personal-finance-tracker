@@ -2,13 +2,13 @@ import {expect, test} from "vitest";
 import {render} from "vitest-browser-react";
 import {BrowserRouter} from "react-router-dom";
 
-import DataAnalysis from "./DataAnalysis";
+import AddExpense from "./AddExpense.jsx";
 
 test("Renders the Data Analysis page", async () => {
     const {getByText} = render(
         <BrowserRouter>
-            <DataAnalysis />
+            <AddExpense />
         </BrowserRouter>
     );
-    expect(getByText("Budget Report")).not.toBeNull();
+    expect(getByText("Add New Expense")).not.toBeNull();
 });
