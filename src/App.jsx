@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import styles from "./Styles.module.css";
 import './App.css'
+import NotificationPage from './pages/NotificationPage.jsx';
 
 //Import components
 import Navbar from "./components/Navbar.jsx";
@@ -28,6 +29,8 @@ import ManagePaymentCards from "./finances/ManagePaymentCards.jsx"
 
 // Imports all graphics and other assets
 import {ExpenseForm} from "./Features/ExpenseForm.jsx";
+import AccountInformation from "./Features/AccountDetailsComponents/AccountInformation.jsx";
+import AccountDetail from "./Features/AccountDetailsComponents/AccountDetail.jsx";
 
 function Home() {
     // Sample data (TO REPLACE with db entry)
@@ -84,12 +87,12 @@ function App() {
                 <Route path="/data" element={<Data/>}/> {/* Needs to be renamed*/}
                 <Route path="/manage-cards" element={<ManagePaymentCards />}/>
 
-
+                <Route path="/notifications" element={<NotificationPage/>}/>
+                <Route path="/settings" element={<AccountInformation/>}/>
 
                 <Route path="/" element={<Home />} />
                 <Route path="/signup" element={<SignUp />} />
                 <Route path="/signin" element={<SignIn />}/>
-
                 <Route path="/expenses" element={<ExpenseForm />} />
                 <Route path="/contact" element={<ContactUs />} /> 
                 <Route path="/privacy" element={<PrivacyPolicy />} /> 
