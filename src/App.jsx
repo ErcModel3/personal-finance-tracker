@@ -28,7 +28,6 @@ import AddPaymentCard from "./finances/AddPaymentCard.jsx";
 import ManagePaymentCards from "./finances/ManagePaymentCards.jsx"
 
 // Imports all graphics and other assets
-import {ExpenseForm} from "./Features/ExpenseForm.jsx";
 import AccountInformation from "./Features/AccountDetailsComponents/AccountInformation.jsx";
 import AccountDetail from "./Features/AccountDetailsComponents/AccountDetail.jsx";
 
@@ -93,8 +92,7 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/signup" element={<SignUp />} />
                 <Route path="/signin" element={<SignIn />}/>
-                <Route path="/expenses" element={<ExpenseForm />} />
-                <Route path="/contact" element={<ContactUs />} /> 
+                <Route path="/contact" element={<ContactUs />} />
                 <Route path="/privacy" element={<PrivacyPolicy />} /> 
                 <Route path="/terms" element={<TermsConditions />} /> {/* Terms and Conditions route */}
                 <Route path="/dashboard" element={
