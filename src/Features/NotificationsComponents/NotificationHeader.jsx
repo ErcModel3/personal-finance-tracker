@@ -1,13 +1,11 @@
 import * as React from "react";
 import styles from "./Notifications.module.css";
-import Avatar from "./Avatar";
-import NotificationInfo from "./NotificationInfo";
-import ClearButton from "./ClearButton";
+import NotificationInfo from "./NotificationInfo.jsx";
+import ClearButton from "./ClearButton.jsx";
 
 function NotificationHeader() {
     return (
         <section className={styles.section}>
-            <Avatar />
             <NotificationInfo />
             <ClearButton />
         </section>

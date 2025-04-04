@@ -1,6 +1,6 @@
 import * as React from "react";
 import styles from "./Notifications.module.css";
-import NotificationItem from "./NotificationItem";
+import NotificationItem from "./NotificationItem.jsx";
 
 const notifications = [
     {

@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import styles from "./Styles.module.css";
 import './App.css'
-import NotificationPage from './Features/NotificationPage.jsx';
+import NotificationPage from './pages/NotificationPage.jsx';
 
 //Import components
 import Navbar from "./components/Navbar.jsx";
@@ -27,6 +27,8 @@ import LogExpense from "./finances/LogExpense.jsx";
 
 // Imports all graphics and other assets
 import {ExpenseForm} from "./Features/ExpenseForm.jsx";
+import AccountInformation from "./Features/AccountDetailsComponents/AccountInformation.jsx";
+import AccountDetail from "./Features/AccountDetailsComponents/AccountDetail.jsx";
 
 function Home() {
     // Sample data (TO REPLACE with db entry)
@@ -79,6 +81,8 @@ function App() {
                 <Route path="/data" element={<Data/>}/>
                 <Route path="/log" element={<LogExpense />}/>
                 <Route path="/notifications" element={<NotificationPage/>}/>
+                <Route path="/settings" element={<AccountInformation/>}/>
+
 
                 <Route path="/expenses" element={<ExpenseForm />} />
                 <Route path="/contact" element={<ContactUs />} /> 
