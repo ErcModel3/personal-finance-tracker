@@ -76,7 +76,7 @@
 
 .form-button-container {
     display: flex;
-    justify-content: center; /* Center the button */
+    justify-content: center; 
     margin-top: 1rem;
 }
 
@@ -111,11 +111,51 @@
         justify-content: center;
     }
 }
+.forgot-password-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+  }
+  
+  .forgot-password-button {
+    background: none;
+    border: none;
+    color: #4a6cf7;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 0;
+    text-align: center;
+    text-decoration: underline;
+  }
+  
+  .forgot-password-button:hover {
+    color: #2845c7;
+  }
+  
+  .new-user-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+    gap: 10px;
+  }
+  
+  .new-user-container p {
+    margin: 0;
+    font-size: 14px;
+  }
+  
+  .create-account-button {
+    min-width: 180px;
+    padding: 0.6rem 1.5rem;  
+  font-size: 0.95rem;      
+  background-color: #22b573;
+  }
 
 .footer {
     text-align: center;
     padding: 1rem;
     background-color: #f5f5f5;
     width: 100%;
-    margin-top: auto; /* Ensure footer is at the bottom */
+    margin-top: auto; 
 }
