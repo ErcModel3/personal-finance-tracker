@@ -331,3 +331,257 @@ input[type="text"],
 button[style*="background: #eee"] {
     background-color: #eee !important;
 }
+
+/* Card Management Styles */
+.loadingState {
+    text-align: center;
+    padding: 30px;
+}
+
+.emptyState {
+    text-align: center;
+    padding: 30px;
+}
+
+.emptyState button {
+    margin-top: 20px;
+}
+
+.cardListContainer {
+    padding: 20px;
+}
+
+.sectionSubheader {
+    margin-bottom: 20px;
+}
+
+.cardList {
+    margin-bottom: 20px;
+}
+
+.cardItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+}
+
+.cardDetails {
+    display: flex;
+    flex-direction: column;
+}
+
+.cardName {
+    font-weight: bold;
+}
+
+.cardUserId {
+    font-size: 0.9em;
+    color: #666;
+}
+
+.cardActions {
+    display: flex;
+    gap: 10px;
+}
+
+.editButton {
+    padding: 8px 12px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    background-color: #f0f0f0;
+    cursor: pointer;
+}
+
+/* Needed something for deleting cards*/
+.deleteButton {
+    padding: 8px 12px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    background-color: #ff6b6b;
+    color: white;
+    cursor: pointer;
+}
+
+.addCardButtonContainer {
+    display: flex;
+    justify-content: center;
+}
+
+.addCardButtonContainer button {
+    width: 200px;
+}
+
+/* Added css for doing the modal overlay for adding cards */
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modalContent {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+}
+
+.modalTitle {
+    margin-bottom: 20px;
+}
+
+.formGroup {
+    margin-bottom: 20px;
+}
+
+.formLabel {
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.formInput {
+    width: 100%;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+}
+
+.formInputDisabled {
+    width: 100%;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    background-color: #f0f0f0;
+    box-sizing: border-box;
+}
+
+.modalActions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+/* Another button */
+.cancelButton {
+    padding: 10px 15px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    background-color: #f0f0f0;
+    cursor: pointer;
+}
+
+/* Removed all of the CSS from the new expense page */
+/* General utility classes */
+.whiteBackground {
+    background: white;
+}
+
+.paddingTop30 {
+    padding-top: 30px;
+}
+
+/* Form layout and styling */
+.formCardContainer {
+    flex-basis: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.formGroup {
+    margin-bottom: 20px;
+}
+
+.formLabel {
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.formInput {
+    width: 100%;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+}
+
+.formSelect {
+    width: 100%;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+    background-color: white;
+}
+
+/* Category buttons */
+.categoryContainer {
+    margin-bottom: 30px;
+}
+
+.categoryButtonsWrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+}
+
+.categoryButton {
+    padding: 8px 16px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    background: white;
+    cursor: pointer;
+    margin-bottom: 5px;
+}
+
+.categoryButtonActive {
+    background: #eee;
+}
+
+/* Form actions */
+.formActions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.formActions button {
+    flex: 1;
+    max-width: 45%;
+    margin: 0;
+}
+
+.cancelButton {
+    background-color: #6c757d;
+}
+
+/* Card selection states */
+.loadingText {
+    color: #666;
+    font-style: italic;
+}
+
+.noCardsMessage {
+    color: #666;
+}
+
+.addCardLink {
+    color: #27ae60;
+    margin-left: 5px;
+    text-decoration: none;
+    font-weight: bold;
+}

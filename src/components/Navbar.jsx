@@ -12,22 +12,21 @@ const Navbar = () => {
                     to="/"
                     className="logo-link"
                     aria-label="Navigate to Home"
-                    //sents the user back to the root page of our app
+                    //sends the user back to the root page of the app
                 >
                     <img
                         src={logo}
                         alt="FinTrack Logo"
                         className="logo-image"
-                        //made the set up actually legible, is the same code from before
                     />
                 </Link>
 
                 {/* Right side: Navigation buttons */}
                 <div className="navbar-nav ms-auto">
-                    <Link className="nav-link" to="/">Home</Link>
                     <Link className="nav-link" to="/log">Add Expense</Link>
-                    <Link className="nav-link" to="/signup">Sign Up</Link>
+                    <Link className="nav-link" to="/manage-cards">Manage Cards</Link>
                     <Link className="nav-link" to="/signin">Sign In</Link>
+                    <Link className="nav-link" to="/signup">Sign Up</Link>
                 </div>
             </div>
         </nav>
