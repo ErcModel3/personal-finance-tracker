@@ -4,35 +4,69 @@ import React, { useState } from 'react';
 import styles from "../Styles.module.css";
 import Navbar from "../components/Navbar.jsx";
 import Footer from "../components/Footer.jsx";
+import supabaseClient from "../auth/Client.js";
 
 const AddPaymentCard = () => {
     // State for form inputs - matching database schema
     const [bankName, setBankName] = useState('');
 
     // Handle form submission
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (!bankName.trim()) {
-            alert("Please enter a Bank Name");
-            return;
+        try {
+            // Get user session. all this session checking should be deleted, this page will be in the session wrapper, so you couldn't even access this page without a valid session.
+            const { data: { session }, error: sessionError } = await supabaseClient.auth.getSession();
+
+            if (sessionError || !session) {
+                console.error("Session error:", sessionError);
+                alert("Authentication error. Please sign in again.");
+                return;
+            }
+
+            const sessionUser = session.user.id;
+            console.log(sessionUser);
+
+            if (!bankName.trim()) {
+                alert("Please enter a Bank Name");
+                return;
+            }
+
+            // Creating the card
+            const cardData = {
+                User_id: sessionUser,
+                Bank_name: bankName.trim()
+            };
+            console.log("Submitting data:", cardData);
+
+            // Insert into database
+            const { data, error } = await supabaseClient
+                .from('Bank_Cards')
+                .insert(cardData)
+                .select();
+
+            if (error) {
+                console.error("Database error:", error);
+                alert("Error saving card: " + error.message);
+                return;
+            }
+
+            console.log("Response data:", data);
+
+            if (data && data.length > 0) {
+                // Show a success message
+                alert("Card saved successfully!");
+                // Reset form
+                setBankName('');
+            } else {
+                console.warn("No data returned after insert");
+                alert("Card may have been created but couldn't be verified.");
+                setBankName('');
+            }
+        } catch (err) {
+            console.error("Unexpected error:", err);
+            alert("An unexpected error occurred: " + err.message);
         }
-
-        // Creating the card
-        const cardData = {
-            // TO DO add integration with the wrapper to get the user ID
-            Bank_name: bankName.trim()
-        };
-
-        // Log to console as JSON
-        console.log("New card data:");
-        console.log(JSON.stringify(cardData, null, 2));
-
-        // Reset form
-        setBankName('');
-
-        // Show a success message
-        alert("Card saved successfully!");
     };
 
     // Cancel button code
