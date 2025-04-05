@@ -39,11 +39,11 @@ const ManageBankCards = () => {
             console.log("Card data received:", data);
 
             // Set the bankCards state with the fetched data
-            setBankCards(data || []);  // Add this line to update your state
+            setBankCards(data || []);
             setLoading(false);
         };
 
-        fetchCards().then(r => null);
+        fetchCards().then(r => null); //ibr idk what the .then does but webstorm told me i should do it so the promise is kept
     }, []);
 
     // Handle editing a card
@@ -68,14 +68,31 @@ const ManageBankCards = () => {
         setSelectedCard(null);
     };
 
-    const handleDeleteCard = (cardId) => {
+    const handleDeleteCard = async (card) => {
         if (window.confirm("Are you sure you want to delete this card?")) {
-            console.log(`Deleting card with ID: ${cardId}`);
+            console.log(`Deleting card with name: ${card.Bank_name}`);
 
-            // Filter out the deleted card from the card states
-            setBankCards(bankCards.filter(card => card.id !== cardId));
+            // Get the current user's ID
+            const sessionID = userID;
 
-            // TO DO add db code to delete the card from the user
+            // Delete from the database matching both Bank_name and User_id
+            const { error } = await supabaseClient
+                .from('Bank_Cards')
+                .delete()
+                .eq('Bank_name', card.Bank_name)
+                .eq('User_id', sessionID);
+
+            if (error) {
+                console.error('Error deleting card:', error);
+                alert('Failed to delete card: ' + error.message);
+                return;
+            }
+
+            // If the delete operation was successful, update the UI
+            // Filter out the card with the matching Bank_name
+            setBankCards(bankCards.filter(c => c.Bank_name !== card.Bank_name));
+
+            console.log('Card deleted successfully');
         }
     };
 
@@ -120,7 +137,7 @@ const ManageBankCards = () => {
                                                 Edit
                                             </button>
                                             <button
-                                                onClick={() => handleDeleteCard(card.id)}
+                                                onClick={() => handleDeleteCard(card)}
                                                 className={styles.deleteButton}
                                             >
                                                 Delete
