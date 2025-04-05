@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import styles from "../Styles.module.css";
 import Navbar from "../components/Navbar.jsx";
 import Footer from "../components/Footer.jsx";
+import supabaseClient from "../auth/Client.js";
 
 const ManageBankCards = () => {
 
@@ -14,19 +15,33 @@ const ManageBankCards = () => {
 
 
     useEffect(() => {
+        console.log("useEffect running");
 
-        // Adding testing data (same way the db would work)
-        setTimeout(() => {
-            const mockCards = [
-                { id: 1, User_id: "1", Bank_name: "Starling" },
-                { id: 2, User_id: "1", Bank_name: "Monzo"},
-                { id: 3, User_id: "1", Bank_name: "American Express" }
-            ];
-            setBankCards(mockCards); // TO DO replace with db card data structure
-            setLoading(false); // TO DO change to true ^
-        }, 500);
+        const fetchCards = async () => {
+            console.log("Fetching user cards...");
 
-        // TO DO Add db code in place of this function
+            // Get the current session
+
+            console.log("User ID:", session.user.id);
+
+            // Query the profiles table using the user ID from the session
+            const { data, error } = await supabaseClient
+                .from('BankCards')
+                .select('*') // Select all columns to see what's available
+                .eq('id', session.user.id);
+
+            if (error) {
+                console.log('Card fetch error:', error);
+                setLoading(false);
+                return;
+            }
+
+            console.log("Card data received:", data);
+
+            setLoading(false);
+        };
+
+        fetchCards();
     }, []);
 
     // Handle editing a card

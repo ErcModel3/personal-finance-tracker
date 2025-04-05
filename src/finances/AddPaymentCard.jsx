@@ -49,8 +49,6 @@ const AddPaymentCard = () => {
                 return;
             }
 
-            console.log("Response data:", data);
-
             if (data && data.length > 0) {
                 // Show a success message
                 alert("Card saved successfully!");
