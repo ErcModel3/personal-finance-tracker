@@ -110,7 +110,7 @@
 }
 
 .create-target-btn {
-    background-color: #4CAF50; /* Green color */
+    background-color: #27ae60; 
     color: white;
     border: none;
     padding: 0.7rem 1.5rem;
@@ -121,7 +121,7 @@
 }
 
 .create-target-btn:hover {
-    background-color: #3e8e41; /* Darker green on hover */
+    background-color: #219653; 
 }
 
 /* Contributions Section */
@@ -219,7 +219,7 @@
     .form-row {
         grid-template-columns: 1fr;
     }
-
+    
     .info-section {
         flex-direction: column;
         align-items: center;
