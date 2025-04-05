@@ -25,7 +25,6 @@ const AddPaymentCard = () => {
             }
 
             const sessionUser = session.user.id;
-            console.log(sessionUser);
 
             if (!bankName.trim()) {
                 alert("Please enter a Bank Name");
@@ -37,7 +36,6 @@ const AddPaymentCard = () => {
                 User_id: sessionUser,
                 Bank_name: bankName.trim()
             };
-            console.log("Submitting data:", cardData);
 
             // Insert into database
             const { data, error } = await supabaseClient
@@ -64,7 +62,6 @@ const AddPaymentCard = () => {
                 setBankName('');
             }
         } catch (err) {
-            console.error("Unexpected error:", err);
             alert("An unexpected error occurred: " + err.message);
         }
     };
