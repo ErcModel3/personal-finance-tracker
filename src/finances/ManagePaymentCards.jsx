@@ -5,6 +5,7 @@ import styles from "../Styles.module.css";
 import Navbar from "../components/Navbar.jsx";
 import Footer from "../components/Footer.jsx";
 import supabaseClient from "../auth/Client.js";
+import userID from "../auth/SessionData.js";
 
 const ManageBankCards = () => {
 
@@ -21,14 +22,13 @@ const ManageBankCards = () => {
             console.log("Fetching user cards...");
 
             // Get the current session
-
-            console.log("User ID:", session.user.id);
+            const sessionID = userID
 
             // Query the profiles table using the user ID from the session
             const { data, error } = await supabaseClient
-                .from('BankCards')
+                .from('Bank_Cards')
                 .select('*') // Select all columns to see what's available
-                .eq('id', session.user.id);
+                .eq('User_id', sessionID);
 
             if (error) {
                 console.log('Card fetch error:', error);
@@ -38,10 +38,12 @@ const ManageBankCards = () => {
 
             console.log("Card data received:", data);
 
+            // Set the bankCards state with the fetched data
+            setBankCards(data || []);  // Add this line to update your state
             setLoading(false);
         };
 
-        fetchCards();
+        fetchCards().then(r => null);
     }, []);
 
     // Handle editing a card
