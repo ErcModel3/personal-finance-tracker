@@ -8,15 +8,17 @@ import Navbar from "../../components/Navbar.jsx";
 
 function AccountInformation() {
     return (
-        <main className={styles.container}>
-            <header className={styles.header}>
-                <h1 className={styles.title}>Account Information</h1>
-                <p className={styles.subtitle}>View and update your account details</p>
+        <main className={styles.compactContainer}>
+            <header className={styles.compactHeader}>
+                <h1 className={styles.compactTitle}>Account Information</h1>
+                <p className={styles.compactSubtitle}>View and update your account details</p>
             </header>
             <Navbar/>
-            <AccountDetailsSection />
-            <NotificationSettings />
-            <DeleteAccount />
+            <div className={styles.contentGrid}>
+                <AccountDetailsSection />
+                <NotificationSettings />
+                <DeleteAccount />
+            </div>
             <Footer />
         </main>
     );

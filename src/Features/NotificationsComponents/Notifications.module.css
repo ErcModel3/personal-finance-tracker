@@ -1,262 +1,251 @@
 .list {
     z-index: 0;
-    justify-content: center;
-    align-items: center;
-    gap: 40px 60px;
     width: 100%;
-    padding: 60px 170px;
-    font-family:
-            Roboto,
-            -apple-system,
-            Helvetica,
-            sans-serif;
+    padding: 20px 0 40px;
+    font-family: Roboto, -apple-system, Helvetica, sans-serif;
     display: flex;
     position: relative;
     overflow: hidden;
+    flex-wrap: wrap;
+    max-width: 100%;
+    margin: 0 auto;
 }
 
 .heading {
     z-index: 0;
     color: #000;
-    flex: 1;
-    align-self: stretch;
-    min-width: 240px;
-    margin-top: auto;
-    margin-bottom: auto;
-    font-size: 40px;
+    width: 100%;
+    margin-bottom: 40px;
+    font-size: 36px;
     font-weight: 700;
     line-height: 1.2;
+    text-align: center;
 }
 
 .notificationContainer {
     z-index: 0;
-    flex-direction: column;
-    flex: 1;
-    justify-content: center;
-    align-self: stretch;
-    align-items: stretch;
-    min-width: 240px;
-    margin-top: auto;
-    margin-bottom: auto;
-    font-weight: 400;
     display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 20px;
+    max-width: 600px;
+    margin: 0 auto;
+    align-items: center;
 }
 
-
 .row {
-    justify-content: start;
-    align-items: stretch;
-    gap: 40px;
+    justify-content: center;
+    align-items: center;
     width: 100%;
+    max-width: 600px;
     display: flex;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease;
+    position: relative;
+    min-height: 100px;
+}
+
+.row:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
 }
 
 .item {
-    flex: 1;
-    justify-content: center;
-    align-items: center;
-    gap: 16px;
-    width: 100%;
-    min-width: 240px;
-    height: 100%;
-    padding-top: 20px;
-    padding-bottom: 20px;
     display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 20px 30px 20px 100px;
     position: relative;
 }
 
 .frame {
-    z-index: 0;
     color: #000;
-    white-space: nowrap;
     text-align: center;
-    background-color: #0000000d;
-    border-radius: 30px;
-    align-self: stretch;
+    background-color: #fff;
+    border-radius: 50%;
     width: 60px;
     height: 60px;
-    margin-top: auto;
-    margin-bottom: auto;
-    padding-left: 11px;
-    padding-right: 11px;
-    font-size: 38px;
-    line-height: 1.6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 .content {
-    z-index: 0;
-    flex: 22px;
-    align-self: stretch;
-    min-width: 240px;
-    margin-top: auto;
-    margin-bottom: auto;
+    flex: 1;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .title {
     color: #000;
-    font-size: 20px;
+    font-size: 24px;
     line-height: 1.4;
+    margin: 10px 0 8px;
+    font-weight: 600;
+    text-align: center;
 }
 
 .subtitle {
-    color: #000;
+    color: #555;
     font-size: 16px;
-}
-
-.notificationImage {
-    aspect-ratio: 500;
-    object-fit: contain;
-    object-position: center;
-    z-index: 0;
-    align-self: start;
-    width: 520px;
-    min-width: 240px;
-    height: 0;
-    position: absolute;
-    bottom: -1px;
-    left: 0;
-    right: 0;
-}
-
-
-.backgroundImage {
-    object-fit: contain;
-    object-position: center;
-    z-index: 0;
-    align-self: start;
-    width: 1440px;
-    min-width: 240px;
-    height: 0;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-}
-
-.avatar {
-    z-index: 0;
-    background-color: #d9d9d980;
-    border-radius: 50px;
-    flex-shrink: 0;
-    align-self: stretch;
-    width: 100px;
-    height: 100px;
-    margin-top: auto;
-    margin-bottom: auto;
-    display: flex;
+    margin: 0;
+    word-wrap: break-word;
+    text-align: center;
 }
 
 .container {
-    z-index: 0;
     flex: 1;
-    align-self: stretch;
-    min-width: 240px;
-    margin-top: auto;
-    margin-bottom: auto;
+    text-align: center;
 }
 
-@media (width<=991px) {
-    .container {
-        max-width: 100%;
-    }
-}
-
-.title {
-    font-size: 24px;
-    font-weight: 700;
-    line-height: 1;
-}
-
-@media (width<=991px) {
-    .title {
-        max-width: 100%;
-    }
-}
-
-.selection {
-    gap: 6px;
-    width: 100%;
-    min-height: 20px;
-    margin-top: 12px;
+/* Center container used for user info */
+.centeredContainer {
     display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    text-align: center;
+    padding-top: 10px;
 }
 
-@media (width<=991px) {
-    .selection {
-        max-width: 100%;
-    }
+/* Wrapper for header section */
+.headerWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 40px 0 20px;
+    margin-top: 20px;
 }
 
-.description {
-    margin-top: 12px;
-    font-size: 16px;
-    font-weight: 400;
+/* Section style - removed blue background */
+.section {
+    width: 100%;
+    padding: 0;
+    font-family: Roboto, -apple-system, Helvetica, sans-serif;
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    margin-top: 0;
+    text-align: center;
 }
 
-@media (width<=991px) {
-    .description {
-        max-width: 100%;
-    }
+/* Button container for Clear All */
+.buttonContainer {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
 }
 
 .button {
-    z-index: 0;
-    align-self: stretch;
-    width: 160px;
-    margin-top: auto;
-    margin-bottom: auto;
-    font-size: 16px;
-    font-weight: 500;
-    overflow: hidden;
-}
-
-.seconday {
-    background-color: #27ae60;
-    border: 1px solid #f5f5f5;
-    border-radius: 8px;
-    width: 160px;
-    max-width: 100%;
-    padding: 12px;
-    color: inherit;
-    font-size: inherit;
-    font-weight: inherit;
-    cursor: pointer;
-}
-
-.img {
-    object-fit: contain;
-    object-position: center;
-    z-index: 0;
-    align-self: start;
-    width: 1440px;
-    min-width: 240px;
-    height: 0;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-}
-
-@media (width<=991px) {
-    .img {
-        max-width: 100%;
-    }
-}
-.section {
-    z-index: 0;
-    color: #f5f5f5;
-    background-color: #2b5d9f;
-    justify-content: center;
-    align-items: center;
-    gap: 40px;
-    width: 100%;
-    padding: 60px 170px;
-    font-family:
-            Roboto,
-            -apple-system,
-            Helvetica,
-            sans-serif;
+    margin-left: 0;
     display: flex;
-    position: relative;
-    overflow: hidden;
+    justify-content: center;
+}
+
+.seconday, .secondary {
+    background-color: #27ae60;
+    border: none;
+    border-radius: 8px;
+    width: auto;
+    padding: 12px 25px;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.seconday:hover, .secondary:hover {
+    background-color: #219653;
+}
+
+.description {
+    color: #555;
+    font-size: 16px;
+    margin: 5px 0 0 0;
+}
+
+body, html, #root, .App {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    text-align: center;
+    padding-top: 10px;
+}
+
+.footer {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    padding: 30px 0;
+    margin-top: 60px;
+    width: 100%;
+    text-align: center;
+}
+
+.footer a {
+    color: #333;
+    text-decoration: none;
+    font-size: 18px;
+    text-align: center;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}
+
+/* For handling the notification header text */
+.selection {
+    display: none; /* Hide this element as it's not needed */
+}
+
+@media (max-width: 768px) {
+    .section {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+    }
+
+    .button {
+        margin: 10px 0;
+    }
+
+    .section > div {
+        margin-right: 0;
+        margin-bottom: 15px;
+    }
+
+    .item {
+        padding-left: 90px;
+    }
+
+    .frame {
+        left: 15px;
+        width: 50px;
+        height: 50px;
+        font-size: 26px;
+    }
+
+    .row {
+        max-width: 90%;
+    }
+
+    .headerWrapper {
+        padding: 30px 0 15px;
+    }
 }

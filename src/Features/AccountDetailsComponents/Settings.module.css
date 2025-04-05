@@ -1,188 +1,177 @@
-.section {
-    border-color: #0000001a;
-    border-bottom-width: 1px;
-    width: 100%;
-    padding-bottom: 60px;
+body, html {
+    margin: 0;
+    padding: 0;
 }
 
-.title {
-    margin-bottom: 24px;
-    font-size: 40px;
-    font-weight: 700;
-}
-
-.cardGrid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 40px;
-    display: grid;
-}
-
-@media (width <= 640px) {
-    .title {
-        font-size: 32px;
-    }
-
-    .cardGrid {
-        grid-template-columns: repeat(1, minmax(0, 1fr));
-    }
-}
-
-.card {
+/* Main Container */
+.compactContainer {
     flex-direction: column;
     align-items: center;
+    padding: 0 170px 60px;
     display: flex;
+    margin-top: 0;
 }
 
-.iconContainer {
-    background-color: #0000000d;
-    border-radius: 50px;
-    width: 100px;
-    height: 100px;
-    margin-bottom: 20px;
-    font-size: 62.5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.title {
+/* Header */
+.compactHeader {
     text-align: center;
-    margin-bottom: 8px;
-    font-size: 20px;
+    margin-bottom: 30px;
 }
 
-.value {
-    text-align: center;
-    font-size: 28px;
-    font-weight: 500;
-}
-
-.subdued {
-    color: #00000080;
-    font-size: 16px;
-    font-weight: normal;
-}
-
-@media (width <= 640px) {
-    .value:not(.subdued) {
-        font-size: 24px;
-    }
-}
-
-.section {
-    border-color: #0000001a;
-    border-bottom-width: 1px;
-    width: 100%;
-    padding-top: 60px;
-    padding-bottom: 60px;
-}
-
-.title {
-    margin-bottom: 24px;
-    font-size: 40px;
-    font-weight: 700;
-}
-
-.description {
-    margin-bottom: 40px;
-    font-size: 16px;
-}
-
-.cardContainer {
-    flex-direction: column;
-    gap: 40px;
-    display: flex;
-}
-
-@media (width <= 640px) {
-    .title {
-        font-size: 32px;
-    }
-}
-.card {
-    border: 1px solid #0000001a;
-    border-radius: 6px;
-    gap: 16px;
-    padding: 16px;
-    display: flex;
-}
-
-.icon {
-    background-color: #d9d9d980;
-    width: 100px;
-    height: 100px;
-}
-
-.content {
-    flex: 1;
-}
-
-.title {
-    margin-bottom: 8px;
-    font-size: 20px;
-    font-weight: 500;
-}
-
-.description {
-    margin-bottom: 16px;
-    font-size: 16px;
-}
-.section {
-    padding-top: 60px;
-    padding-bottom: 60px;
-}
-
-.deleteButton {
-    color: #f5f5f5;
-    background-color: #27ae60;
-    border-radius: 8px;
-    width: 240px;
-    padding: 12px;
-    font-size: 16px;
-    font-weight: 500;
-    cursor: pointer;
-    border: none;
-}
-
-.deleteButton:hover {
-    opacity: 0.9;
-}
-.container {
-    flex-direction: column;
-    align-items: center;
-    padding: 60px 170px;
-    display: flex;
-}
-
-.header {
-    text-align: center;
-    margin-bottom: 60px;
-}
-
-.title {
+.compactTitle {
     margin-bottom: 12px;
     font-size: 40px;
     font-weight: 700;
 }
 
-.subtitle {
-    font-size: 32px;
+.compactSubtitle {
+    font-size: 16px;
 }
 
-@media (width <= 991px) {
-    .container {
+/* Sections */
+.compactSection {
+    border-color: #0000001a;
+    border-bottom-width: 1px;
+    width: 100%;
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+
+.sectionTitle {
+    margin-bottom: 24px;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.sectionDescription {
+    margin-bottom: 16px;
+    font-size: 14px;
+}
+
+/* Account Detail Cards */
+.cardGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    width: 100%;
+}
+
+.compactCard {
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    border: 1px solid #0000001a;
+    border-radius: 6px;
+    background-color: #f8f8f8;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    align-items: center;
+    text-align: center;
+}
+
+.detailTitle {
+    font-size: 16px;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.detailValue {
+    font-size: 14px;
+    font-weight: normal;
+}
+
+/* Notification Cards */
+.notificationContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.notificationCard {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    border: 1px solid #0000001a;
+    border-radius: 6px;
+    background-color: #f8f8f8;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.notificationContent {
+    flex: 1;
+}
+
+.notificationTitle {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+.notificationDescription {
+    font-size: 14px;
+    margin-bottom: 0;
+}
+
+/* Toggle Buttons */
+.toggleContainer {
+    display: flex;
+    gap: 8px;
+}
+
+.toggleButton {
+    padding: 6px 12px;
+    font-size: 14px;
+    border-radius: 4px;
+    border: none;
+    background-color: #27ae60;
+    color: #f5f5f5;
+    cursor: pointer;
+}
+
+.toggleButton:hover {
+    opacity: 0.9;
+}
+
+/* Delete Button */
+.deleteButton {
+    color: #f5f5f5;
+    background-color: #e74c3c;
+    border-radius: 4px;
+    width: 140px;
+    padding: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    margin-top: 20px;
+}
+
+.deleteButton:hover {
+    opacity: 0.9;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 991px) {
+    .compactContainer {
         padding-left: 60px;
         padding-right: 60px;
     }
+    
+    .cardGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
-@media (width <= 640px) {
-    .container {
-        padding: 40px 20px;
+@media (max-width: 640px) {
+    .compactContainer {
+        padding: 0 20px 40px;
     }
-
-    .title {
+    
+    .compactTitle {
         font-size: 32px;
     }
+    
+    .cardGrid {
+        grid-template-columns: repeat(1, 1fr);
+    }
 }
-

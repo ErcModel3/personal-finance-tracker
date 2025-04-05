@@ -3,25 +3,39 @@ import styles from "../Features/AccountDetailsComponents/Settings.module.css";
 import AccountDetail from "../Features/AccountDetailsComponents/AccountDetail.jsx";
 
 function AccountDetailsSection() {
+    const handlePasswordClick = () => {
+        // Database integration
+        alert("Password change functionality will be implemented here.");
+
+    };
+
+    const userData = {
+        username: "Username will be displayed here",
+        email: "user@example.com"
+    };
+
     return (
         <section className={styles.section}>
             <h2 className={styles.title}>Account Details</h2>
             <div className={styles.cardGrid}>
                 <AccountDetail
-                    icon="😊"
                     title="Username"
-                    value="Your current username"
+                    value={userData.username}
                 />
                 <AccountDetail
-                    icon="📧"
                     title="Email"
-                    value="your.email@example.com"
+                    value={userData.email}
                 />
                 <AccountDetail
-                    icon="🔒"
-                    title="Change Password"
-                    value="Click here to change your password"
-                    isSubdued
+                    title="Password Management"
+                    value={
+                        <button
+                            className={styles.passwordChangeButton}
+                            onClick={handlePasswordClick}
+                        >
+                            Change Password
+                        </button>
+                    }
                 />
             </div>
         </section>
