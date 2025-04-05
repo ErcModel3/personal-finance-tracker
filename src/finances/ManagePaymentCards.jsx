@@ -48,22 +48,46 @@ const ManageBankCards = () => {
 
     // Handle editing a card
     const handleEditCard = (card) => {
-        setSelectedCard(card);
+        // Store the card with an additional field for the original bank name
+        setSelectedCard({
+            ...card, //copies all data from card into this JSON
+            originalBankName: card.Bank_name
+        });
         console.log(`Editing card:`, JSON.stringify(card, null, 2));
     };
 
-    const handleSaveEdit = () => {
+    const handleSaveEdit = async () => {
         if (!selectedCard.Bank_name.trim()) {
             alert("Bank name cannot be empty");
             return;
         }
+
+        // Get the current user's ID
+        const sessionID = userID;
+
+        // Update the card in the database using the original name as identifier
+        const { error } = await supabaseClient
+            .from('Bank_Cards')
+            .update({
+                Bank_name: selectedCard.Bank_name
+            })
+            .eq('User_id', sessionID)
+            .eq('Bank_name', selectedCard.originalBankName);
+
+        if (error) {
+            console.error('Error updating card:', error);
+            alert('Failed to update card: ' + error.message);
+            return;
+        }
+
+        // Update the local state
         setBankCards(bankCards.map(card =>
-            card.id === selectedCard.id ? selectedCard : card
+            card.Bank_name === selectedCard.originalBankName ?
+                {...card, Bank_name: selectedCard.Bank_name} :
+                card
         ));
 
         console.log(`Saved edited card:`, JSON.stringify(selectedCard, null, 2));
-
-        // TO DO add db code to edit the selected card
 
         setSelectedCard(null);
     };
