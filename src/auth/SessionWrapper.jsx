@@ -3,7 +3,7 @@ import supabaseClient from "./Client.js";
 import { Navigate } from "react-router-dom";
 
 // eslint-disable-next-line react/prop-types
-function Wrapper({children}) {
+function SessionWrapper({children}) {
     const [authenticated, setAuthenticated] = useState(false);
     const [loading, setLoading] = useState(true);
 
@@ -28,4 +28,4 @@ function Wrapper({children}) {
     }
 }
 
-export default Wrapper;
+export default SessionWrapper;

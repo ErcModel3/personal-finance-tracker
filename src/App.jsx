@@ -11,7 +11,7 @@ import NotFound from "./components/NotFound.jsx";
 //Import pages
 import SignUp from "./pages/SignUp";
 import SignIn from "./pages/SignIn";
-import Wrapper from "./auth/Wrapper.jsx";
+import SessionWrapper from "./auth/SessionWrapper.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import Reviews from "./pages/Reviews.jsx";
 import Welcome from "./pages/Welcome.jsx";
@@ -79,31 +79,31 @@ function App() {
         <BrowserRouter>
             <Routes>
                 {/*Financial routing*/}
-                <Route path="/add-expense" element={<AddExpense />}/>
-                <Route path="/add-card" element={
-                    <Wrapper>
-                        <AddPaymentCard />
-                    </Wrapper>
-                } />
-                <Route path="/finance-targets" element={<FinanceTargets />} />
+                <Route path="/add-expense" element={
+                    <SessionWrapper> <AddExpense /> </SessionWrapper>
+                }/>
+                <Route path="/finance-targets" element={
+                    <SessionWrapper> <FinanceTargets /> </SessionWrapper>
+                    } />
                 <Route path="/data" element={<Data/>}/> {/* Needs to be renamed*/}
-                <Route path="/manage-cards" element={<ManagePaymentCards />}/>
-                <Route path="/merged" element={<MergedCards />}/>
-
-                <Route path="/notifications" element={<NotificationPage/>}/>
-                <Route path="/settings" element={<AccountInformation/>}/>
-
+                <Route path="/manage-cards" element={
+                    <SessionWrapper> <MergedCards /> </SessionWrapper>
+                }/>
+                <Route path="/notifications" element={
+                    <SessionWrapper> <NotificationPage/> </SessionWrapper>
+                }/>
+                <Route path="/settings" element={
+                    <SessionWrapper> <AccountInformation/> </SessionWrapper>
+                }/>
+                <Route path="/dashboard" element={
+                    <SessionWrapper> <Dashboard /> </SessionWrapper>
+                } />
                 <Route path="/" element={<Home />} />
                 <Route path="/signup" element={<SignUp />} />
                 <Route path="/signin" element={<SignIn />}/>
                 <Route path="/contact" element={<ContactUs />} />
                 <Route path="/privacy" element={<PrivacyPolicy />} />
                 <Route path="/terms" element={<TermsConditions />} /> {/* Terms and Conditions route */}
-                <Route path="/dashboard" element={
-                    <Wrapper>
-                        <Dashboard />
-                    </Wrapper>
-                } />
                 <Route path="*" element={<NotFound />} />
             </Routes>
         </BrowserRouter>
