@@ -13,9 +13,20 @@ const AddExpense = () => {
     const [selectedCard, setSelectedCard] = useState('');
     const [availableCards, setAvailableCards] = useState([]);
     const [loading, setLoading] = useState(true);
+    // New state for custom categories
+    const [customCategory, setCustomCategory] = useState('');
+
+    const [categories, setCategories] = useState([
+        'Bills', 'Eating out', 'Essential Spend', 'Groceries',
+        'Non-essential Spend', 'Shopping', 'Savings'
+    ]);
+    const [defaultCategories] = useState([
+        'Bills', 'Eating out', 'Essential Spend', 'Groceries',
+        'Non-essential Spend', 'Shopping', 'Savings'
+    ]);
+    const [showCustomInput, setShowCustomInput] = useState(false);
 
     useEffect(() => {
-
         // Adding testing data (same way the db would work)
         setTimeout(() => {
             const mockCards = [
@@ -27,7 +38,11 @@ const AddExpense = () => {
             setLoading(false); // TO DO change to true ^
         }, 500);
 
-        // TO DO Add db code in place of this function
+        // Save to localStorage or database (Rowan's problem)
+        const savedCategories = localStorage.getItem('customCategories');
+        if (savedCategories) {
+            setCategories(JSON.parse(savedCategories));
+        }
     }, []);
 
     // Handle form submission
@@ -84,6 +99,56 @@ const AddExpense = () => {
         setAmount('');
         setCategory('Bills');
         setSelectedCard('');
+        setShowCustomInput(false);
+    };
+
+    // Handle adding a new custom category
+    const handleAddCustomCategory = () => {
+        if (customCategory.trim() === '') {
+            alert("Please enter a category name");
+            return;
+        }
+
+        if (categories.includes(customCategory.trim())) {
+            alert("This category already exists");
+            return;
+        }
+
+        const updatedCategories = [...categories, customCategory.trim()];
+        setCategories(updatedCategories);
+        setCategory(customCategory.trim());
+        setCustomCategory('');
+        setShowCustomInput(false);
+
+        // Save to localStorage or database (Rowan's problem)
+        localStorage.setItem('customCategories', JSON.stringify(updatedCategories));
+    };
+
+    // Handle removing a category
+    const handleRemoveCategory = (categoryToRemove) => {
+        // Don't allow removing the category if it's currently selected
+        if (category === categoryToRemove) {
+            alert("Cannot remove currently selected category");
+            return;
+        }
+
+        // Prevent removing default categories
+        if (defaultCategories.includes(categoryToRemove)) {
+            const confirmRemove = window.confirm("Are you sure you want to remove this default category?");
+            if (!confirmRemove) return;
+        }
+
+        // To prevent accidents
+        if (categories.includes(categoryToRemove)) {
+            const confirmRemove = window.confirm("Are you sure you want to remove this category?");
+            if (!confirmRemove) return;
+        }
+
+        const updatedCategories = categories.filter(cat => cat !== categoryToRemove);
+        setCategories(updatedCategories);
+
+        // Save to localStorage or database (Rowan's problem)
+        localStorage.setItem('customCategories', JSON.stringify(updatedCategories));
     };
 
     return (
@@ -150,49 +215,51 @@ const AddExpense = () => {
                         <div className={styles.categoryContainer}>
                             <div className={styles.formLabel}>Category</div>
                             <div className={styles.categoryButtonsWrapper}>
+                                {categories.map(cata => (
+                                    <div key={cata} className={styles.categoryButtonContainer}>
+                                        <button
+                                            onClick={() => setCategory(cata)}
+                                            className={`${styles.categoryButton} ${category === cata ? styles.categoryButtonActive : ''}`}
+                                        >
+                                            {cata}
+                                        </button>
+                                        <button
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleRemoveCategory(cata);
+                                            }}
+                                            className={styles.removeCategoryButton}
+                                            title="Remove category"
+                                        >
+                                            ×
+                                        </button>
+                                    </div>
+                                ))}
                                 <button
-                                    onClick={() => setCategory('Bills')}
-                                    className={`${styles.categoryButton} ${category === 'Bills' ? styles.categoryButtonActive : ''}`}
+                                    onClick={() => setShowCustomInput(!showCustomInput)}
+                                    className={`${styles.categoryButton}`}
                                 >
-                                    Bills
-                                </button>
-                                <button
-                                    onClick={() => setCategory('Eating out')}
-                                    className={`${styles.categoryButton} ${category === 'Eating out' ? styles.categoryButtonActive : ''}`}
-                                >
-                                    Eating out
-                                </button>
-                                <button
-                                    onClick={() => setCategory('Essential Spend')}
-                                    className={`${styles.categoryButton} ${category === 'Essential Spend' ? styles.categoryButtonActive : ''}`}
-                                >
-                                    Essential Spend
-                                </button>
-                                <button
-                                    onClick={() => setCategory('Groceries')}
-                                    className={`${styles.categoryButton} ${category === 'Groceries' ? styles.categoryButtonActive : ''}`}
-                                >
-                                    Groceries
-                                </button>
-                                <button
-                                    onClick={() => setCategory('Non-essential Spend')}
-                                    className={`${styles.categoryButton} ${category === 'Non-essential Spend' ? styles.categoryButtonActive : ''}`}
-                                >
-                                    Non-essential Spend
-                                </button>
-                                <button
-                                    onClick={() => setCategory('Shopping')}
-                                    className={`${styles.categoryButton} ${category === 'Shopping' ? styles.categoryButtonActive : ''}`}
-                                >
-                                    Shopping
-                                </button>
-                                <button
-                                    onClick={() => setCategory('Savings')}
-                                    className={`${styles.categoryButton} ${category === 'Savings' ? styles.categoryButtonActive : ''}`}
-                                >
-                                    Savings
+                                    + Add Custom
                                 </button>
                             </div>
+
+                            {showCustomInput && (
+                                <div className={`${styles.formGroup} `}>
+                                    <input
+                                        type="text"
+                                        placeholder="Enter custom category"
+                                        value={customCategory}
+                                        onChange={(e) => setCustomCategory(e.target.value)}
+                                        className={styles.formInput}
+                                    />
+                                    <button
+                                        onClick={handleAddCustomCategory}
+                                        className={`${styles.primaryButton} `}
+                                    >
+                                        Add
+                                    </button>
+                                </div>
+                            )}
                         </div>
 
                         <div className={styles.formActions}>
@@ -216,5 +283,46 @@ const AddExpense = () => {
         </div>
     );
 };
+
+//Don't need this to my knowledge but keep it here just in case Kirk whines
+
+/*Bills
+</button>
+<button
+    onClick={() => setCategory('Eating out')}
+    className={`${styles.categoryButton} ${category === 'Eating out' ? styles.categoryButtonActive : ''}`}
+>
+    Eating out
+</button>
+<button
+    onClick={() => setCategory('Essential Spend')}
+    className={`${styles.categoryButton} ${category === 'Essential Spend' ? styles.categoryButtonActive : ''}`}
+>
+    Essential Spend
+</button>
+<button
+    onClick={() => setCategory('Groceries')}
+    className={`${styles.categoryButton} ${category === 'Groceries' ? styles.categoryButtonActive : ''}`}
+>
+    Groceries
+</button>
+<button
+    onClick={() => setCategory('Non-essential Spend')}
+    className={`${styles.categoryButton} ${category === 'Non-essential Spend' ? styles.categoryButtonActive : ''}`}
+>
+    Non-essential Spend
+</button>
+<button
+    onClick={() => setCategory('Shopping')}
+    className={`${styles.categoryButton} ${category === 'Shopping' ? styles.categoryButtonActive : ''}`}
+>
+    Shopping
+</button>
+<button
+    onClick={() => setCategory('Savings')}
+    className={`${styles.categoryButton} ${category === 'Savings' ? styles.categoryButtonActive : ''}`}
+>
+    Savings
+*/
 
 export default AddExpense;
