@@ -120,7 +120,7 @@
     padding-top: 10px;
 }
 
-/* Wrapper for header section */
+/* SessionWrapper for header section */
 .headerWrapper {
     display: flex;
     flex-direction: column;

@@ -4,6 +4,8 @@ import React, { useState, useEffect } from 'react';
 import styles from "../Styles.module.css";
 import Navbar from "../components/Navbar.jsx";
 import Footer from "../components/Footer.jsx";
+import supabaseClient from "../auth/Client.js";
+import userID from "../auth/SessionData.js";
 
 const ManageBankCards = () => {
 
@@ -14,51 +16,107 @@ const ManageBankCards = () => {
 
 
     useEffect(() => {
+        console.log("useEffect running");
 
-        // Adding testing data (same way the db would work)
-        setTimeout(() => {
-            const mockCards = [
-                { id: 1, User_id: "1", Bank_name: "Starling" },
-                { id: 2, User_id: "1", Bank_name: "Monzo"},
-                { id: 3, User_id: "1", Bank_name: "American Express" }
-            ];
-            setBankCards(mockCards); // TO DO replace with db card data structure
-            setLoading(false); // TO DO change to true ^
-        }, 500);
+        const fetchCards = async () => {
+            console.log("Fetching user cards...");
 
-        // TO DO Add db code in place of this function
+            // Get the current session
+            const sessionID = userID
+
+            // Query the profiles table using the user ID from the session
+            const { data, error } = await supabaseClient
+                .from('Bank_Cards')
+                .select('*') // Select all columns to see what's available
+                .eq('User_id', sessionID);
+
+            if (error) {
+                console.log('Card fetch error:', error);
+                setLoading(false);
+                return;
+            }
+
+            console.log("Card data received:", data);
+
+            // Set the bankCards state with the fetched data
+            setBankCards(data || []);
+            setLoading(false);
+        };
+
+        fetchCards().then(r => null); //ibr idk what the .then does but webstorm told me i should do it so the promise is kept
     }, []);
 
     // Handle editing a card
     const handleEditCard = (card) => {
-        setSelectedCard(card);
+        // Store the card with an additional field for the original bank name
+        setSelectedCard({
+            ...card, //copies all data from card into this JSON
+            originalBankName: card.Bank_name
+        });
         console.log(`Editing card:`, JSON.stringify(card, null, 2));
     };
 
-    const handleSaveEdit = () => {
+    const handleSaveEdit = async () => {
         if (!selectedCard.Bank_name.trim()) {
             alert("Bank name cannot be empty");
             return;
         }
+
+        // Get the current user's ID
+        const sessionID = userID;
+
+        // Update the card in the database using the original name as identifier
+        const { error } = await supabaseClient
+            .from('Bank_Cards')
+            .update({
+                Bank_name: selectedCard.Bank_name
+            })
+            .eq('User_id', sessionID)
+            .eq('Bank_name', selectedCard.originalBankName);
+
+        if (error) {
+            console.error('Error updating card:', error);
+            alert('Failed to update card: ' + error.message);
+            return;
+        }
+
+        // Update the local state
         setBankCards(bankCards.map(card =>
-            card.id === selectedCard.id ? selectedCard : card
+            card.Bank_name === selectedCard.originalBankName ?
+                {...card, Bank_name: selectedCard.Bank_name} :
+                card
         ));
 
         console.log(`Saved edited card:`, JSON.stringify(selectedCard, null, 2));
 
-        // TO DO add db code to edit the selected card
-
         setSelectedCard(null);
     };
 
-    const handleDeleteCard = (cardId) => {
+    const handleDeleteCard = async (card) => {
         if (window.confirm("Are you sure you want to delete this card?")) {
-            console.log(`Deleting card with ID: ${cardId}`);
+            console.log(`Deleting card with name: ${card.Bank_name}`);
 
-            // Filter out the deleted card from the card states
-            setBankCards(bankCards.filter(card => card.id !== cardId));
+            // Get the current user's ID
+            const sessionID = userID;
 
-            // TO DO add db code to delete the card from the user
+            // Delete from the database matching both Bank_name and User_id
+            const { error } = await supabaseClient
+                .from('Bank_Cards')
+                .delete()
+                .eq('Bank_name', card.Bank_name)
+                .eq('User_id', sessionID);
+
+            if (error) {
+                console.error('Error deleting card:', error);
+                alert('Failed to delete card: ' + error.message);
+                return;
+            }
+
+            // If the delete operation was successful, update the UI
+            // Filter out the card with the matching Bank_name
+            setBankCards(bankCards.filter(c => c.Bank_name !== card.Bank_name));
+
+            console.log('Card deleted successfully');
         }
     };
 
@@ -103,7 +161,7 @@ const ManageBankCards = () => {
                                                 Edit
                                             </button>
                                             <button
-                                                onClick={() => handleDeleteCard(card.id)}
+                                                onClick={() => handleDeleteCard(card)}
                                                 className={styles.deleteButton}
                                             >
                                                 Delete
