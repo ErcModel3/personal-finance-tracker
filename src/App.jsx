@@ -78,7 +78,7 @@ function App() {
     return (
         <BrowserRouter>
             <Routes>
-                {/*Financial routing*/}
+                {/* Profile routing */}
                 <Route path="/add-expense" element={
                     <SessionWrapper> <AddExpense /> </SessionWrapper>
                 }/>
@@ -98,6 +98,9 @@ function App() {
                 <Route path="/dashboard" element={
                     <SessionWrapper> <Dashboard /> </SessionWrapper>
                 } />
+
+
+                {/* Non profile Routing */}
                 <Route path="/" element={<Home />} />
                 <Route path="/signup" element={<SignUp />} />
                 <Route path="/signin" element={<SignIn />}/>

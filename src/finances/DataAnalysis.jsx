@@ -23,7 +23,9 @@ const DataAnalysis = () => {
         budgetSet: 3000,
         grossSalary: 6250
     };
+    //pull all expenses and agregate based on month
     const MoneySpentMonthly = [122, 635, 539, 40, 841, 526, 535, 440, 930, 839, 420, 78];
+    //pull all expenses and perform aggregation for each category
     const SpendingCategoryData = {
         "Bills":"30",
         "Eating out":"254",
