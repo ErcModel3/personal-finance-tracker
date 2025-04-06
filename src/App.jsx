@@ -17,7 +17,7 @@ import Reviews from "./pages/Reviews.jsx";
 import Welcome from "./pages/Welcome.jsx";
 import ContactUs from "./pages/ContactUs.jsx";
 import PrivacyPolicy from "./pages/PrivacyPolicy.jsx";
-import TermsConditions from "./pages/TermsConditions.jsx";// Import TermsConditions component
+import TermsConditions from "./pages/TermsConditions.jsx";
 
 //Import financial and associated changes
 import Data from "./finances/DataAnalysis.jsx";
@@ -106,6 +106,10 @@ function App() {
                 <Route path="/signin" element={<SignIn />}/>
                 <Route path="/contact" element={<ContactUs />} />
                 <Route path="/privacy" element={<PrivacyPolicy />} />
+                <Route path="/terms" element={<TermsConditions />} /> 
+                <Route path="/dashboard" element={<Dashboard />} />
+                
+                
                 <Route path="/terms" element={<TermsConditions />} /> {/* Terms and Conditions route */}
                 <Route path="*" element={<NotFound />} />
             </Routes>
