@@ -6,6 +6,7 @@ import Navbar from "../components/Navbar.jsx";
 import Footer from "../components/Footer.jsx";
 import supabaseClient from "../auth/Client.js";
 import userID from "../auth/SessionData.js";
+import {Await} from "react-router-dom";
 
 const BankCardsManager = () => {
     // States for card management
@@ -28,7 +29,7 @@ const BankCardsManager = () => {
         setLoading(true);
 
         // Get the current session
-        const sessionID = userID;
+        const sessionID = await userID;
 
         // Query the profiles table using the user ID from the session
         const { data, error } = await supabaseClient
@@ -66,7 +67,7 @@ const BankCardsManager = () => {
         }
 
         // Get the current user's ID
-        const sessionID = userID;
+        const sessionID = await userID;
 
         // Update the card in the database using the original name as identifier
         const { error } = await supabaseClient
@@ -100,7 +101,7 @@ const BankCardsManager = () => {
             console.log(`Deleting card with name: ${card.Bank_name}`);
 
             // Get the current user's ID
-            const sessionID = userID;
+            const sessionID = await userID;
 
             // Delete from the database matching both Bank_name and User_id
             const { error } = await supabaseClient
@@ -129,7 +130,7 @@ const BankCardsManager = () => {
 
         try {
             // Get user session
-            const sessionID = userID;
+            const sessionID = await userID;
 
             if (!bankName.trim()) {
                 alert("Please enter a Bank Name");

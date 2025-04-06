@@ -15,6 +15,6 @@ async function getSessionID() {
     return session.user.id;
 }
 
-const userID= await getSessionID();
+const userID = getSessionID();
 
 export default userID;
