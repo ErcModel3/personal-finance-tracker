@@ -15,9 +15,9 @@ import Wrapper from "./auth/Wrapper.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import Reviews from "./pages/Reviews.jsx";
 import Welcome from "./pages/Welcome.jsx";
-import ContactUs from "./pages/ContactUs.jsx"; 
+import ContactUs from "./pages/ContactUs.jsx";
 import PrivacyPolicy from "./pages/PrivacyPolicy.jsx";
-import TermsConditions from "./pages/TermsConditions.jsx"; // Import TermsConditions component
+import TermsConditions from "./pages/TermsConditions.jsx";// Import TermsConditions component
 
 //Import financial and associated changes
 import Data from "./finances/DataAnalysis.jsx";
@@ -26,8 +26,9 @@ import SpendingMonthlyBarChart from "./finance_modules/SpendingMonthlyBarChart.j
 import AddExpense from "./finances/AddExpense.jsx";
 import AddPaymentCard from "./finances/AddPaymentCard.jsx";
 import ManagePaymentCards from "./finances/ManagePaymentCards.jsx"
+import FinanceTargets from "./finances/FinanceTargets.jsx";
 
-// Imports all graphics and other assets
+// Imports all graphics and other
 import AccountInformation from "./Features/AccountDetailsComponents/AccountInformation.jsx";
 import AccountDetail from "./Features/AccountDetailsComponents/AccountDetail.jsx";
 
@@ -83,6 +84,7 @@ function App() {
                         <AddPaymentCard />
                     </Wrapper>
                 } />
+                <Route path="/finance-targets" element={<FinanceTargets />} />
                 <Route path="/data" element={<Data/>}/> {/* Needs to be renamed*/}
                 <Route path="/manage-cards" element={<ManagePaymentCards />}/>
 
@@ -93,7 +95,7 @@ function App() {
                 <Route path="/signup" element={<SignUp />} />
                 <Route path="/signin" element={<SignIn />}/>
                 <Route path="/contact" element={<ContactUs />} />
-                <Route path="/privacy" element={<PrivacyPolicy />} /> 
+                <Route path="/privacy" element={<PrivacyPolicy />} />
                 <Route path="/terms" element={<TermsConditions />} /> {/* Terms and Conditions route */}
                 <Route path="/dashboard" element={
                     <Wrapper>
