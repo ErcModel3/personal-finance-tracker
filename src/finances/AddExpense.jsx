@@ -205,6 +205,7 @@ const AddExpense = () => {
                             <button
                                 onClick={handleSubmit}
                                 className={styles.primaryButton}
+                                
                             >
                                 Save Expense
                             </button>
