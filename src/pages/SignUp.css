@@ -121,6 +121,26 @@ input[type="date"]:invalid {
   text-decoration: underline;
 }
 
+.existing-user-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+  gap: 10px;
+}
+
+.existing-user-container p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.signin-account-button {
+  min-width: 180px;
+  padding: 0.6rem 1.5rem;
+  font-size: 0.95rem;
+  background-color: #22b573;
+}
+
 @media (max-width: 768px) {
   .signup-container {
     flex-direction: column;
