@@ -11,7 +11,7 @@ import BudgetPieChart from "../finance_modules/BudgetPieChart.jsx";
 import SpendingCategoryPieChart from "../finance_modules/SpendingCategoryCharts.jsx";
 
 const Dashboard = () => {
-    // Sample data (TO REPLACE with db entries)
+    // Sample data (TO DO replace with DB entries)
     const budgetData = {
         monthlySalary: 5000,
         tax: 1250,
