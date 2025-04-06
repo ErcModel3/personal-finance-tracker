@@ -170,6 +170,17 @@ const SignUp = () => {
               <div className="form-button-container">
                 <button type="submit" className="signup-button">Sign Up</button>
               </div>
+
+              <div className="existing-user-container">
+                <p>Already have an account?</p>
+                <button
+                    type="button"
+                    className="signup-button signin-account-button"
+                    onClick={() => navigate("/signin")}
+                >
+                  Sign In
+                </button>
+              </div>
             </form>
           </div>
           <Footer/>
