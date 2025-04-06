@@ -585,3 +585,34 @@ button[style*="background: #eee"] {
     text-decoration: none;
     font-weight: bold;
 }
+
+
+.categoryButtonContainer {
+    position: relative;
+    display: inline-block;
+    margin: 5px;
+}
+
+.removeCategoryButton {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background-color: #ff5252;
+    color: white;
+    border: none;
+    font-size: 14px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.categoryButtonContainer:hover .removeCategoryButton {
+    opacity: 1;
+}
