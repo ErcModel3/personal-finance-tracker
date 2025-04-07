@@ -4,7 +4,7 @@ import AccountDetailsSection from "../../pages/AccountDetailsSection.jsx";
 import NotificationSettings from "./NotificationSettings.jsx";
 import DeleteAccount from "./DeleteAccount.jsx";
 import Footer from "../../components/Footer.jsx";
-import Navbar from "../../components/Navbar.jsx";
+import AuthenticatedNavbar from "../../components/AuthenticatedNavbar.jsx";
 
 function AccountInformation() {
     return (
@@ -13,7 +13,7 @@ function AccountInformation() {
                 <h1 className={styles.compactTitle}>Account Information</h1>
                 <p className={styles.compactSubtitle}>View and update your account details</p>
             </header>
-            <Navbar/>
+            <AuthenticatedNavbar/>
             <div className={styles.contentGrid}>
                 <AccountDetailsSection />
                 <NotificationSettings />

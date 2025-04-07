@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 // Import Components
 import styles from "../Styles.module.css";
-import Navbar from "../components/Navbar.jsx";
+import AuthenticatedNavbar from "../components/AuthenticatedNavbar.jsx";
 import Footer from "../components/Footer.jsx";
 
 const AddExpense = () => {
@@ -153,7 +153,7 @@ const AddExpense = () => {
 
     return (
         <div className={`${styles.app} ${styles.whiteBackground} ${styles.paddingTop30}`}>
-            <Navbar />
+            <AuthenticatedNavbar />
             <div className={`${styles.metricsSection} ${styles.paddingTop30}`}>
                 <div className={styles.metricsHeader}>
                     <h1 className={styles.metricsTitle}>Add New Expense</h1>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './FinanceTargets.css';
-import Navbar from "../components/Navbar.jsx";
+import AuthenticatedNavbar from "../components/AuthenticatedNavbar.jsx";
 import Footer from "../components/Footer.jsx";
 
 const FinanceTargets = () => {
@@ -21,7 +21,7 @@ const FinanceTargets = () => {
 
     return (
         <div className="finance-targets-page">
-            <Navbar />
+            <AuthenticatedNavbar />
 
             <div className="content-section">
                 <h2 className="section-title">Your Financial Targets</h2>

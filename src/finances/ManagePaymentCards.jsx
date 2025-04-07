@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 // Import Components
 import styles from "../Styles.module.css";
-import Navbar from "../components/Navbar.jsx";
+import AuthenticatedNavbar from "../components/AuthenticatedNavbar.jsx";
 import Footer from "../components/Footer.jsx";
 import supabaseClient from "../auth/Client.js";
 import userID from "../auth/SessionData.js";
@@ -122,7 +122,7 @@ const ManageBankCards = () => {
 
     return (
         <div className={styles.app}>
-            <Navbar />
+            <AuthenticatedNavbar />
             <div className={styles.metricsSection}>
                 <div className={styles.metricsHeader}>
                     <h1 className={styles.metricsTitle}>Manage Bank Cards</h1>

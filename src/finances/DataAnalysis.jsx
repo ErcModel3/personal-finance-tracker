@@ -2,7 +2,7 @@ import { Chart, ArcElement, Tooltip, Legend } from 'chart.js/auto';
 
 // Import Components
 import styles from "../Styles.module.css";
-import Navbar from "../components/Navbar.jsx";
+import AuthenticatedNavbar from "../components/AuthenticatedNavbar.jsx";
 import Footer from "../components/Footer.jsx";
 
 // Import Reports
@@ -38,7 +38,7 @@ const DataAnalysis = () => {
 
     return (
         <div className={styles.app}>
-            <Navbar />
+            <AuthenticatedNavbar />
             <div className={styles.heroSection}>
                 <div className={styles.heroContent}>
                     <h1 className={styles.heroTitle}>Budget Report</h1>

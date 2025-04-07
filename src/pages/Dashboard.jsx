@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import styles from "../Styles.module.css";
 
 // Import Components
-import Navbar from "../components/Navbar.jsx";
+import AuthenticatedNavbar from "../components/AuthenticatedNavbar.jsx";
 import Footer from "../components/Footer.jsx";
 
 // Import Charts
@@ -61,7 +61,7 @@ const Dashboard = () => {
 
     return (
         <div className={styles.app}>
-            <Navbar />
+            <AuthenticatedNavbar />
             
             {/* Dashboard Header */}
             <div className={styles.heroSection}>
