@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styles from "../Styles.module.css";
 
@@ -10,8 +10,17 @@ import Footer from "../components/Footer.jsx";
 import BudgetPieChart from "../finance_modules/BudgetPieChart.jsx";
 import SpendingCategoryPieChart from "../finance_modules/SpendingCategoryCharts.jsx";
 
+// Import Database Client and User ID
+import supabaseClient from "../auth/Client.js";
+import userID from "../auth/SessionData.js";
+
 const Dashboard = () => {
-    // Sample data (TO DO replace with DB entries)
+    // State variables for data
+    const [loading, setLoading] = useState(true);
+    const [spendingCategoryData, setSpendingCategoryData] = useState({});
+    const [recentTransactions, setRecentTransactions] = useState([]);
+
+    // Sample data for other sections (TO DO replace with DB entries)
     const budgetData = {
         monthlySalary: 5000,
         tax: 1250,
@@ -20,25 +29,6 @@ const Dashboard = () => {
         budgetSet: 3000,
         grossSalary: 6250
     };
-    
-    const SpendingCategoryData = {
-        "Bills":"30",
-        "Eating out":"254",
-        "Essential Spend":"132",
-        "Groceries":"95",
-        "Non-essential Spend":"45",
-        "Shopping":"64",
-        "Savings":"150"
-    };
-
-    // Sample recent transactions
-    const recentTransactions = [
-        { id: 1, date: "2025-04-05", description: "Grocery Store", category: "Groceries", amount: -85.42 },
-        { id: 2, date: "2025-04-04", description: "Monthly Salary", category: "Income", amount: 5000.00 },
-        { id: 3, date: "2025-04-03", description: "Restaurant", category: "Eating out", amount: -64.50 },
-        { id: 4, date: "2025-04-02", description: "Electric Bill", category: "Bills", amount: -120.75 },
-        { id: 5, date: "2025-04-01", description: "Online Store", category: "Shopping", amount: -39.99 }
-    ];
 
     // Sample upcoming bills
     const upcomingBills = [
@@ -55,6 +45,78 @@ const Dashboard = () => {
         { id: 3, name: "New Laptop", target: 1500, current: 750, deadline: "2025-09-01" }
     ];
 
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true);
+            try {
+                // Get the user ID from the session
+                const userId = await userID;
+
+                // get expenses and use join on the categories table
+                const { data: expensesData, error: expensesError } = await supabaseClient
+                    .from('Expenses')
+                    .select(`
+                        id,
+                        Description,
+                        Amount,
+                        Date,
+                        Categories:Category_id (id, Name) 
+                    `)
+                    .eq('User_id', userId)
+                    .order('Date', { ascending: false });
+
+                if (expensesError) {
+                    console.error('Error fetching expenses:', expensesError);
+                    return;
+                }
+
+                //Process expenses for 5 most recent transactions
+                const processedTransactions = expensesData
+                    .slice(0, 5) // Get the 5 most recent transactions
+                    .map(expense => ({
+                        id: expense.id,
+                        date: new Date(expense.Date).toISOString().split('T')[0], // Format date as YYYY-MM-DD
+                        description: expense.Description,
+                        category: expense.Categories?.Name || 'Uncategorized',
+                        amount: -expense.Amount // Expenses are negative amounts
+                    }));
+
+                setRecentTransactions(processedTransactions);
+
+
+                const categorySpending = {};
+
+                // Process all expenses to group by category and sum amounts
+                expensesData.forEach(expense => {
+                    const categoryName = expense.Categories?.Name || 'Uncategorized';
+                    const amount = expense.Amount || 0;
+
+                    // Initialize the category if it doesn't exist
+                    if (!categorySpending[categoryName]) {
+                        categorySpending[categoryName] = 0;
+                    }
+
+                    // Add the amount to the category total
+                    categorySpending[categoryName] += amount;
+                });
+
+                // Convert for pie chart
+                const formattedCategoryData = {};
+                for (const [category, amount] of Object.entries(categorySpending)) {
+                    formattedCategoryData[category] = amount.toString();
+                }
+
+                setSpendingCategoryData(formattedCategoryData);
+            } catch (error) {
+                console.error('Exception while fetching data:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData().then(r => null);
+    }, []);
+
     const calculateRemainingBudget = () => {
         return budgetData.budgetSet - budgetData.amountSpent;
     };
@@ -62,7 +124,7 @@ const Dashboard = () => {
     return (
         <div className={styles.app}>
             <AuthenticatedNavbar />
-            
+
             {/* Dashboard Header */}
             <div className={styles.heroSection}>
                 <div className={styles.heroContent}>
@@ -116,7 +178,15 @@ const Dashboard = () => {
                     <p className={styles.metricsDescription}>How your money is distributed across categories</p>
                 </div>
                 <div className={styles.chartContainer}>
-                    <SpendingCategoryPieChart SpendingCategoryData={SpendingCategoryData} />
+                    {loading ? (
+                        <div className={styles.loadingMessage}>Loading spending data...</div>
+                    ) : Object.keys(spendingCategoryData).length === 0 ? (
+                        <div className={styles.noDataMessage}>
+                            No spending data available. Add some expenses to see your spending breakdown.
+                        </div>
+                    ) : (
+                        <SpendingCategoryPieChart SpendingCategoryData={spendingCategoryData} />
+                    )}
                 </div>
             </div>
 
@@ -127,16 +197,23 @@ const Dashboard = () => {
                     <p className={styles.metricsDescription}>Your latest financial activities</p>
                 </div>
                 <div className={`${styles.chartContainer} ${styles.tableContainer}`}>
-                    <table className={styles.dataTable}>
-                        <thead>
+                    {loading ? (
+                        <div className={styles.loadingMessage}>Loading transactions...</div>
+                    ) : recentTransactions.length === 0 ? (
+                        <div className={styles.noDataMessage}>
+                            No transactions available. Add some expenses to see your recent transactions.
+                        </div>
+                    ) : (
+                        <table className={styles.dataTable}>
+                            <thead>
                             <tr>
                                 <th>Date</th>
                                 <th>Description</th>
                                 <th>Category</th>
                                 <th>Amount</th>
                             </tr>
-                        </thead>
-                        <tbody>
+                            </thead>
+                            <tbody>
                             {recentTransactions.map(transaction => (
                                 <tr key={transaction.id}>
                                     <td>{transaction.date}</td>
@@ -147,8 +224,9 @@ const Dashboard = () => {
                                     </td>
                                 </tr>
                             ))}
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    )}
                     <div className={styles.viewAllContainer}>
                         <Link to="/data" className={styles.linkNoDecoration}>
                             <button className={styles.primaryButton}>View All Transactions</button>
@@ -196,7 +274,7 @@ const Dashboard = () => {
                                         <div>{`£${goal.current} / £${goal.target}`}</div>
                                     </div>
                                     <div className={styles.progressBarBackground}>
-                                        <div 
+                                        <div
                                             className={styles.progressBarFill}
                                             style={{ width: `${progressPercentage}%` }}
                                         ></div>
