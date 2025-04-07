@@ -1,0 +1,143 @@
+/* AuthenticatedNavbar.css - For the authenticated navbar */
+
+/* Authenticated Navbar container */
+.authenticated-navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background-color: #27AE60;
+    padding: 10px 0;
+}
+
+/* Inner container for centering */
+.authenticated-navbar .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Brand/Title on the left */
+.authenticated-navbar-brand {
+    color: #FFFFFF;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+/* Navigation buttons */
+.authenticated-navbar-nav {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap; /* Allow wrapping for smaller screens */
+}
+
+.ms-auto {
+    margin-left: auto;
+}
+
+/* Authenticated nav links - same style as regular nav links */
+.auth-nav-link {
+    background-color: #27AE60;
+    color: #FFFFFF;
+    margin: 0 8px; /* Slightly closer spacing for more items */
+    border: 1px solid #FFFFFF;
+    border-radius: 5px;
+    padding: 8px 14px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+
+/* Hover effect for buttons */
+.auth-nav-link:hover {
+    background-color: #1E8449;
+    transform: scale(1.05);
+}
+
+/* Special styling for logout button */
+.logout-button {
+    background-color: #2196F3; /* Different color for logout */
+    margin-left: 16px;
+}
+
+.logout-button:hover {
+    background-color: #0b7dda;
+}
+
+/* Cogwheel icon styling */
+.cogwheel-link {
+    background-color: transparent;
+    border: none;
+    padding: 8px;
+    margin-left: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cogwheel-icon {
+    width: 24px;
+    height: 24px;
+    transition: transform 0.3s ease;
+}
+
+.cogwheel-link:hover {
+    background-color: transparent;
+    transform: none;
+}
+
+.cogwheel-link:hover .cogwheel-icon {
+    transform: rotate(90deg);
+}
+
+/* Logo link styling */
+.auth-logo-link {
+    display: inline-block;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.auth-logo-image {
+    height: 50px;
+    width: auto;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.auth-logo-link:hover .auth-logo-image {
+    opacity: 0.8;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+    .authenticated-navbar-nav {
+        justify-content: center;
+        margin-top: 10px;
+    }
+    
+    .auth-nav-link {
+        margin: 5px;
+        padding: 6px 12px;
+    }
+}
+
+@media (max-width: 768px) {
+    .authenticated-navbar .container {
+        flex-direction: column;
+    }
+    
+    .authenticated-navbar-nav {
+        width: 100%;
+        justify-content: center;
+        margin-top: 15px;
+    }
+}

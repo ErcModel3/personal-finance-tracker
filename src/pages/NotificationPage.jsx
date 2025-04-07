@@ -1,12 +1,12 @@
 import NotificationList from "../Features/NotificationsComponents/NotificationList.jsx";
 import NotificationHeader from "../Features/NotificationsComponents/NotificationHeader.jsx";
-import Navbar from "../components/Navbar.jsx";
+import AuthenticatedNavbar from "../components/AuthenticatedNavbar.jsx";
 import Footer from "../components/Footer.jsx";
 
 function NotificationPage () {
     return (
         <div>
-            <Navbar/>
+            <AuthenticatedNavbar/>
             <NotificationHeader/>
             <NotificationList/>
             <Footer/>

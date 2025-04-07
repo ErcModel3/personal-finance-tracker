@@ -1,4 +1,4 @@
-/* Navbar.css */
+/* Navbar.css - For the simple navbar */
 
 /* Navbar container */
 .navbar {
@@ -22,11 +22,6 @@
     padding: 0 20px;
 }
 
-.navbar {
-    background-color: #27AE60; /* Green background */
-    padding: 10px 20px; /* Spacing inside the navbar */
-}
-
 /* Brand/Title on the left */
 .navbar-brand {
     color: #FFFFFF; /* White text */
@@ -39,26 +34,9 @@
     display: flex;
     align-items: center;
 }
+
 .ms-auto {
     margin-left: auto; /* This ensures items are pushed to the right */
-}
-
-.nav-link {
-    background-color: #27AE60;
-    color: #FFFFFF;
-    margin: 0 5px;
-    border: 1px solid #FFFFFF;
-    border-radius: 5px;
-    padding: 8px 16px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s ease;
-    text-decoration: none;
-    display: inline-block;
-}
-
-.nav-link:hover {
-    background-color: #1E8449;
 }
 
 .nav-link {
@@ -71,6 +49,8 @@
     cursor: pointer; /* Pointer cursor on hover */
     font-size: 16px; /* Button text size */
     transition: background-color 0.3s ease; /* Smooth hover transition */
+    text-decoration: none;
+    display: inline-block;
 }
 
 /* Hover effect for buttons */
@@ -78,7 +58,7 @@
     background-color: #1E8449; /* Slightly darker green on hover */
 }
 
-/*NEW made by za genius Logo link styling */
+/* Logo link styling */
 .logo-link {
     display: inline-block;
     background: none;
@@ -99,4 +79,3 @@
 .logo-link:hover .logo-image {
     opacity: 0.8;
 }
-
