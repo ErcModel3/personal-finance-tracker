@@ -294,24 +294,6 @@ const Dashboard = () => {
                 </div>
             </div>
 
-            {/* Quick Actions Section */}
-            <div className={styles.metricsSection}>
-                <div className={styles.metricsHeader}>
-                    <h2 className={styles.metricsTitle}>Quick Actions</h2>
-                </div>
-                <div className={styles.quickActionsContainer}>
-                    <Link to="/add-expense" className={styles.linkNoDecoration}>
-                        <button className={styles.primaryButton}>Add Expense</button>
-                    </Link>
-                    <Link to="/add-card" className={styles.linkNoDecoration}>
-                        <button className={styles.primaryButton}>Add Payment Card</button>
-                    </Link>
-                    <Link to="/data" className={styles.linkNoDecoration}>
-                        <button className={styles.primaryButton}>View Full Report</button>
-                    </Link>
-                </div>
-            </div>
-
             <Footer />
         </div>
     );
