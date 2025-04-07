@@ -39,7 +39,7 @@ const AuthenticatedNavbar = () => {
                     <Link className="auth-nav-link" to="/manage-cards">Manage Cards</Link>
                     <Link className="auth-nav-link" to="/finance-targets">Targets</Link>
                     <Link className="auth-nav-link" to="/notifications">Notifications</Link>
-                    <Link className="auth-nav-link" to="/data">Expense Report</Link>
+                    <Link className="auth-nav-link" to="/data">Analysis</Link>
 
                     <Link className="auth-nav-link cogwheel-link" to="/settings" aria-label="Settings">
                         <img 
