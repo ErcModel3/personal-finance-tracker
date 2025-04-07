@@ -21,16 +21,15 @@ const Dashboard = () => {
     const [recentTransactions, setRecentTransactions] = useState([]);
     const [currentMonth, setCurrentMonth] = useState('');
     const [currentYear, setCurrentYear] = useState('');
+    const [amountSpent, setAmountSpent] = useState(0);
 
-    // Sample data for other sections (TO DO replace with DB entries)
-    const budgetData = {
+    // Budget data with dynamic amountSpent
+    const [budgetData, setBudgetData] = useState({
         monthlySalary: 5000,
-        tax: 1250,
-        amountSpent: 2800,
+        amountSpent: 0, // Will be updated from the database
         bonus: 500,
-        budgetSet: 3000,
-        grossSalary: 6250
-    };
+        budgetSet: 5000,
+    });
 
     // Sample upcoming bills
     const upcomingBills = [
@@ -114,6 +113,21 @@ const Dashboard = () => {
                     return expenseDate >= new Date(startDate) && expenseDate <= new Date(endDate);
                 });
 
+                // Calculate total amount spent this month
+                const totalSpent = currentMonthExpenses.reduce(
+                    (total, expense) => total + (expense.Amount || 0),
+                    0
+                );
+
+                // Update amountSpent
+                setAmountSpent(totalSpent);
+
+                // Update budget data with the new amountSpent
+                setBudgetData(prevData => ({
+                    ...prevData,
+                    amountSpent: totalSpent
+                }));
+
                 // Process monthly spending by category
                 const categorySpending = {};
 
@@ -167,7 +181,7 @@ const Dashboard = () => {
             {/* Overview Section */}
             <div className={styles.metricsSection}>
                 <div className={styles.metricsHeader}>
-                    <h2 className={styles.metricsTitle}>Financial Overview</h2>
+                    <h2 className={styles.metricsTitle}>Financial Overview - {currentMonth} {currentYear}</h2>
                     <p className={styles.metricsDescription}>Your key metrics for this month</p>
                 </div>
 
@@ -179,13 +193,23 @@ const Dashboard = () => {
 
                     <div className={styles.metricCard}>
                         <div className={styles.metricLabel}>Total Spent</div>
-                        <div className={styles.metricValue}>£{budgetData.amountSpent}</div>
+                        <div className={styles.metricValue}>
+                            {loading ? (
+                                <span className={styles.loadingText}>Loading...</span>
+                            ) : (
+                                `£${budgetData.amountSpent.toFixed(2)}`
+                            )}
+                        </div>
                     </div>
 
                     <div className={styles.metricCard}>
                         <div className={styles.metricLabel}>Remaining Budget</div>
                         <div className={`${styles.metricValue} ${calculateRemainingBudget() >= 0 ? styles.positiveAmount : styles.negativeAmount}`}>
-                            £{calculateRemainingBudget()}
+                            {loading ? (
+                                <span className={styles.loadingText}>Loading...</span>
+                            ) : (
+                                `£${calculateRemainingBudget().toFixed(2)}`
+                            )}
                         </div>
                     </div>
                 </div>
@@ -194,11 +218,15 @@ const Dashboard = () => {
             {/* Budget Visualization Section */}
             <div className={styles.metricsSection}>
                 <div className={styles.metricsHeader}>
-                    <h2 className={styles.metricsTitle}>Budget Overview</h2>
+                    <h2 className={styles.metricsTitle}>Budget Overview - {currentMonth} {currentYear}</h2>
                     <p className={styles.metricsDescription}>Visualize your spending vs. budget</p>
                 </div>
                 <div className={styles.chartContainer}>
-                    <BudgetPieChart budgetData={budgetData} />
+                    {loading ? (
+                        <div className={styles.loadingMessage}>Loading budget data...</div>
+                    ) : (
+                        <BudgetPieChart budgetData={budgetData} />
+                    )}
                 </div>
             </div>
 
@@ -322,24 +350,6 @@ const Dashboard = () => {
                             </Link>
                         </div>
                     </div>
-                </div>
-            </div>
-
-            {/* Quick Actions Section */}
-            <div className={styles.metricsSection}>
-                <div className={styles.metricsHeader}>
-                    <h2 className={styles.metricsTitle}>Quick Actions</h2>
-                </div>
-                <div className={styles.quickActionsContainer}>
-                    <Link to="/add-expense" className={styles.linkNoDecoration}>
-                        <button className={styles.primaryButton}>Add Expense</button>
-                    </Link>
-                    <Link to="/add-card" className={styles.linkNoDecoration}>
-                        <button className={styles.primaryButton}>Add Payment Card</button>
-                    </Link>
-                    <Link to="/data" className={styles.linkNoDecoration}>
-                        <button className={styles.primaryButton}>View Full Report</button>
-                    </Link>
                 </div>
             </div>
 
