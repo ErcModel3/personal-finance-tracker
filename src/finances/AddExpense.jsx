@@ -16,10 +16,12 @@ const AddExpense = () => {
     const [expenseName, setExpenseName] = useState('');
     const [amount, setAmount] = useState('');
     const [category, setCategory] = useState('');
+    const [categoryId, setCategoryId] = useState(null);
     const [selectedCard, setSelectedCard] = useState('');
     const [availableCards, setAvailableCards] = useState([]);
     const [loading, setLoading] = useState(true);
     const [categoriesLoading, setCategoriesLoading] = useState(true);
+    const [submitting, setSubmitting] = useState(false);
     // New state for custom categories
     const [customCategory, setCustomCategory] = useState('');
 
@@ -31,7 +33,7 @@ const AddExpense = () => {
         // Function to fetch user ID asyncronously
         const fetchUserID = async () => {
             const userId = await getSessionID();
-            return userId;
+            return userId; //inlining this return data causes issues parsing data to the other functions so don't 'improve' this plz.
         };
 
         // fetch categories from supabase
@@ -87,6 +89,7 @@ const AddExpense = () => {
             }
         };
 
+        //on page load get persisted categories
         const initializeData = async () => {
             const userId = await fetchUserID();
 
@@ -94,7 +97,8 @@ const AddExpense = () => {
             const userCategories = await fetchCategories(userId);
             setCategories(userCategories);
             if (userCategories.length > 0) {
-                setCategory(userCategories[0].name); // Set default category to first in list
+                setCategory(userCategories[0].name);
+                setCategoryId(userCategories[0].id); // Store the category ID
             }
 
             // Fetch cards
@@ -105,51 +109,81 @@ const AddExpense = () => {
         initializeData().then(r => null);
     }, []);
 
-    // Handle form submission
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        setSubmitting(true);
 
-        // Input validation in JS
-        if (!expenseName.trim()) {
-            alert("Please enter an expense name");
-            return;
+        try {
+            // Input validation in JS
+            if (!expenseName.trim()) {
+                alert("Please enter an expense name");
+                return;
+            }
+
+            // More input validation around numbers
+            const amountValue = parseFloat(amount);
+            if (isNaN(amountValue) || amountValue <= 0) {
+                alert("Please enter a valid amount");
+                return;
+            }
+
+            // Validate card selection
+            if (!selectedCard) {
+                alert("Please select a payment card");
+                return;
+            }
+
+            // Validate category selection
+            if (!categoryId) {
+                alert("Please select a category");
+                return;
+            }
+
+            // Get user ID
+            const userId = await getSessionID();
+
+            // Create the expense object for the database
+            const expenseData = {
+                User_id: userId,
+                Category_id: categoryId,
+                Bankcard_id: parseInt(selectedCard), // Ensure it's an integer
+                Amount: amountValue,
+                Date: new Date().toISOString(), // Current timestamp
+                Description: expenseName.trim()
+            };
+
+            // Submit to database
+            const { data, error } = await supabaseClient
+                .from('Expenses')
+                .insert([expenseData]);
+
+            if (error) {
+                console.error('Error adding expense:', error);
+                alert("Failed to save expense. Please try again.");
+                return;
+            }
+
+            // Reset form
+            setExpenseName('');
+            setAmount('');
+            if (categories.length > 0) {
+                setCategory(categories[0].name);
+                setCategoryId(categories[0].id);
+            } else {
+                setCategory('');
+                setCategoryId(null);
+            }
+            setSelectedCard('');
+
+            // Show success message
+            alert("Expense saved successfully!");
+
+        } catch (error) {
+            console.error('Exception when saving expense:', error);
+            alert("An error occurred while saving the expense.");
+        } finally {
+            setSubmitting(false);
         }
-
-        // More input validation around numbers
-        const amountValue = parseFloat(amount);
-        if (isNaN(amountValue) || amountValue <= 0) {
-            alert("Please enter a valid amount");
-            return;
-        }
-
-        // Validate card selection
-        if (!selectedCard) {
-            alert("Please select a payment card");
-            return;
-        }
-
-        // Creates the JSON for the db
-        const expenseData = {
-            name: expenseName.trim(),
-            amount: amountValue,
-            category: category,
-            cardId: selectedCard,
-        };
-
-        // Log to console
-        console.log("New expense data:");
-        console.log(JSON.stringify(expenseData, null, 2));
-
-        // TO DO Database Code here
-
-        // Reset form
-        setExpenseName('');
-        setAmount('');
-        setCategory(categories.length > 0 ? categories[0].name : '');
-        setSelectedCard('');
-
-        // Show success message
-        alert("Expense saved successfully!");
     };
 
     // Handle cancel action
@@ -157,7 +191,13 @@ const AddExpense = () => {
         // Reset form
         setExpenseName('');
         setAmount('');
-        setCategory(categories.length > 0 ? categories[0].name : '');
+        if (categories.length > 0) {
+            setCategory(categories[0].name);
+            setCategoryId(categories[0].id);
+        } else {
+            setCategory('');
+            setCategoryId(null);
+        }
         setSelectedCard('');
         setShowCustomInput(false);
     };
@@ -183,7 +223,8 @@ const AddExpense = () => {
             .from('Categories')
             .insert([
                 { Name: customCategory.trim(), User_id: userId }
-            ]);
+            ])
+            .select();
 
         if (error) {
             console.error('Error adding category:', error);
@@ -191,19 +232,23 @@ const AddExpense = () => {
             return;
         }
 
-        // Get the new category from the response if available, or create one with a temporary ID
-        const newCategoryId = data?.[0]?.id || `${Date.now()}`;
-        const newCategory = {
-            id: newCategoryId,
-            name: customCategory.trim()
-        };
+        // Get the new category from the response
+        if (data && data.length > 0) {
+            const newCategory = {
+                id: data[0].id,
+                name: customCategory.trim()
+            };
 
-        // Update local state with new category
-        const updatedCategories = [...categories, newCategory];
-        setCategories(updatedCategories);
-        setCategory(newCategory.name);
-        setCustomCategory('');
-        setShowCustomInput(false);
+            // Update local state with new category
+            const updatedCategories = [...categories, newCategory];
+            setCategories(updatedCategories);
+            setCategory(newCategory.name);
+            setCategoryId(newCategory.id);
+            setCustomCategory('');
+            setShowCustomInput(false);
+        } else {
+            alert("Category added but could not be loaded. Please refresh the page.");
+        }
     };
 
     // Handle removing a category from database
@@ -246,6 +291,12 @@ const AddExpense = () => {
         setCategories(updatedCategories);
     };
 
+    // Set the category and categoryId when a category is selected
+    const handleCategorySelection = (categoryObj) => {
+        setCategory(categoryObj.name);
+        setCategoryId(categoryObj.id);
+    };
+
     return (
         <div className={`${styles.app} ${styles.whiteBackground} ${styles.paddingTop30}`}>
             <AuthenticatedNavbar />
@@ -265,6 +316,7 @@ const AddExpense = () => {
                                 value={expenseName}
                                 onChange={(e) => setExpenseName(e.target.value)}
                                 className={styles.formInput}
+                                disabled={submitting}
                             />
                         </div>
 
@@ -276,6 +328,7 @@ const AddExpense = () => {
                                 value={amount}
                                 onChange={(e) => setAmount(e.target.value)}
                                 className={styles.formInput}
+                                disabled={submitting}
                             />
                         </div>
 
@@ -296,6 +349,7 @@ const AddExpense = () => {
                                     value={selectedCard}
                                     onChange={(e) => setSelectedCard(e.target.value)}
                                     className={styles.formSelect}
+                                    disabled={submitting}
                                 >
                                     <option value="">Select a payment card</option>
                                     {availableCards.map(card => (
@@ -318,8 +372,9 @@ const AddExpense = () => {
                                     categories.map(cata => (
                                         <div key={cata.id} className={styles.categoryButtonContainer}>
                                             <button
-                                                onClick={() => setCategory(cata.name)}
+                                                onClick={() => handleCategorySelection(cata)}
                                                 className={`${styles.categoryButton} ${category === cata.name ? styles.categoryButtonActive : ''}`}
+                                                disabled={submitting}
                                             >
                                                 {cata.name}
                                             </button>
@@ -330,6 +385,7 @@ const AddExpense = () => {
                                                 }}
                                                 className={styles.removeCategoryButton}
                                                 title="Remove category"
+                                                disabled={submitting}
                                             >
                                                 ×
                                             </button>
@@ -339,6 +395,7 @@ const AddExpense = () => {
                                 <button
                                     onClick={() => setShowCustomInput(!showCustomInput)}
                                     className={`${styles.categoryButton}`}
+                                    disabled={submitting}
                                 >
                                     + Add Custom
                                 </button>
@@ -352,10 +409,12 @@ const AddExpense = () => {
                                         value={customCategory}
                                         onChange={(e) => setCustomCategory(e.target.value)}
                                         className={styles.formInput}
+                                        disabled={submitting}
                                     />
                                     <button
                                         onClick={handleAddCustomCategory}
                                         className={`${styles.primaryButton} `}
+                                        disabled={submitting}
                                     >
                                         Add
                                     </button>
@@ -367,14 +426,16 @@ const AddExpense = () => {
                             <button
                                 onClick={handleCancel}
                                 className={`${styles.primaryButton} ${styles.cancelButton}`}
+                                disabled={submitting}
                             >
                                 Cancel
                             </button>
                             <button
                                 onClick={handleSubmit}
                                 className={styles.primaryButton}
+                                disabled={submitting}
                             >
-                                Save Expense
+                                {submitting ? "Saving..." : "Save Expense"}
                             </button>
                         </div>
                     </div>
