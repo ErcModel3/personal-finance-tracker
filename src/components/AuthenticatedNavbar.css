@@ -71,6 +71,32 @@
     background-color: #0b7dda;
 }
 
+/* Cogwheel icon styling */
+.cogwheel-link {
+    background-color: transparent;
+    border: none;
+    padding: 8px;
+    margin-left: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cogwheel-icon {
+    width: 24px;
+    height: 24px;
+    transition: transform 0.3s ease;
+}
+
+.cogwheel-link:hover {
+    background-color: transparent;
+    transform: none;
+}
+
+.cogwheel-link:hover .cogwheel-icon {
+    transform: rotate(90deg);
+}
+
 /* Logo link styling */
 .auth-logo-link {
     display: inline-block;
