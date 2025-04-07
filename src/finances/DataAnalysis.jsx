@@ -29,11 +29,8 @@ const DataAnalysis = () => {
     // Budget data with dynamic amountSpent
     const [budgetData, setBudgetData] = useState({
         monthlySalary: 4000,
-        tax: 1250,
         amountSpent: 0, // Will be updated from the database
-        bonus: 500,
         budgetSet: 3000,
-        grossSalary: 6250
     });
 
     // Function to get month name from month number
@@ -109,7 +106,7 @@ const DataAnalysis = () => {
 
                 // Process current month expenses to group by category and sum amounts
                 currentMonthExpenses.forEach(expense => {
-                    const categoryName = expense.Categories?.Name || 'Uncategorized';
+                    const categoryName = expense.Categories?.Name || 'Uncategorized'; // this is here just because if u delete a category the expenses set the category to NULL
                     const amount = expense.Amount || 0;
 
                     // Initialize the category if it doesn't exist
@@ -178,7 +175,6 @@ const DataAnalysis = () => {
                     <div className={styles.metricCard}>
                         <div className={styles.metricLabel}>Monthly Salary</div>
                         <div className={styles.metricValue}>£{budgetData.monthlySalary}</div>
-                        <div>- Tax: £{budgetData.tax}</div>
                     </div>
 
                     <div className={styles.metricCard}>
@@ -190,13 +186,11 @@ const DataAnalysis = () => {
                                 `£${budgetData.amountSpent.toFixed(2)}`
                             )}
                         </div>
-                        <div>+ Bonus: £{budgetData.bonus}</div>
                     </div>
 
                     <div className={styles.metricCard}>
                         <div className={styles.metricLabel}>Budget Set</div>
                         <div className={styles.metricValue}>£{budgetData.budgetSet}</div>
-                        <div>from Gross Salary</div>
                     </div>
                 </div>
             </div>
