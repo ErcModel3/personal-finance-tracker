@@ -1,48 +1,108 @@
-import React, { useState, useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 
 // Import Components
 import styles from "../Styles.module.css";
 import AuthenticatedNavbar from "../components/AuthenticatedNavbar.jsx";
 import Footer from "../components/Footer.jsx";
+import userID from "../auth/SessionData.js";
+import supabaseClient from "../auth/Client.js";
+
+const getSessionID = async () => {
+    return await userID;
+}
 
 const AddExpense = () => {
     // State for form inputs
     const [expenseName, setExpenseName] = useState('');
     const [amount, setAmount] = useState('');
-    const [category, setCategory] = useState('Bills');
+    const [category, setCategory] = useState('');
     const [selectedCard, setSelectedCard] = useState('');
     const [availableCards, setAvailableCards] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [categoriesLoading, setCategoriesLoading] = useState(true);
     // New state for custom categories
     const [customCategory, setCustomCategory] = useState('');
 
-    const [categories, setCategories] = useState([
-        'Bills', 'Eating out', 'Essential Spend', 'Groceries',
-        'Non-essential Spend', 'Shopping', 'Savings'
-    ]);
-    const [defaultCategories] = useState([
-        'Bills', 'Eating out', 'Essential Spend', 'Groceries',
-        'Non-essential Spend', 'Shopping', 'Savings'
-    ]);
+    // Initialize with empty array instead of hardcoded values
+    const [categories, setCategories] = useState([]);
     const [showCustomInput, setShowCustomInput] = useState(false);
 
     useEffect(() => {
-        // Adding testing data (same way the db would work)
-        setTimeout(() => {
-            const mockCards = [
-                { id: 1, User_id: "1", Bank_name: "Starling" },
-                { id: 2, User_id: "1", Bank_name: "Monzo"},
-                { id: 3, User_id: "1", Bank_name: "American Express" }
-            ];
-            setAvailableCards(mockCards); // TO DO replace with db card data structure
-            setLoading(false); // TO DO change to true ^
-        }, 500);
+        // Function to fetch user ID asyncronously
+        const fetchUserID = async () => {
+            const userId = await getSessionID();
+            return userId;
+        };
 
-        // Save to localStorage or database (Rowan's problem)
-        const savedCategories = localStorage.getItem('customCategories');
-        if (savedCategories) {
-            setCategories(JSON.parse(savedCategories));
-        }
+        // fetch categories from supabase
+        const fetchCategories = async (userId) => {
+            setCategoriesLoading(true);
+            try {
+                const { data, error } = await supabaseClient
+                    .from('Categories')
+                    .select('*')
+                    .eq('User_id', userId);
+
+                if (error) {
+                    console.error('Error fetching categories:', error);
+                    return [];
+                }
+
+                // Store full category objects to preserve ids
+                // Filter out any categories with empty names
+                return data
+                    .filter(item => item.Name && item.Name.trim() !== '')
+                    .map(item => ({
+                        id: item.id,
+                        name: item.Name.trim()
+                    }));
+            } catch (error) {
+                console.error('Exception when fetching categories:', error);
+                return [];
+            } finally {
+                setCategoriesLoading(false);
+            }
+        };
+
+        //fetch bank cards from Supabase
+        const fetchCards = async (userId) => {
+            setLoading(true);
+            try {
+                const { data, error } = await supabaseClient
+                    .from('Bank_Cards')
+                    .select('*')
+                    .eq('User_id', userId);
+
+                if (error) {
+                    console.error('Error fetching cards:', error);
+                    return [];
+                }
+
+                return data;
+            } catch (error) {
+                console.error('Exception when fetching cards:', error);
+                return [];
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        const initializeData = async () => {
+            const userId = await fetchUserID();
+
+            // Fetch categories
+            const userCategories = await fetchCategories(userId);
+            setCategories(userCategories);
+            if (userCategories.length > 0) {
+                setCategory(userCategories[0].name); // Set default category to first in list
+            }
+
+            // Fetch cards
+            const userCards = await fetchCards(userId);
+            setAvailableCards(userCards);
+        };
+
+        initializeData().then(r => null);
     }, []);
 
     // Handle form submission
@@ -85,7 +145,7 @@ const AddExpense = () => {
         // Reset form
         setExpenseName('');
         setAmount('');
-        setCategory('Bills');
+        setCategory(categories.length > 0 ? categories[0].name : '');
         setSelectedCard('');
 
         // Show success message
@@ -97,58 +157,93 @@ const AddExpense = () => {
         // Reset form
         setExpenseName('');
         setAmount('');
-        setCategory('Bills');
+        setCategory(categories.length > 0 ? categories[0].name : '');
         setSelectedCard('');
         setShowCustomInput(false);
     };
 
-    // Handle adding a new custom category
-    const handleAddCustomCategory = () => {
+    // Handle adding a new custom category to database
+    const handleAddCustomCategory = async () => {
         if (customCategory.trim() === '') {
             alert("Please enter a category name");
             return;
         }
 
-        if (categories.includes(customCategory.trim())) {
+        // Check if category already exists by name
+        if (categories.some(cat => cat.name === customCategory.trim())) {
             alert("This category already exists");
             return;
         }
 
-        const updatedCategories = [...categories, customCategory.trim()];
+        // Get user ID
+        const userId = await getSessionID();
+
+        // Add new category to database
+        const { data, error } = await supabaseClient
+            .from('Categories')
+            .insert([
+                { Name: customCategory.trim(), User_id: userId }
+            ]);
+
+        if (error) {
+            console.error('Error adding category:', error);
+            alert("Failed to add category. Please try again.");
+            return;
+        }
+
+        // Get the new category from the response if available, or create one with a temporary ID
+        const newCategoryId = data?.[0]?.id || `${Date.now()}`;
+        const newCategory = {
+            id: newCategoryId,
+            name: customCategory.trim()
+        };
+
+        // Update local state with new category
+        const updatedCategories = [...categories, newCategory];
         setCategories(updatedCategories);
-        setCategory(customCategory.trim());
+        setCategory(newCategory.name);
         setCustomCategory('');
         setShowCustomInput(false);
-
-        // Save to localStorage or database (Rowan's problem)
-        localStorage.setItem('customCategories', JSON.stringify(updatedCategories));
     };
 
-    // Handle removing a category
-    const handleRemoveCategory = (categoryToRemove) => {
+    // Handle removing a category from database
+    const handleRemoveCategory = async (categoryNameToRemove) => {
         // Don't allow removing the category if it's currently selected
-        if (category === categoryToRemove) {
+        if (category === categoryNameToRemove) {
             alert("Cannot remove currently selected category");
             return;
         }
 
-        // Prevent removing default categories
-        if (defaultCategories.includes(categoryToRemove)) {
-            const confirmRemove = window.confirm("Are you sure you want to remove this default category?");
-            if (!confirmRemove) return;
+        // Find the category object by name
+        const categoryToRemove = categories.find(cat => cat.name === categoryNameToRemove);
+        if (!categoryToRemove) {
+            console.error('Category not found:', categoryNameToRemove);
+            return;
         }
 
         // To prevent accidents
-        if (categories.includes(categoryToRemove)) {
-            const confirmRemove = window.confirm("Are you sure you want to remove this category?");
-            if (!confirmRemove) return;
+        const confirmRemove = window.confirm("Are you sure you want to remove this category?");
+        if (!confirmRemove) return;
+
+        // Get user ID
+        const userId = await getSessionID();
+
+        // Remove category from database
+        const { error } = await supabaseClient
+            .from('Categories')
+            .delete()
+            .eq('id', categoryToRemove.id)
+            .eq('User_id', userId);
+
+        if (error) {
+            console.error('Error removing category:', error);
+            alert("Failed to remove category. Please try again.");
+            return;
         }
 
-        const updatedCategories = categories.filter(cat => cat !== categoryToRemove);
+        // Update local state
+        const updatedCategories = categories.filter(cat => cat.id !== categoryToRemove.id);
         setCategories(updatedCategories);
-
-        // Save to localStorage or database (Rowan's problem)
-        localStorage.setItem('customCategories', JSON.stringify(updatedCategories));
     };
 
     return (
@@ -215,26 +310,32 @@ const AddExpense = () => {
                         <div className={styles.categoryContainer}>
                             <div className={styles.formLabel}>Category</div>
                             <div className={styles.categoryButtonsWrapper}>
-                                {categories.map(cata => (
-                                    <div key={cata} className={styles.categoryButtonContainer}>
-                                        <button
-                                            onClick={() => setCategory(cata)}
-                                            className={`${styles.categoryButton} ${category === cata ? styles.categoryButtonActive : ''}`}
-                                        >
-                                            {cata}
-                                        </button>
-                                        <button
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                handleRemoveCategory(cata);
-                                            }}
-                                            className={styles.removeCategoryButton}
-                                            title="Remove category"
-                                        >
-                                            ×
-                                        </button>
-                                    </div>
-                                ))}
+                                {categoriesLoading ? (
+                                    <div className={styles.loadingText}>Loading categories...</div>
+                                ) : categories.length === 0 ? (
+                                    <div className={styles.noCardsMessage}>No categories available. Add one below.</div>
+                                ) : (
+                                    categories.map(cata => (
+                                        <div key={cata.id} className={styles.categoryButtonContainer}>
+                                            <button
+                                                onClick={() => setCategory(cata.name)}
+                                                className={`${styles.categoryButton} ${category === cata.name ? styles.categoryButtonActive : ''}`}
+                                            >
+                                                {cata.name}
+                                            </button>
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleRemoveCategory(cata.name);
+                                                }}
+                                                className={styles.removeCategoryButton}
+                                                title="Remove category"
+                                            >
+                                                ×
+                                            </button>
+                                        </div>
+                                    ))
+                                )}
                                 <button
                                     onClick={() => setShowCustomInput(!showCustomInput)}
                                     className={`${styles.categoryButton}`}
@@ -283,46 +384,5 @@ const AddExpense = () => {
         </div>
     );
 };
-
-//Don't need this to my knowledge but keep it here just in case Kirk whines
-
-/*Bills
-</button>
-<button
-    onClick={() => setCategory('Eating out')}
-    className={`${styles.categoryButton} ${category === 'Eating out' ? styles.categoryButtonActive : ''}`}
->
-    Eating out
-</button>
-<button
-    onClick={() => setCategory('Essential Spend')}
-    className={`${styles.categoryButton} ${category === 'Essential Spend' ? styles.categoryButtonActive : ''}`}
->
-    Essential Spend
-</button>
-<button
-    onClick={() => setCategory('Groceries')}
-    className={`${styles.categoryButton} ${category === 'Groceries' ? styles.categoryButtonActive : ''}`}
->
-    Groceries
-</button>
-<button
-    onClick={() => setCategory('Non-essential Spend')}
-    className={`${styles.categoryButton} ${category === 'Non-essential Spend' ? styles.categoryButtonActive : ''}`}
->
-    Non-essential Spend
-</button>
-<button
-    onClick={() => setCategory('Shopping')}
-    className={`${styles.categoryButton} ${category === 'Shopping' ? styles.categoryButtonActive : ''}`}
->
-    Shopping
-</button>
-<button
-    onClick={() => setCategory('Savings')}
-    className={`${styles.categoryButton} ${category === 'Savings' ? styles.categoryButtonActive : ''}`}
->
-    Savings
-*/
 
 export default AddExpense;

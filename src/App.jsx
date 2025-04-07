@@ -25,8 +25,6 @@ import Data from "./finances/DataAnalysis.jsx";
 import BudgetPieChart from "./finance_modules/BudgetPieChart.jsx";
 import SpendingMonthlyBarChart from "./finance_modules/SpendingMonthlyBarChart.jsx";
 import AddExpense from "./finances/AddExpense.jsx";
-import AddPaymentCard from "./finances/AddPaymentCard.jsx";
-import ManagePaymentCards from "./finances/ManagePaymentCards.jsx"
 import FinanceTargets from "./finances/FinanceTargets.jsx";
 
 // Imports all graphics and other
