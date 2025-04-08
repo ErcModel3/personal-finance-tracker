@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styles from "../Styles.module.css";
 
@@ -10,35 +10,26 @@ import Footer from "../components/Footer.jsx";
 import BudgetPieChart from "../finance_modules/BudgetPieChart.jsx";
 import SpendingCategoryPieChart from "../finance_modules/SpendingCategoryCharts.jsx";
 
-const Dashboard = () => {
-    // Sample data (TO DO replace with DB entries)
-    const budgetData = {
-        monthlySalary: 5000,
-        tax: 1250,
-        amountSpent: 2800,
-        bonus: 500,
-        budgetSet: 3000,
-        grossSalary: 6250
-    };
-    
-    const SpendingCategoryData = {
-        "Bills":"30",
-        "Eating out":"254",
-        "Essential Spend":"132",
-        "Groceries":"95",
-        "Non-essential Spend":"45",
-        "Shopping":"64",
-        "Savings":"150"
-    };
+// Import Database Client and User ID
+import supabaseClient from "../auth/Client.js";
+import userID from "../auth/SessionData.js";
 
-    // Sample recent transactions
-    const recentTransactions = [
-        { id: 1, date: "2025-04-05", description: "Grocery Store", category: "Groceries", amount: -85.42 },
-        { id: 2, date: "2025-04-04", description: "Monthly Salary", category: "Income", amount: 5000.00 },
-        { id: 3, date: "2025-04-03", description: "Restaurant", category: "Eating out", amount: -64.50 },
-        { id: 4, date: "2025-04-02", description: "Electric Bill", category: "Bills", amount: -120.75 },
-        { id: 5, date: "2025-04-01", description: "Online Store", category: "Shopping", amount: -39.99 }
-    ];
+const Dashboard = () => {
+    // State variables for data
+    const [loading, setLoading] = useState(true);
+    const [spendingCategoryData, setSpendingCategoryData] = useState({});
+    const [recentTransactions, setRecentTransactions] = useState([]);
+    const [currentMonth, setCurrentMonth] = useState('');
+    const [currentYear, setCurrentYear] = useState('');
+    const [amountSpent, setAmountSpent] = useState(0);
+
+    // Budget data with dynamic amountSpent
+    const [budgetData, setBudgetData] = useState({
+        monthlySalary: 5000,
+        amountSpent: 0, // Will be updated from the database
+        bonus: 500,
+        budgetSet: 5000,
+    });
 
     // Sample upcoming bills
     const upcomingBills = [
@@ -55,6 +46,122 @@ const Dashboard = () => {
         { id: 3, name: "New Laptop", target: 1500, current: 750, deadline: "2025-09-01" }
     ];
 
+    // Function to get month name from month number
+    const getMonthName = (monthNumber) => {
+        const months = [
+            'January', 'February', 'March', 'April', 'May', 'June',
+            'July', 'August', 'September', 'October', 'November', 'December'
+        ];
+        return months[monthNumber - 1];
+    };
+
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true);
+            try {
+                // Get the user ID from the session
+                const userId = await userID;
+
+                // Get current month and year
+                const now = new Date();
+                const year = now.getFullYear();
+                const month = now.getMonth() + 1; // JavaScript months are 0-indexed
+
+                // Set current month and year for display
+                setCurrentMonth(getMonthName(month));
+                setCurrentYear(year);
+
+                // Create date range for current month
+                const startDate = `${year}-${month.toString().padStart(2, '0')}-01T00:00:00.000Z`;
+                const lastDay = new Date(year, month, 0).getDate(); // Get last day of current month
+                const endDate = `${year}-${month.toString().padStart(2, '0')}-${lastDay}T23:59:59.999Z`;
+
+                // Get expenses and use join on the categories table
+                const { data: expensesData, error: expensesError } = await supabaseClient
+                    .from('Expenses')
+                    .select(`
+                        id,
+                        Description,
+                        Amount,
+                        Date,
+                        Categories:Category_id (id, Name) 
+                    `)
+                    .eq('User_id', userId)
+                    .order('Date', { ascending: false });
+
+                if (expensesError) {
+                    console.error('Error fetching expenses:', expensesError);
+                    return;
+                }
+
+                // Process expenses for 5 most recent transactions (regardless of month)
+                const processedTransactions = expensesData
+                    .slice(0, 5) // Get the 5 most recent transactions
+                    .map(expense => ({
+                        id: expense.id,
+                        date: new Date(expense.Date).toISOString().split('T')[0], // Format date as YYYY-MM-DD
+                        description: expense.Description,
+                        category: expense.Categories?.Name || 'Uncategorized',
+                        amount: -expense.Amount // Expenses are negative amounts
+                    }));
+
+                setRecentTransactions(processedTransactions);
+
+                // Filter expenses for current month only
+                const currentMonthExpenses = expensesData.filter(expense => {
+                    const expenseDate = new Date(expense.Date);
+                    return expenseDate >= new Date(startDate) && expenseDate <= new Date(endDate);
+                });
+
+                // Calculate total amount spent this month
+                const totalSpent = currentMonthExpenses.reduce(
+                    (total, expense) => total + (expense.Amount || 0),
+                    0
+                );
+
+                // Update amountSpent
+                setAmountSpent(totalSpent);
+
+                // Update budget data with the new amountSpent
+                setBudgetData(prevData => ({
+                    ...prevData,
+                    amountSpent: totalSpent
+                }));
+
+                // Process monthly spending by category
+                const categorySpending = {};
+
+                // Process current month expenses to group by category and sum amounts
+                currentMonthExpenses.forEach(expense => {
+                    const categoryName = expense.Categories?.Name || 'Uncategorized';
+                    const amount = expense.Amount || 0;
+
+                    // Initialize the category if it doesn't exist
+                    if (!categorySpending[categoryName]) {
+                        categorySpending[categoryName] = 0;
+                    }
+
+                    // Add the amount to the category total
+                    categorySpending[categoryName] += amount;
+                });
+
+                // Convert for pie chart
+                const formattedCategoryData = {};
+                for (const [category, amount] of Object.entries(categorySpending)) {
+                    formattedCategoryData[category] = amount.toString();
+                }
+
+                setSpendingCategoryData(formattedCategoryData);
+            } catch (error) {
+                console.error('Exception while fetching data:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData().then(r => null);
+    }, []);
+
     const calculateRemainingBudget = () => {
         return budgetData.budgetSet - budgetData.amountSpent;
     };
@@ -62,7 +169,7 @@ const Dashboard = () => {
     return (
         <div className={styles.app}>
             <AuthenticatedNavbar />
-            
+
             {/* Dashboard Header */}
             <div className={styles.heroSection}>
                 <div className={styles.heroContent}>
@@ -74,7 +181,7 @@ const Dashboard = () => {
             {/* Overview Section */}
             <div className={styles.metricsSection}>
                 <div className={styles.metricsHeader}>
-                    <h2 className={styles.metricsTitle}>Financial Overview</h2>
+                    <h2 className={styles.metricsTitle}>Financial Overview - {currentMonth} {currentYear}</h2>
                     <p className={styles.metricsDescription}>Your key metrics for this month</p>
                 </div>
 
@@ -86,13 +193,23 @@ const Dashboard = () => {
 
                     <div className={styles.metricCard}>
                         <div className={styles.metricLabel}>Total Spent</div>
-                        <div className={styles.metricValue}>£{budgetData.amountSpent}</div>
+                        <div className={styles.metricValue}>
+                            {loading ? (
+                                <span className={styles.loadingText}>Loading...</span>
+                            ) : (
+                                `£${budgetData.amountSpent.toFixed(2)}`
+                            )}
+                        </div>
                     </div>
 
                     <div className={styles.metricCard}>
                         <div className={styles.metricLabel}>Remaining Budget</div>
                         <div className={`${styles.metricValue} ${calculateRemainingBudget() >= 0 ? styles.positiveAmount : styles.negativeAmount}`}>
-                            £{calculateRemainingBudget()}
+                            {loading ? (
+                                <span className={styles.loadingText}>Loading...</span>
+                            ) : (
+                                `£${calculateRemainingBudget().toFixed(2)}`
+                            )}
                         </div>
                     </div>
                 </div>
@@ -101,22 +218,34 @@ const Dashboard = () => {
             {/* Budget Visualization Section */}
             <div className={styles.metricsSection}>
                 <div className={styles.metricsHeader}>
-                    <h2 className={styles.metricsTitle}>Budget Overview</h2>
+                    <h2 className={styles.metricsTitle}>Budget Overview - {currentMonth} {currentYear}</h2>
                     <p className={styles.metricsDescription}>Visualize your spending vs. budget</p>
                 </div>
                 <div className={styles.chartContainer}>
-                    <BudgetPieChart budgetData={budgetData} />
+                    {loading ? (
+                        <div className={styles.loadingMessage}>Loading budget data...</div>
+                    ) : (
+                        <BudgetPieChart budgetData={budgetData} />
+                    )}
                 </div>
             </div>
 
             {/* Category Spending Section */}
             <div className={styles.metricsSection}>
                 <div className={styles.metricsHeader}>
-                    <h2 className={styles.metricsTitle}>Spending by Category</h2>
-                    <p className={styles.metricsDescription}>How your money is distributed across categories</p>
+                    <h2 className={styles.metricsTitle}>Spending by Category - {currentMonth} {currentYear}</h2>
+                    <p className={styles.metricsDescription}>How your money is distributed across categories this month</p>
                 </div>
                 <div className={styles.chartContainer}>
-                    <SpendingCategoryPieChart SpendingCategoryData={SpendingCategoryData} />
+                    {loading ? (
+                        <div className={styles.loadingMessage}>Loading spending data...</div>
+                    ) : Object.keys(spendingCategoryData).length === 0 ? (
+                        <div className={styles.noDataMessage}>
+                            No spending data available for {currentMonth}. Add some expenses to see your spending breakdown.
+                        </div>
+                    ) : (
+                        <SpendingCategoryPieChart SpendingCategoryData={spendingCategoryData} />
+                    )}
                 </div>
             </div>
 
@@ -127,16 +256,23 @@ const Dashboard = () => {
                     <p className={styles.metricsDescription}>Your latest financial activities</p>
                 </div>
                 <div className={`${styles.chartContainer} ${styles.tableContainer}`}>
-                    <table className={styles.dataTable}>
-                        <thead>
+                    {loading ? (
+                        <div className={styles.loadingMessage}>Loading transactions...</div>
+                    ) : recentTransactions.length === 0 ? (
+                        <div className={styles.noDataMessage}>
+                            No transactions available. Add some expenses to see your recent transactions.
+                        </div>
+                    ) : (
+                        <table className={styles.dataTable}>
+                            <thead>
                             <tr>
                                 <th>Date</th>
                                 <th>Description</th>
                                 <th>Category</th>
                                 <th>Amount</th>
                             </tr>
-                        </thead>
-                        <tbody>
+                            </thead>
+                            <tbody>
                             {recentTransactions.map(transaction => (
                                 <tr key={transaction.id}>
                                     <td>{transaction.date}</td>
@@ -147,8 +283,9 @@ const Dashboard = () => {
                                     </td>
                                 </tr>
                             ))}
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    )}
                     <div className={styles.viewAllContainer}>
                         <Link to="/data" className={styles.linkNoDecoration}>
                             <button className={styles.primaryButton}>View All Transactions</button>
@@ -196,7 +333,7 @@ const Dashboard = () => {
                                         <div>{`£${goal.current} / £${goal.target}`}</div>
                                     </div>
                                     <div className={styles.progressBarBackground}>
-                                        <div 
+                                        <div
                                             className={styles.progressBarFill}
                                             style={{ width: `${progressPercentage}%` }}
                                         ></div>
@@ -213,24 +350,6 @@ const Dashboard = () => {
                             </Link>
                         </div>
                     </div>
-                </div>
-            </div>
-
-            {/* Quick Actions Section */}
-            <div className={styles.metricsSection}>
-                <div className={styles.metricsHeader}>
-                    <h2 className={styles.metricsTitle}>Quick Actions</h2>
-                </div>
-                <div className={styles.quickActionsContainer}>
-                    <Link to="/add-expense" className={styles.linkNoDecoration}>
-                        <button className={styles.primaryButton}>Add Expense</button>
-                    </Link>
-                    <Link to="/add-card" className={styles.linkNoDecoration}>
-                        <button className={styles.primaryButton}>Add Payment Card</button>
-                    </Link>
-                    <Link to="/data" className={styles.linkNoDecoration}>
-                        <button className={styles.primaryButton}>View Full Report</button>
-                    </Link>
                 </div>
             </div>
 
