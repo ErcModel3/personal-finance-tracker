@@ -381,7 +381,7 @@ const Transactions = () => {
                                         <td>{formatDate(transaction.date)}</td>
                                         <td>{transaction.description}</td>
                                         <td>{transaction.category}</td>
-                                        <td>{transaction.cardName} ({transaction.cardNumber})</td>
+                                        <td>{transaction.cardName}</td>
                                         <td className={`${styles.amountCell} ${transaction.amount >= 0 ? styles.positiveAmount : styles.negativeAmount}`}>
                                             {transaction.amount > 0 ? '+' : ''}£{Math.abs(transaction.amount).toFixed(2)}
                                         </td>
