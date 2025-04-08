@@ -318,18 +318,116 @@
 }
 
 /* Force white background on ALL elements */
+/* Force white background on content areas but preserve navbar */
 body, html, .footer, .footerLinks, .footerLink, 
 .app, .metricsSection, .metricCard, 
-input[type="text"], 
-.metricsHeader, .metricsTitle, .metricsDescription {
+input[type="text"], .formInput, .formSelect,
+.metricsHeader, .metricsTitle, .metricsDescription,
+.modalContent, .formCardContainer, .chartContainer,
+.cardItem, .billItem, .reviewCard, .savingsGoalItem,
+.dataTable, .tableContainer, .monthlyTable,
+.filterContainer, .searchInput, .dateFilter,
+.emptyState, .loadingState, .categoryButtonsWrapper {
     background-color: white !important;
-    color: black !important; /* Ensures text remains readable */
+    color: black !important;
 }
 
+/* Maintain form styling */
+.formInput, .formSelect, .searchInput, .dateFilter, input[type="text"] {
+    background-color: white !important;
+    color: black !important;
+    border: 1px solid #ddd !important;
+}
 
-/* Ensure selected buttons have a distinct look while maintaining light theme */
-button[style*="background: #eee"] {
+/* Ensure table elements are properly styled */
+.dataTable th, .dataTable td,
+.monthlyTable th, .monthlyTable td {
+    background-color: white !important;
+    color: black !important;
+    border-bottom: 1px solid #ddd !important;
+}
+
+/* Style for category buttons in light mode */
+.categoryButton {
+    background-color: white !important;
+    color: black !important;
+    border: 1px solid #ddd !important;
+}
+
+.categoryButtonActive {
     background-color: #eee !important;
+    color: black !important;
+    border: 1px solid #ddd !important;
+}
+
+/* Maintain button styling for usability */
+.primaryButton.cancelButton {
+    background-color: #6c757d !important;
+    color: white !important;
+}
+
+.primaryButton:not(.cancelButton) {
+    background-color: #27ae60 !important;
+    color: white !important;
+}
+
+/* Specific overrides for card and item components */
+.metricCard, .reviewCard, .billItem {
+    background-color: white !important;
+    border: 1px solid #ddd !important;
+}
+
+/* Text colors for specific elements */
+.metricLabel, .loadingText, .noCardsMessage, .billDate, .savingsGoalDate {
+    color: #666 !important;
+}
+
+.metricValue, .cardName, .billTitle, .billAmount, .savingsGoalTitle {
+    color: black !important;
+    font-weight: bold;
+}
+
+/* Preserve color indicators for amounts */
+.positiveAmount {
+    color: #27ae60 !important;
+}
+
+.negativeAmount {
+    color: #e74c3c !important;
+}
+
+/* Progress bar styling */
+.progressBarBackground {
+    background-color: #e0e0e0 !important;
+}
+
+.progressBarFill {
+    background-color: #27ae60 !important;
+}
+
+/* Modal overlay adjustments */
+.modalOverlay {
+    background-color: rgba(0,0,0,0.5) !important; /* Keep some transparency */
+}
+
+.modalContent {
+    background-color: white !important;
+    border: 1px solid #ddd !important;
+}
+
+/* Specific button overrides */
+.deleteButton {
+    background-color: #ff6b6b !important;
+    color: white !important;
+}
+
+.editButton {
+    background-color: #f0f0f0 !important;
+    color: black !important;
+}
+
+.addCardLink {
+    color: #27ae60 !important;
 }
 
 /* Card Management Styles */
