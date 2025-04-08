@@ -5,7 +5,6 @@ import NotificationPage from './pages/NotificationPage.jsx';
 
 //Import components
 import Navbar from "./components/Navbar.jsx";
-import AuthenticatedNavbar from "./components/AuthenticatedNavbar.jsx";  // Import the new authenticated navbar
 import Footer from "./components/Footer.jsx";
 import NotFound from "./components/NotFound.jsx";
 
@@ -26,6 +25,7 @@ import BudgetPieChart from "./finance_modules/BudgetPieChart.jsx";
 import SpendingMonthlyBarChart from "./finance_modules/SpendingMonthlyBarChart.jsx";
 import AddExpense from "./finances/AddExpense.jsx";
 import FinanceTargets from "./finances/FinanceTargets.jsx";
+import Transactions from "./finances/Transactions.jsx";
 
 // Imports all graphics and other
 import AccountInformation from "./Features/AccountDetailsComponents/AccountInformation.jsx";
@@ -89,58 +89,42 @@ function App() {
                 {/*Protected routes*/}
                 <Route path="/dashboard" element={
                     <SessionWrapper>
-                        <>
-                            <AuthenticatedNavbar />
-                            <Dashboard />
-                        </>
+                        <Dashboard />
                     </SessionWrapper>
                 } />
                 <Route path="/add-expense" element={
                     <SessionWrapper>
-                        <>
-                            <AuthenticatedNavbar />
-                            <AddExpense />
-                        </>
+                        <AddExpense />
                     </SessionWrapper>
                 }/>
                 <Route path="/finance-targets" element={
                     <SessionWrapper>
-                        <>
-                            <AuthenticatedNavbar />
-                            <FinanceTargets />
-                        </>
+                        <FinanceTargets />
                     </SessionWrapper>
                 } />
                 <Route path="/data" element={
                     <SessionWrapper>
-                        <>
-                            <AuthenticatedNavbar />
-                            <Data/>
-                        </>
+                        <Data/>
                     </SessionWrapper>
                 }/>
                 <Route path="/manage-cards" element={
                     <SessionWrapper>
-                        <>
-                            <AuthenticatedNavbar />
-                            <MergedCards />
-                        </>
+                        <MergedCards />
+                    </SessionWrapper>
+                }/>
+                <Route path="/transactions" element={
+                    <SessionWrapper>
+                        <Transactions />
                     </SessionWrapper>
                 }/>
                 <Route path="/notifications" element={
                     <SessionWrapper>
-                        <>
-                            <AuthenticatedNavbar />
-                            <NotificationPage/>
-                        </>
+                        <NotificationPage/>
                     </SessionWrapper>
                 }/>
                 <Route path="/settings" element={
                     <SessionWrapper>
-                        <>
-                            <AuthenticatedNavbar />
-                            <AccountInformation/>
-                        </>
+                        <AccountInformation/>
                     </SessionWrapper>
                 }/>
                 

@@ -36,6 +36,7 @@ const AuthenticatedNavbar = () => {
                 <div className="authenticated-navbar-nav ms-auto">
                     <Link className="auth-nav-link" to="/dashboard">Dashboard</Link>
                     <Link className="auth-nav-link" to="/add-expense">Add Expense</Link>
+                    <Link className="auth-nav-link" to="/transactions">Transactions</Link>
                     <Link className="auth-nav-link" to="/manage-cards">Manage Cards</Link>
                     <Link className="auth-nav-link" to="/finance-targets">Finance Targets</Link>
                     <Link className="auth-nav-link" to="/notifications">Notifications</Link>
