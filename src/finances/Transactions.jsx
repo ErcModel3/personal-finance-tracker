@@ -17,7 +17,9 @@ const Transactions = () => {
     const [categoryFilter, setCategoryFilter] = useState('');
     const [dateFilter, setDateFilter] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
+    const [cardFilter, setCardFilter] = useState('');
     const [categories, setCategories] = useState([]);
+    const [bankCards, setBankCards] = useState([]);
     const [monthlyData, setMonthlyData] = useState({});
 
     useEffect(() => {
@@ -26,17 +28,59 @@ const Transactions = () => {
             try {
                 // Get the user ID from the session
                 const userId = await userID;
-
-                // Get expenses and use join on the categories table
+                
+                // Get all bank cards first so we can use them as a lookup
+                const { data: cardsData, error: cardsError } = await supabaseClient
+                    .from('Bank_Cards')
+                    .select('*')
+                    .eq('User_id', userId);
+                
+                if (cardsError) {
+                    console.error('Error fetching bank cards:', cardsError);
+                }
+                
+                // Create a lookup for cards by ID
+                const cardLookup = {};
+                if (cardsData && cardsData.length > 0) {
+                    cardsData.forEach(card => {
+                        cardLookup[card.id] = {
+                            name: card.Bank_name || 'Unknown Card',
+                            last4: card.Last4Digits || '0000'
+                        };
+                    });
+                    
+                    // Keep track of available cards for filtering
+                    setBankCards(cardsData.map(card => ({
+                        id: card.id,
+                        name: card.Bank_name,
+                        last4: card.Last4Digits || '0000'
+                    })));
+                }
+                
+                // Get categories for lookup
+                const { data: categoriesData, error: catError } = await supabaseClient
+                    .from('Categories')
+                    .select('*');
+                    
+                if (catError) {
+                    console.error('Error fetching categories:', catError);
+                }
+                
+                // Create a lookup for categories
+                const categoryLookup = {};
+                if (categoriesData) {
+                    categoriesData.forEach(cat => {
+                        categoryLookup[cat.id] = cat.Name;
+                    });
+                    
+                    // Extract unique categories for filtering
+                    setCategories(categoriesData.map(cat => cat.Name).filter(Boolean));
+                }
+                
+                // Get expenses data - note that the field is "Bankcard_id" not "Card_id"
                 const { data: expensesData, error: expensesError } = await supabaseClient
                     .from('Expenses')
-                    .select(`
-                        id,
-                        Description,
-                        Amount,
-                        Date,
-                        Categories:Category_id (id, Name) 
-                    `)
+                    .select('*')
                     .eq('User_id', userId)
                     .order('Date', { ascending: false });
 
@@ -45,22 +89,36 @@ const Transactions = () => {
                     setError('Failed to fetch expenses');
                     return;
                 }
-
+                
+                console.log('First expense for debugging:', expensesData[0]);
+                
                 // Process all transactions
-                const processedTransactions = expensesData.map(expense => ({
-                    id: expense.id,
-                    date: new Date(expense.Date).toISOString().split('T')[0], // Format date as YYYY-MM-DD
-                    description: expense.Description || 'Unnamed Transaction',
-                    category: expense.Categories?.Name || 'Uncategorized',
-                    amount: -expense.Amount // Expenses are negative amounts
-                }));
+                const processedTransactions = expensesData.map(expense => {
+                    // Get category name from lookup
+                    const categoryName = expense.Category_id && categoryLookup[expense.Category_id] 
+                        ? categoryLookup[expense.Category_id] 
+                        : 'Uncategorized';
+                    
+                    // Get card info from lookup - note that it's "Bankcard_id" in your DB
+                    const cardId = expense.Bankcard_id;
+                    const card = cardId && cardLookup[cardId] 
+                        ? cardLookup[cardId]
+                        : { name: 'Unknown Card', last4: '0000' };
+                    
+                    return {
+                        id: expense.id,
+                        date: new Date(expense.Date).toISOString().split('T')[0],
+                        description: expense.Description || 'Unnamed Transaction',
+                        category: categoryName,
+                        amount: -expense.Amount, // Expenses are negative amounts
+                        cardName: card.name,
+                        cardNumber: card.last4 ? `**** ${card.last4}` : '**** 0000',
+                        cardId: cardId
+                    };
+                });
 
                 setTransactions(processedTransactions);
-
-                // Extract unique categories from transactions
-                const uniqueCategories = [...new Set(processedTransactions.map(t => t.category))];
-                setCategories(uniqueCategories);
-
+                
                 // Process monthly data
                 processMonthlyData(processedTransactions);
                 
@@ -87,7 +145,8 @@ const Transactions = () => {
                 monthlyBreakdown[monthYear] = {
                     income: 0,
                     expenses: 0,
-                    categories: {}
+                    categories: {},
+                    cards: {} // Track spending by card
                 };
             }
             
@@ -101,6 +160,13 @@ const Transactions = () => {
                     monthlyBreakdown[monthYear].categories[transaction.category] = 0;
                 }
                 monthlyBreakdown[monthYear].categories[transaction.category] += Math.abs(transaction.amount);
+                
+                // Track spending by card
+                const cardKey = transaction.cardName;
+                if (!monthlyBreakdown[monthYear].cards[cardKey]) {
+                    monthlyBreakdown[monthYear].cards[cardKey] = 0;
+                }
+                monthlyBreakdown[monthYear].cards[cardKey] += Math.abs(transaction.amount);
             }
         });
         
@@ -110,6 +176,13 @@ const Transactions = () => {
             monthlyBreakdown[month].topCategories = Object.entries(categories)
                 .sort((a, b) => b[1] - a[1])
                 .slice(0, 3)
+                .map(([name, amount]) => ({ name, amount }));
+                
+            // Calculate top cards for each month
+            const cards = monthlyBreakdown[month].cards;
+            monthlyBreakdown[month].topCards = Object.entries(cards)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 2)
                 .map(([name, amount]) => ({ name, amount }));
         });
         
@@ -132,12 +205,14 @@ const Transactions = () => {
     const filteredTransactions = transactions.filter(transaction => {
         const matchesCategory = categoryFilter ? transaction.category === categoryFilter : true;
         const matchesDate = dateFilter ? transaction.date.includes(dateFilter) : true;
+        const matchesCard = cardFilter ? transaction.cardId == cardFilter : true; // Use == for numeric comparison
         const matchesSearch = searchTerm 
             ? transaction.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-              transaction.category.toLowerCase().includes(searchTerm.toLowerCase())
+              transaction.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+              transaction.cardName.toLowerCase().includes(searchTerm.toLowerCase())
             : true;
         
-        return matchesCategory && matchesDate && matchesSearch;
+        return matchesCategory && matchesDate && matchesCard && matchesSearch;
     });
 
     // Calculate totals
@@ -166,6 +241,7 @@ const Transactions = () => {
         setCategoryFilter('');
         setDateFilter('');
         setSearchTerm('');
+        setCardFilter('');
     };
 
     return (
@@ -239,6 +315,21 @@ const Transactions = () => {
                     </div>
                     
                     <div className={styles.filterSelectItem}>
+                        <select
+                            value={cardFilter}
+                            onChange={(e) => setCardFilter(e.target.value)}
+                            className={styles.filterSelect}
+                        >
+                            <option value="">All Cards</option>
+                            {bankCards.map(card => (
+                                <option key={card.id} value={card.id}>
+                                    {card.name} (**** {card.last4})
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    
+                    <div className={styles.filterSelectItem}>
                         <input
                             type="month"
                             value={dateFilter}
@@ -280,6 +371,7 @@ const Transactions = () => {
                                     <th>Date</th>
                                     <th>Description</th>
                                     <th>Category</th>
+                                    <th>Bank Card</th>
                                     <th>Amount</th>
                                 </tr>
                             </thead>
@@ -289,6 +381,7 @@ const Transactions = () => {
                                         <td>{formatDate(transaction.date)}</td>
                                         <td>{transaction.description}</td>
                                         <td>{transaction.category}</td>
+                                        <td>{transaction.cardName} ({transaction.cardNumber})</td>
                                         <td className={`${styles.amountCell} ${transaction.amount >= 0 ? styles.positiveAmount : styles.negativeAmount}`}>
                                             {transaction.amount > 0 ? '+' : ''}£{Math.abs(transaction.amount).toFixed(2)}
                                         </td>
@@ -323,6 +416,7 @@ const Transactions = () => {
                                     <th>Expenses</th>
                                     <th>Savings</th>
                                     <th>Top Categories</th>
+                                    <th>Top Cards</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -346,6 +440,17 @@ const Transactions = () => {
                                                     </ul>
                                                 ) : (
                                                     <p>No category data available</p>
+                                                )}
+                                            </td>
+                                            <td>
+                                                {data.topCards && data.topCards.length > 0 ? (
+                                                    <ul className={styles.categoryList}>
+                                                        {data.topCards.map((card, index) => (
+                                                            <li key={index}>{card.name}: £{card.amount.toFixed(2)}</li>
+                                                        ))}
+                                                    </ul>
+                                                ) : (
+                                                    <p>No card data available</p>
                                                 )}
                                             </td>
                                         </tr>
