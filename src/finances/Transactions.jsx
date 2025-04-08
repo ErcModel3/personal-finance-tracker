@@ -1,70 +1,80 @@
 import React, { useState, useEffect } from 'react';
-import './Transactions.css';
+import styles from "../Styles.module.css"; // Using the same styles as Dashboard
 import AuthenticatedNavbar from "../components/AuthenticatedNavbar.jsx";
 import Footer from "../components/Footer.jsx";
 
+// Import Database Client and User ID
+import supabaseClient from "../auth/Client.js";
+import userID from "../auth/SessionData.js";
+
 const Transactions = () => {
-    const [transactions, setTransactions] = useState([]);
+    // State variables for data
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
+    const [transactions, setTransactions] = useState([]);
+    
     // Filter states
     const [categoryFilter, setCategoryFilter] = useState('');
     const [dateFilter, setDateFilter] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
     const [categories, setCategories] = useState([]);
     const [monthlyData, setMonthlyData] = useState({});
-    
-    // Fetch transactions from the database
+
     useEffect(() => {
-        const fetchTransactions = async () => {
+        const fetchData = async () => {
+            setLoading(true);
             try {
-                setLoading(true);
-                
-                const userId = localStorage.getItem('userId') || '1'; // Fallback to '1' if not available
-                
-                // Fetch transactions from your API
-                const response = await fetch(`/api/expenses?user_id=${userId}`);
-                
-                if (!response.ok) {
-                    throw new Error('Failed to fetch transactions');
+                // Get the user ID from the session
+                const userId = await userID;
+
+                // Get expenses and use join on the categories table
+                const { data: expensesData, error: expensesError } = await supabaseClient
+                    .from('Expenses')
+                    .select(`
+                        id,
+                        Description,
+                        Amount,
+                        Date,
+                        Categories:Category_id (id, Name) 
+                    `)
+                    .eq('User_id', userId)
+                    .order('Date', { ascending: false });
+
+                if (expensesError) {
+                    console.error('Error fetching expenses:', expensesError);
+                    setError('Failed to fetch expenses');
+                    return;
                 }
-                
-                const data = await response.json();
-                
-                // Transform the data to match components expected format
-                const formattedTransactions = data.map(item => ({
-                    id: item.id,
-                    date: new Date(item.Date).toISOString().split('T')[0],
-                    description: item.Description || 'Unnamed Transaction',
-                    amount: item.Amount,
-                    // Fetch category name based on category_id
-                    category: item.category_name || 'Uncategorized'
+
+                // Process all transactions
+                const processedTransactions = expensesData.map(expense => ({
+                    id: expense.id,
+                    date: new Date(expense.Date).toISOString().split('T')[0], // Format date as YYYY-MM-DD
+                    description: expense.Description || 'Unnamed Transaction',
+                    category: expense.Categories?.Name || 'Uncategorized',
+                    amount: -expense.Amount // Expenses are negative amounts
                 }));
-                
-                setTransactions(formattedTransactions);
-                
-                // Fetch categories
-                const categoryResponse = await fetch(`/api/categories?user_id=${userId}`);
-                if (categoryResponse.ok) {
-                    const categoryData = await categoryResponse.json();
-                    setCategories(categoryData.map(cat => cat.Name));
-                }
-                
+
+                setTransactions(processedTransactions);
+
+                // Extract unique categories from transactions
+                const uniqueCategories = [...new Set(processedTransactions.map(t => t.category))];
+                setCategories(uniqueCategories);
+
                 // Process monthly data
-                processMonthlyData(formattedTransactions);
+                processMonthlyData(processedTransactions);
                 
-            } catch (err) {
-                console.error('Error fetching transactions:', err);
-                setError(err.message);
+            } catch (error) {
+                console.error('Exception while fetching data:', error);
+                setError('An unexpected error occurred');
             } finally {
                 setLoading(false);
             }
         };
-        
-        fetchTransactions();
+
+        fetchData();
     }, []);
-    
+
     // Process transactions data to get monthly summaries
     const processMonthlyData = (transactionsData) => {
         const monthlyBreakdown = {};
@@ -103,7 +113,19 @@ const Transactions = () => {
                 .map(([name, amount]) => ({ name, amount }));
         });
         
-        setMonthlyData(monthlyBreakdown);
+        // Sort monthly data by year and month (most recent first)
+        const sortedMonthlyData = {};
+        Object.keys(monthlyBreakdown)
+            .sort((a, b) => {
+                const dateA = new Date(a);
+                const dateB = new Date(b);
+                return dateB - dateA; // Sort in descending order (newest first)
+            })
+            .forEach(month => {
+                sortedMonthlyData[month] = monthlyBreakdown[month];
+            });
+        
+        setMonthlyData(sortedMonthlyData);
     };
 
     // Apply filters to transactions
@@ -145,78 +167,114 @@ const Transactions = () => {
         setDateFilter('');
         setSearchTerm('');
     };
-    
-
 
     return (
-        <div className="transactions-page">
+        <div className={styles.app}>
             <AuthenticatedNavbar />
 
-            <div className="content-section">
-                <h2 className="section-title">Recent Transactions</h2>
-                <p className="section-description">Your complete transaction history</p>
+            {/* Transactions Header - No blue hero section */}
+            <div className={`${styles.metricsSection} ${styles.paddingTop30}`}>
+                <div className={styles.metricsHeader}>
+                    <h1 className={styles.metricsTitle}>Transactions</h1>
+                    <p className={styles.metricsDescription}>View and manage all your financial activities</p>
+                </div>
+            </div>
 
-                <div className="summary-stats">
-                    <div className="stat-card income">
-                        <h3>Income</h3>
-                        <p className="stat-amount">£{income.toFixed(2)}</p>
-                    </div>
-                    <div className="stat-card expenses">
-                        <h3>Expenses</h3>
-                        <p className="stat-amount">£{expenses.toFixed(2)}</p>
-                    </div>
-                    <div className="stat-card balance">
-                        <h3>Balance</h3>
-                        <p className="stat-amount">£{balance.toFixed(2)}</p>
-                    </div>
+            {/* Overview Section */}
+            <div className={styles.metricsSection}>
+                <div className={styles.metricsHeader}>
+                    <h2 className={styles.metricsTitle}>Financial Summary</h2>
+                    <p className={styles.metricsDescription}>Your key metrics for the selected period</p>
                 </div>
 
-                <div className="filter-section">
-                    <div className="search-container">
+                <div className={styles.metricsCards}>
+                    <div className={styles.metricCard}>
+                        <div className={styles.metricLabel}>Income</div>
+                        <div className={`${styles.metricValue} ${styles.positiveAmount}`}>£{income.toFixed(2)}</div>
+                    </div>
+
+                    <div className={styles.metricCard}>
+                        <div className={styles.metricLabel}>Expenses</div>
+                        <div className={`${styles.metricValue} ${styles.negativeAmount}`}>£{expenses.toFixed(2)}</div>
+                    </div>
+
+                    <div className={styles.metricCard}>
+                        <div className={styles.metricLabel}>Balance</div>
+                        <div className={`${styles.metricValue} ${balance >= 0 ? styles.positiveAmount : styles.negativeAmount}`}>
+                            £{balance.toFixed(2)}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Filters Section */}
+            <div className={styles.metricsSection}>
+                <div className={styles.metricsHeader}>
+                    <h2 className={styles.metricsTitle}>Filter Transactions</h2>
+                    <p className={styles.metricsDescription}>Customize your transaction view</p>
+                </div>
+                
+                <div className={`${styles.chartContainer} ${styles.filterContainer}`}>
+                    <div className={styles.filterItem}>
                         <input
                             type="text"
                             placeholder="Search transactions..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="search-input"
+                            className={styles.searchInput}
                         />
                     </div>
                     
-                    <div className="filter-controls">
+                    <div className={styles.filterSelectItem}>
                         <select
                             value={categoryFilter}
                             onChange={(e) => setCategoryFilter(e.target.value)}
-                            className="filter-select"
+                            className={styles.filterSelect}
                         >
                             <option value="">All Categories</option>
                             {categories.map(category => (
                                 <option key={category} value={category}>{category}</option>
                             ))}
                         </select>
-                        
+                    </div>
+                    
+                    <div className={styles.filterSelectItem}>
                         <input
                             type="month"
                             value={dateFilter}
                             onChange={(e) => setDateFilter(e.target.value)}
-                            className="date-filter"
+                            className={styles.dateFilter}
                         />
-                        
+                    </div>
+                    
+                    <div className={styles.filterButtonContainer}>
                         <button 
                             onClick={clearFilters}
-                            className="clear-filters-btn"
+                            className={`${styles.primaryButton} ${styles.filterButton}`}
                         >
                             Clear Filters
                         </button>
                     </div>
                 </div>
+            </div>
 
-                <div className="transactions-table-container">
+            {/* Transactions Table Section */}
+            <div className={styles.metricsSection}>
+                <div className={styles.metricsHeader}>
+                    <h2 className={styles.metricsTitle}>All Transactions</h2>
+                    <p className={styles.metricsDescription}>Your complete transaction history</p>
+                </div>
+                <div className={`${styles.chartContainer} ${styles.tableContainer}`}>
                     {loading ? (
-                        <div className="loading-indicator">Loading transactions...</div>
+                        <div className={styles.loadingMessage}>Loading transactions...</div>
                     ) : error ? (
-                        <div className="error-message">Error: {error}</div>
+                        <div className={styles.errorMessage}>Error: {error}</div>
+                    ) : filteredTransactions.length === 0 ? (
+                        <div className={styles.noDataMessage}>
+                            {transactions.length === 0 ? 'No transactions found in your account' : 'No transactions found matching your filters'}
+                        </div>
                     ) : (
-                        <table className="transactions-table">
+                        <table className={styles.dataTable}>
                             <thead>
                                 <tr>
                                     <th>Date</th>
@@ -226,81 +284,78 @@ const Transactions = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {filteredTransactions.length > 0 ? (
-                                    filteredTransactions.map(transaction => (
-                                        <tr key={transaction.id}>
-                                            <td>{formatDate(transaction.date)}</td>
-                                            <td>{transaction.description}</td>
-                                            <td>
-                                                <span className={`category-tag ${transaction.category.toLowerCase().replace(/\s+/g, '-')}`}>
-                                                    {transaction.category}
-                                                </span>
-                                            </td>
-                                            <td className={transaction.amount > 0 ? 'amount-positive' : 'amount-negative'}>
-                                                {transaction.amount > 0 ? '+' : ''}£{Math.abs(transaction.amount).toFixed(2)}
-                                            </td>
-                                        </tr>
-                                    ))
-                                ) : (
-                                    <tr>
-                                        <td colSpan="4" className="no-transactions">
-                                            {transactions.length === 0 ? 'No transactions found in your account' : 'No transactions found matching your filters'}
+                                {filteredTransactions.map(transaction => (
+                                    <tr key={transaction.id}>
+                                        <td>{formatDate(transaction.date)}</td>
+                                        <td>{transaction.description}</td>
+                                        <td>{transaction.category}</td>
+                                        <td className={`${styles.amountCell} ${transaction.amount >= 0 ? styles.positiveAmount : styles.negativeAmount}`}>
+                                            {transaction.amount > 0 ? '+' : ''}£{Math.abs(transaction.amount).toFixed(2)}
                                         </td>
                                     </tr>
-                                )}
+                                ))}
                             </tbody>
                         </table>
                     )}
                 </div>
             </div>
 
-            <div className="content-section">
-                <h2 className="section-title">Monthly Breakdown</h2>
-                <p className="section-description">Your spending patterns by month</p>
-
+            {/* Monthly Breakdown Section as Table */}
+            <div className={styles.metricsSection}>
+                <div className={styles.metricsHeader}>
+                    <h2 className={styles.metricsTitle}>Monthly Breakdown</h2>
+                    <p className={styles.metricsDescription}>Your spending patterns by month</p>
+                </div>
+                
                 {loading ? (
-                    <div className="loading-indicator">Loading monthly data...</div>
+                    <div className={styles.loadingMessage}>Loading monthly data...</div>
                 ) : error ? (
-                    <div className="error-message">Error loading monthly data: {error}</div>
+                    <div className={styles.errorMessage}>Error loading monthly data: {error}</div>
+                ) : Object.keys(monthlyData).length === 0 ? (
+                    <div className={styles.noDataMessage}>No monthly data available</div>
                 ) : (
-                    <div className="monthly-breakdown">
-                        {Object.keys(monthlyData).length > 0 ? (
-                            Object.entries(monthlyData).map(([month, data]) => {
-                                const savings = data.income - data.expenses;
-                                
-                                return (
-                                    <div className="month-card" key={month}>
-                                        <h3>{month}</h3>
-                                        <div className="month-stats">
-                                            <p>Income: <span className="positive">£{data.income.toFixed(2)}</span></p>
-                                            <p>Expenses: <span className="negative">£{data.expenses.toFixed(2)}</span></p>
-                                            <p>Savings: <span className={savings >= 0 ? "positive" : "negative"}>
+                    <div className={`${styles.chartContainer} ${styles.tableContainer}`}>
+                        <table className={`${styles.dataTable} ${styles.monthlyTable}`}>
+                            <thead>
+                                <tr>
+                                    <th>Month</th>
+                                    <th>Income</th>
+                                    <th>Expenses</th>
+                                    <th>Savings</th>
+                                    <th>Top Categories</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {Object.entries(monthlyData).map(([month, data]) => {
+                                    const savings = data.income - data.expenses;
+                                    
+                                    return (
+                                        <tr key={month}>
+                                            <td className={styles.monthColumn}>{month}</td>
+                                            <td className={styles.positiveAmount}>£{data.income.toFixed(2)}</td>
+                                            <td className={styles.negativeAmount}>£{data.expenses.toFixed(2)}</td>
+                                            <td className={savings >= 0 ? styles.positiveAmount : styles.negativeAmount}>
                                                 £{savings.toFixed(2)}
-                                            </span></p>
-                                        </div>
-                                        <div className="category-breakdown">
-                                            <h4>Top Categories:</h4>
-                                            {data.topCategories && data.topCategories.length > 0 ? (
-                                                <ul>
-                                                    {data.topCategories.map((category, index) => (
-                                                        <li key={index}>{category.name}: £{category.amount.toFixed(2)}</li>
-                                                    ))}
-                                                </ul>
-                                            ) : (
-                                                <p>No category data available</p>
-                                            )}
-                                        </div>
-                                    </div>
-                                );
-                            })
-                        ) : (
-                            <div className="no-data-message">No monthly data available</div>
-                        )}
+                                            </td>
+                                            <td>
+                                                {data.topCategories && data.topCategories.length > 0 ? (
+                                                    <ul className={styles.categoryList}>
+                                                        {data.topCategories.map((category, index) => (
+                                                            <li key={index}>{category.name}: £{category.amount.toFixed(2)}</li>
+                                                        ))}
+                                                    </ul>
+                                                ) : (
+                                                    <p>No category data available</p>
+                                                )}
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
+                            </tbody>
+                        </table>
                     </div>
                 )}
             </div>
-
-
 
             <Footer />
         </div>
