@@ -27,7 +27,7 @@ const Dashboard = () => {
 
     // Budget data with dynamic amountSpent and monthlySalary
     const [budgetData, setBudgetData] = useState({
-        monthlySalary: 0, // Will be updated from the user's profile
+        monthlySalary: 0, // Will be updated from the user's salary
         amountSpent: 0, // Will be updated from the database
         bonus: 500,
         budgetSet: 0, // Will be updated to match the salary
@@ -78,18 +78,18 @@ const Dashboard = () => {
                 const lastDay = new Date(year, month, 0).getDate(); // Get last day of current month
                 const endDate = `${year}-${month.toString().padStart(2, '0')}-${lastDay}T23:59:59.999Z`;
 
-                // Fetch user's profile data to get the monthly salary
-                const { data: profileData, error: profileError } = await supabaseClient
-                    .from('profiles')
-                    .select('monthly_salary')
-                    .eq('auth_user_id', userId)
+                // Fetch user's salary data from Monthly_Salary table
+                const { data: salaryData, error: salaryError } = await supabaseClient
+                    .from('Monthly_Salary')
+                    .select('Salary')
+                    .eq('userID', userId)
                     .single();
 
-                if (profileError && profileError.code !== 'PGRST116') {
-                    console.error('Error fetching user profile:', profileError);
-                } else if (profileData && profileData.monthly_salary) {
-                    // Update the salary if it exists in the profile
-                    const salary = parseFloat(profileData.monthly_salary);
+                if (salaryError && salaryError.code !== 'PGRST116') {
+                    console.error('Error fetching user salary:', salaryError);
+                } else if (salaryData && salaryData.Salary) {
+                    // Update the salary if it exists
+                    const salary = parseFloat(salaryData.Salary);
                     setUserSalary(salary);
                     setHasSalarySet(true);
                     
@@ -221,12 +221,17 @@ const Dashboard = () => {
                                 <span className={styles.loadingText}>Loading...</span>
                             </div>
                         ) : hasSalarySet ? (
-                            <div className={styles.metricValue}>£{userSalary.toFixed(2)}</div>
+                            <div className={styles.metricValueContainer}>
+                                <div className={styles.metricValue}>£{userSalary.toFixed(2)}</div>
+                                <Link to="/monthly-salary" className={styles.linkNoDecoration}>
+                                    <button className={`${styles.smallButton} ${styles.salaryButton}`}>Update</button>
+                                </Link>
+                            </div>
                         ) : (
                             <div className={styles.metricValueContainer}>
                                 <div className={styles.metricValue}>Not set</div>
                                 <Link to="/monthly-salary" className={styles.linkNoDecoration}>
-                                    <button className={styles.smallButton}>Set Salary</button>
+                                    <button className={`${styles.smallButton} ${styles.salaryButton}`}>Set Salary</button>
                                 </Link>
                             </div>
                         )}
@@ -286,7 +291,7 @@ const Dashboard = () => {
                                 This will help us provide accurate budget visualizations and financial insights.
                             </p>
                             <Link to="/monthly-salary" className={styles.linkNoDecoration}>
-                                <button className={styles.primaryButton}>Set Your Salary</button>
+                                <button className={`${styles.primaryButton} ${styles.salaryButton}`}>Set Your Salary</button>
                             </Link>
                         </div>
                     </div>
@@ -350,7 +355,7 @@ const Dashboard = () => {
                         </table>
                     )}
                     <div className={styles.viewAllContainer}>
-                        <Link to="/data" className={styles.linkNoDecoration}>
+                        <Link to="/transactions" className={styles.linkNoDecoration}>
                             <button className={styles.primaryButton}>View All Transactions</button>
                         </Link>
                     </div>
