@@ -99,6 +99,20 @@
     font-weight: 500;
 }
 
+/* Green button for salary buttons */
+.salaryButton {
+    background-color: #27ae60 !important;
+    color: white !important;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+}
+
+.smallButton.salaryButton {
+    font-size: 14px;
+    padding: 8px 12px;
+}
+
 .metricsSection {
     padding: 60px 170px;
 }

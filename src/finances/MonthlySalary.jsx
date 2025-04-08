@@ -14,7 +14,23 @@ function MonthlySalary() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [user, setUser] = useState(null);
+    const [salaryRecord, setSalaryRecord] = useState(null);
 
+    // Custom styles for the green button
+    const greenButtonStyle = {
+        backgroundColor: '#27AE60',
+        color: 'white',
+        padding: '10px 16px',
+        border: 'none',
+        borderRadius: '5px',
+        cursor: 'pointer',
+        fontSize: '16px',
+        fontWeight: 'bold',
+        transition: 'background-color 0.3s ease',
+        width: '100%',
+        marginTop: '20px'
+    };
+    
     // Fetch the current user and their salary on component mount
     useEffect(() => {
         const fetchUserAndSalary = async () => {
@@ -25,20 +41,21 @@ function MonthlySalary() {
                 if (userId) {
                     setUser(userId);
                     
-                    // Check if the user has a salary already
-                    const { data, error: profileError } = await supabaseClient
-                        .from('profiles')
-                        .select('monthly_salary')
-                        .eq('auth_user_id', userId)
+                    // Check if the user has a salary record already
+                    const { data, error: salaryError } = await supabaseClient
+                        .from('Monthly_Salary')
+                        .select('*')
+                        .eq('userID', userId)
                         .single();
                     
-                    if (profileError && profileError.code !== 'PGRST116') { // PGRST116 is "no rows found"
-                        throw profileError;
+                    if (salaryError && salaryError.code !== 'PGRST116') { // PGRST116 is "no rows found"
+                        throw salaryError;
                     }
                     
-                    if (data && data.monthly_salary) {
-                        setCurrentSalary(data.monthly_salary);
-                        setMonthlySalary(data.monthly_salary.toString());
+                    if (data) {
+                        setSalaryRecord(data);
+                        setCurrentSalary(data.Salary);
+                        setMonthlySalary(data.Salary.toString());
                     }
                 } else {
                     // Redirect to login if no user is found
@@ -69,32 +86,23 @@ function MonthlySalary() {
         }
 
         try {
-            // Check if profile exists
-            const { data: existingProfile, error: profileCheckError } = await supabaseClient
-                .from('profiles')
-                .select('id')
-                .eq('auth_user_id', user)
-                .single();
-                
-            if (profileCheckError && profileCheckError.code !== 'PGRST116') {
-                throw profileCheckError;
-            }
-            
             let result;
             
-            if (existingProfile) {
-                // Update existing profile with the new salary
+            if (salaryRecord) {
+                // Update existing salary record
                 result = await supabaseClient
-                    .from('profiles')
-                    .update({ monthly_salary: parseFloat(monthlySalary) })
-                    .eq('auth_user_id', user);
+                    .from('Monthly_Salary')
+                    .update({ 
+                        Salary: parseFloat(monthlySalary)
+                    })
+                    .eq('userID', user);
             } else {
-                // Create new profile with the salary
+                // Create new salary record
                 result = await supabaseClient
-                    .from('profiles')
+                    .from('Monthly_Salary')
                     .insert([{ 
-                        auth_user_id: user,
-                        monthly_salary: parseFloat(monthlySalary)
+                        userID: user,
+                        Salary: parseFloat(monthlySalary)
                     }]);
             }
             
@@ -124,7 +132,7 @@ function MonthlySalary() {
                     
                     {currentSalary && (
                         <div className={styles.currentSalaryInfo}>
-                            <p>Your current monthly salary: <strong>${currentSalary.toFixed(2)}</strong></p>
+                            <p>Your current monthly salary: <strong>£{currentSalary.toFixed(2)}</strong></p>
                         </div>
                     )}
                     
@@ -163,7 +171,7 @@ function MonthlySalary() {
 
                             <button 
                                 type="submit" 
-                                className={styles.submitButton}
+                                style={greenButtonStyle}
                                 disabled={loading || !monthlySalary}
                             >
                                 {loading ? 'Saving...' : (currentSalary ? 'Update Salary' : 'Save Salary')}
