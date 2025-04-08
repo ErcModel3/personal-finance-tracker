@@ -35,7 +35,6 @@ const AuthenticatedNavbar = () => {
                 {/* Right side: Navigation buttons for authenticated users */}
                 <div className="authenticated-navbar-nav ms-auto">
                     <Link className="auth-nav-link" to="/dashboard">Dashboard</Link>
-                    <Link className="auth-nav-link" to="/transactions">Transactions</Link>
                     <Link className="auth-nav-link" to="/add-expense">Add Expenses</Link>
                     <Link className="auth-nav-link" to="/manage-cards">Manage Cards</Link>
                     <Link className="auth-nav-link" to="/finance-targets">Targets</Link>
