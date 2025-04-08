@@ -26,6 +26,7 @@ import SpendingMonthlyBarChart from "./finance_modules/SpendingMonthlyBarChart.j
 import AddExpense from "./finances/AddExpense.jsx";
 import FinanceTargets from "./finances/FinanceTargets.jsx";
 import Transactions from "./finances/Transactions.jsx";
+import MonthlySalary from './finances/MonthlySalary.jsx';
 
 // Imports all graphics and other
 import AccountInformation from "./Features/AccountDetailsComponents/AccountInformation.jsx";
@@ -125,6 +126,11 @@ function App() {
                 <Route path="/settings" element={
                     <SessionWrapper>
                         <AccountInformation/>
+                    </SessionWrapper>
+                }/>
+                <Route path="/monthly-salary" element={
+                    <SessionWrapper>
+                        <MonthlySalary />
                     </SessionWrapper>
                 }/>
                 
