@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import './ContactUs.css'; 
 import Navbar from "../components/Navbar.jsx";
 import Footer from "../components/Footer.jsx";
+import supabaseClient from "../auth/Client.js";
 
 const ContactUs = () => {
     const [formData, setFormData] = useState({
-        name: '',
-        email: '',
-        subject: 'General Inquiry', 
-        message: ''
+        Name: '',
+        Email: '',
+        Subject: '',
+        Message: '',
     });
 
     const handleChange = (e) => {
@@ -22,8 +23,15 @@ const ContactUs = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log('Form submitted', formData);
-        // To do: Add form submission logic here
+
+        const dataToSubmit = {
+            ...formData,
+            Subject: formData.Subject || 'General Inquiry'
+        }
         alert('Message sent! We will get back to you soon.');
+        //assuming we had real customer support and an email address to send messages to, we would do error and data checking, because this is proof of concept, I have not added this here.
+        const {data, error} = await supabaseClient.from('Contact_Us').insert(dataToSubmit);
+        if (error) console.log(error);
     };
 
     return (
@@ -54,12 +62,12 @@ const ContactUs = () => {
                     
                     <form className="contact-form" onSubmit={handleSubmit}>
                         <div className="form-group">
-                            <label htmlFor="name">Name</label>
+                            <label htmlFor="Name">Name</label>
                             <input
                                 type="text"
-                                id="name"
-                                name="name"
-                                value={formData.name}
+                                id="Name"
+                                name="Name"
+                                value={formData.Name}
                                 onChange={handleChange}
                                 placeholder="Enter your name"
                                 required
@@ -67,12 +75,12 @@ const ContactUs = () => {
                         </div>
 
                         <div className="form-group">
-                            <label htmlFor="email">Email</label>
+                            <label htmlFor="Email">Email</label>
                             <input
-                                type="email"
-                                id="email"
-                                name="email"
-                                value={formData.email}
+                                type="Email"
+                                id="Email"
+                                name="Email"
+                                value={formData.Email}
                                 onChange={handleChange}
                                 placeholder="Enter your email"
                                 required
@@ -80,11 +88,11 @@ const ContactUs = () => {
                         </div>
 
                         <div className="form-group">
-                            <label htmlFor="subject">Subject</label>
+                            <label htmlFor="Subject">Subject</label>
                             <select
-                                id="subject"
-                                name="subject"
-                                value={formData.subject}
+                                id="Subject"
+                                name="Subject"
+                                value={formData.Subject}
                                 onChange={handleChange}
                                 required
                             >
@@ -95,11 +103,11 @@ const ContactUs = () => {
                         </div>
 
                         <div className="form-group">
-                            <label htmlFor="message">Message</label>
+                            <label htmlFor="Message">Message</label>
                             <textarea
-                                id="message"
-                                name="message"
-                                value={formData.message}
+                                id="Message"
+                                name="Message"
+                                value={formData.Message}
                                 onChange={handleChange}
                                 placeholder="Type your message here"
                                 rows="4"
