@@ -756,3 +756,91 @@ button[style*="background: #eee"] {
         min-width: 100%;
     }
 }
+/* General utility classes */
+.paddingTop30 {
+    padding-top: 30px;
+}
+
+/* Filter container styles */
+.filterContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+    padding: 20px;
+}
+
+.filterItem {
+    flex: 1;
+    min-width: 250px;
+}
+
+.filterSelectItem {
+    flex: 1;
+    min-width: 200px;
+}
+
+.filterButtonContainer {
+    display: flex;
+    align-items: center;
+}
+
+.filterButton {
+    padding: 10px 20px;
+    margin: 0;
+}
+
+/* Form inputs with consistent styling */
+.searchInput {
+    width: 100%;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+}
+
+.filterSelect {
+    width: 100%;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+    background-color: white;
+}
+
+.dateFilter {
+    width: 100%;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+}
+
+/* Category list styling */
+.categoryList {
+    list-style-type: disc;
+    padding-left: 20px;
+    margin: 0;
+}
+
+/* Monthly breakdown table specific styling */
+.monthlyTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.monthlyTable th, 
+.monthlyTable td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+}
+
+.monthlyTable th {
+    font-weight: bold;
+    background-color: #f8f9fa;
+}
+
+.monthColumn {
+    font-weight: bold;
+}
