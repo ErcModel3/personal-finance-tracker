@@ -27,13 +27,12 @@ import AddExpense from "./finances/AddExpense.jsx";
 import FinanceTargets from "./finances/FinanceTargets.jsx";
 import Transactions from "./finances/Transactions.jsx";
 import MonthlySalary from './finances/MonthlySalary.jsx';
+import FinancialForms from './Features/FinancialForms.jsx';
 
 // Imports all graphics and other
 import AccountInformation from "./Features/AccountDetailsComponents/AccountInformation.jsx";
 import AccountDetail from "./Features/AccountDetailsComponents/AccountDetail.jsx";
 import MergedCards from "./finances/MergedCards.jsx";
-
-
 
 function Home() {
     // Sample data (TO REPLACE with db entry)
@@ -133,6 +132,13 @@ function App() {
                         <MonthlySalary />
                     </SessionWrapper>
                 }/>
+                {/* Comment out this route to see if it's causing the issue*/}
+                <Route path="/financial-forms" element={
+                    <SessionWrapper>
+                        <FinancialForms />
+                    </SessionWrapper>
+                }/>
+                
                 
                 {/* 404 route */}
                 <Route path="*" element={<NotFound />} />

@@ -24,6 +24,10 @@ const Dashboard = () => {
     const [amountSpent, setAmountSpent] = useState(0);
     const [userSalary, setUserSalary] = useState(0);
     const [hasSalarySet, setHasSalarySet] = useState(false);
+    
+    // Add state for upcoming bills and savings targets
+    const [upcomingBills, setUpcomingBills] = useState([]);
+    const [savingsGoals, setSavingsGoals] = useState([]);
 
     // Budget data with dynamic amountSpent and monthlySalary
     const [budgetData, setBudgetData] = useState({
@@ -32,21 +36,6 @@ const Dashboard = () => {
         bonus: 500,
         budgetSet: 0, // Will be updated to match the salary
     });
-
-    // Sample upcoming bills
-    const upcomingBills = [
-        { id: 1, dueDate: "2025-04-15", description: "Rent", amount: 1200.00 },
-        { id: 2, dueDate: "2025-04-20", description: "Internet", amount: 59.99 },
-        { id: 3, dueDate: "2025-04-22", description: "Phone Bill", amount: 45.00 },
-        { id: 4, dueDate: "2025-04-28", description: "Water Bill", amount: 35.75 }
-    ];
-
-    // Sample savings goals
-    const savingsGoals = [
-        { id: 1, name: "Emergency Fund", target: 10000, current: 5000, deadline: "2025-12-31" },
-        { id: 2, name: "Vacation", target: 2500, current: 1250, deadline: "2025-07-15" },
-        { id: 3, name: "New Laptop", target: 1500, current: 750, deadline: "2025-09-01" }
-    ];
 
     // Function to get month name from month number
     const getMonthName = (monthNumber) => {
@@ -180,6 +169,101 @@ const Dashboard = () => {
                 }
 
                 setSpendingCategoryData(formattedCategoryData);
+                
+                // Fetch Direct Debits for upcoming bills
+                const { data: directDebitsData, error: directDebitsError } = await supabaseClient
+                    .from('Direct_Debits')
+                    .select('*')
+                    .eq('Userid', userId)
+                    .order('Start_date', { ascending: false });
+                
+                if (directDebitsError) {
+                    console.error('Error fetching direct debits:', directDebitsError);
+                } else {
+                    // Process direct debits to determine upcoming payments
+                    const now = new Date();
+                    const oneMonthFromNow = new Date();
+                    oneMonthFromNow.setMonth(oneMonthFromNow.getMonth() + 1);
+                    
+                    const processedBills = directDebitsData
+                        .filter(bill => {
+                            const startDate = new Date(bill.Start_date);
+                            const endDate = bill.End_Date ? new Date(bill.End_Date) : null;
+                            
+                            // Include bills that have started and haven't ended
+                            return startDate <= now && (!endDate || endDate >= now);
+                        })
+                        .map(bill => {
+                            // Calculate next due date based on recurrence
+                            let nextDueDate = new Date(bill.Start_date);
+                            
+                            // Adjust to find the next occurrence
+                            while (nextDueDate < now) {
+                                switch(bill.Recurrance) {
+                                    case 'Daily':
+                                        nextDueDate.setDate(nextDueDate.getDate() + 1);
+                                        break;
+                                    case 'Weekly':
+                                        nextDueDate.setDate(nextDueDate.getDate() + 7);
+                                        break;
+                                    case 'Monthly':
+                                        nextDueDate.setMonth(nextDueDate.getMonth() + 1);
+                                        break;
+                                    case 'Quarterly':
+                                        nextDueDate.setMonth(nextDueDate.getMonth() + 3);
+                                        break;
+                                    case 'Yearly':
+                                        nextDueDate.setFullYear(nextDueDate.getFullYear() + 1);
+                                        break;
+                                    default:
+                                        nextDueDate.setMonth(nextDueDate.getMonth() + 1);
+                                }
+                            }
+                            
+                            return {
+                                id: bill.id,
+                                dueDate: nextDueDate.toISOString().split('T')[0],
+                                description: bill.Name,
+                                amount: bill.Amount
+                            };
+                        })
+                        // Only include bills due in the next month
+                        .filter(bill => {
+                            const dueDate = new Date(bill.dueDate);
+                            return dueDate <= oneMonthFromNow;
+                        })
+                        // Sort by due date
+                        .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate))
+                        // Take only 4 closest upcoming bills
+                        .slice(0, 4);
+                    
+                    setUpcomingBills(processedBills);
+                }
+                
+                // Fetch savings targets/goals
+                const { data: targetsData, error: targetsError } = await supabaseClient
+                    .from('Targets')
+                    .select('*')
+                    .eq('User_id', userId);
+                
+                if (targetsError) {
+                    console.error('Error fetching savings targets:', targetsError);
+                } else {
+                    // Process targets data
+                    const processedGoals = targetsData
+                        .map(target => ({
+                            id: target.id,
+                            name: target.Name,
+                            target: target.Goal,
+                            current: target.Current_completion,
+                            deadline: target.Target_date
+                        }))
+                        // Take only 3 savings goals
+                        .slice(0, 3);
+                    
+                    setSavingsGoals(processedGoals);
+                }
+                
             } catch (error) {
                 console.error('Exception while fetching data:', error);
             } finally {
@@ -370,18 +454,38 @@ const Dashboard = () => {
                         <h2 className={styles.metricsTitle}>Upcoming Bills</h2>
                         <p className={styles.metricsDescription}>Don't miss your payments</p>
                     </div>
-                    <div className={`${styles.chartContainer} ${styles.fullHeightContainer}`}>
-                        {upcomingBills.map(bill => (
-                            <div key={bill.id} className={styles.billItem}>
-                                <div className={styles.billItemContent}>
-                                    <div>
-                                        <div className={styles.billTitle}>{bill.description}</div>
-                                        <div className={styles.billDate}>Due: {bill.dueDate}</div>
-                                    </div>
-                                    <div className={styles.billAmount}>£{bill.amount.toFixed(2)}</div>
+                    <div className={`${styles.tableComponentContainer} ${styles.billsTableContainer} ${styles.fullHeightContainer}`}>
+                        {loading ? (
+                            <div className={styles.loadingMessage}>Loading bills...</div>
+                        ) : upcomingBills.length === 0 ? (
+                            <div className={styles.noDataMessage}>
+                                No upcoming bills found. Add direct debits to track your bills.
+                                <div className={styles.viewAllContainer} style={{ marginTop: '16px' }}>
+                                    <Link to="/financial-forms" className={styles.linkNoDecoration}>
+                                        <button className={styles.primaryButton}>Add Direct Debits</button>
+                                    </Link>
                                 </div>
                             </div>
-                        ))}
+                        ) : (
+                            upcomingBills.map(bill => (
+                                <div key={bill.id} className={styles.billItem}>
+                                    <div className={styles.billItemContent}>
+                                        <div>
+                                            <div className={styles.billTitle}>{bill.description}</div>
+                                            <div className={styles.billDate}>Due: {bill.dueDate}</div>
+                                        </div>
+                                        <div className={styles.billAmount}>£{bill.amount.toFixed(2)}</div>
+                                    </div>
+                                </div>
+                            ))
+                        )}
+                        {upcomingBills.length > 0 && (
+                            <div className={styles.viewAllContainer}>
+                                <Link to="/financial-forms" className={styles.linkNoDecoration}>
+                                    <button className={styles.primaryButton}>Manage Bills</button>
+                                </Link>
+                            </div>
+                        )}
                     </div>
                 </div>
 
@@ -391,32 +495,47 @@ const Dashboard = () => {
                         <h2 className={styles.metricsTitle}>Savings Goals</h2>
                         <p className={styles.metricsDescription}>Track your progress</p>
                     </div>
-                    <div className={`${styles.chartContainer} ${styles.fullHeightContainer}`}>
-                        {savingsGoals.map(goal => {
-                            const progressPercentage = (goal.current / goal.target) * 100;
-                            return (
-                                <div key={goal.id} className={styles.savingsGoalItem}>
-                                    <div className={styles.savingsGoalHeader}>
-                                        <div className={styles.savingsGoalTitle}>{goal.name}</div>
-                                        <div>{`£${goal.current} / £${goal.target}`}</div>
-                                    </div>
-                                    <div className={styles.progressBarBackground}>
-                                        <div
-                                            className={styles.progressBarFill}
-                                            style={{ width: `${progressPercentage}%` }}
-                                        ></div>
-                                    </div>
-                                    <div className={styles.savingsGoalDate}>
-                                        Target date: {goal.deadline}
-                                    </div>
+                    <div className={`${styles.tableComponentContainer} ${styles.savingsTableContainer} ${styles.fullHeightContainer}`}>
+                        {loading ? (
+                            <div className={styles.loadingMessage}>Loading goals...</div>
+                        ) : savingsGoals.length === 0 ? (
+                            <div className={styles.noDataMessage}>
+                                No savings goals yet. Set up your first goal to start tracking!
+                                <div className={styles.viewAllContainer} style={{ marginTop: '16px' }}>
+                                    <Link to="/finance-targets" className={styles.linkNoDecoration}>
+                                        <button className={styles.primaryButton}>Create Goals</button>
+                                    </Link>
                                 </div>
-                            );
-                        })}
-                        <div className={styles.viewAllContainer}>
-                            <Link to="/finance-targets" className={styles.linkNoDecoration}>
-                                <button className={styles.primaryButton}>Manage Goals</button>
-                            </Link>
-                        </div>
+                            </div>
+                        ) : (
+                            savingsGoals.map(goal => {
+                                const progressPercentage = (goal.current / goal.target) * 100;
+                                return (
+                                    <div key={goal.id} className={styles.savingsGoalItem}>
+                                        <div className={styles.savingsGoalHeader}>
+                                            <div className={styles.savingsGoalTitle}>{goal.name}</div>
+                                            <div>{`£${goal.current.toFixed(2)} / £${goal.target.toFixed(2)}`}</div>
+                                        </div>
+                                        <div className={styles.progressBarBackground}>
+                                            <div
+                                                className={styles.progressBarFill}
+                                                style={{ width: `${progressPercentage}%` }}
+                                            ></div>
+                                        </div>
+                                        <div className={styles.savingsGoalDate}>
+                                            Target date: {new Date(goal.deadline).toLocaleDateString()}
+                                        </div>
+                                    </div>
+                                );
+                            })
+                        )}
+                        {savingsGoals.length > 0 && (
+                            <div className={styles.viewAllContainer}>
+                                <Link to="/finance-targets" className={styles.linkNoDecoration}>
+                                    <button className={styles.primaryButton}>Manage Goals</button>
+                                </Link>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

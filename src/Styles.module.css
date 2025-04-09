@@ -311,6 +311,32 @@
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
+/* NEW CLASSES FOR BILLS AND SAVINGS TABLES */
+.tableComponentContainer {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    /* Remove shadow */
+}
+
+.billsTableContainer {
+    width: 100%;
+    background-color: #fff;
+    padding: 0;
+    /* Remove shadow and extra padding */
+}
+
+.savingsTableContainer {
+    width: 100%;
+    background-color: #fff;
+    padding: 0;
+    /* Remove shadow and extra padding */
+}
+
 /* If you don't already have these styles, add them as well */
 .metricsSection {
     padding: 40px 20px;
@@ -341,7 +367,8 @@ input[type="text"], .formInput, .formSelect,
 .cardItem, .billItem, .reviewCard, .savingsGoalItem,
 .dataTable, .tableContainer, .monthlyTable,
 .filterContainer, .searchInput, .dateFilter,
-.emptyState, .loadingState, .categoryButtonsWrapper {
+.emptyState, .loadingState, .categoryButtonsWrapper,
+.tableComponentContainer, .billsTableContainer, .savingsTableContainer {
     background-color: white !important;
     color: black !important;
 }
@@ -386,9 +413,20 @@ input[type="text"], .formInput, .formSelect,
 }
 
 /* Specific overrides for card and item components */
-.metricCard, .reviewCard, .billItem {
+.metricCard, .reviewCard {
     background-color: white !important;
     border: 1px solid #ddd !important;
+}
+
+/* Updated styling for bill items - no shadows, cleaner borders */
+.billItem {
+    background-color: white !important;
+    border: 1px solid #ddd !important;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-left: 4px solid #3498db;
+    border-radius: 0 4px 4px 0;
+    box-shadow: none !important;
 }
 
 /* Text colors for specific elements */

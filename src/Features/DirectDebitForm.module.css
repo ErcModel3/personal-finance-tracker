@@ -1,132 +1,260 @@
-.container {
-    flex-direction: column;
-    padding: 60px;
+.pageWrapper {
     display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #fff;
+    align-items: center;
+    width: 100%;
+}
+
+.container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 80px 0 60px;
+    background-color: #fff;
+    width: 100%;
+    max-width: 1200px;
+    align-items: center;
 }
 
 .formWrapper {
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    gap: 60px;
     display: flex;
+    flex-direction: column;
+    max-width: 600px;
+    margin: 0 auto;
+    width: 100%;
+    background-color: #fff;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 0;
+    align-items: center;
+}
+
+.tabSelector {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 32px;
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 12px;
+    justify-content: center;
+    width: 60%;
+}
+
+.tabButton {
+    background: none;
+    border: none;
+    padding: 10px 20px;
+    font-family: Roboto, sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-radius: 6px;
+    flex: 1;
+    text-align: center;
+}
+
+.tabButton:hover {
+    color: #27ae60;
+}
+
+.activeTab {
+    color: #27ae60;
+    border-bottom: 3px solid #27ae60;
+    background-color: rgba(39, 174, 96, 0.08);
 }
 
 .headerTitle {
-    color: #000;
-    flex: 1;
-    gap: 24px;
-    font-family: Roboto;
-    font-size: 40px;
+    color: #222;
+    font-family: Roboto, sans-serif;
+    font-size: 28px;
     font-weight: 700;
-    line-height: 48px;
+    line-height: 1.2;
+    margin-bottom: 24px;
+    text-align: center;
+    width: 100%;
 }
 
 .formSection {
-    flex-direction: column;
-    flex: 1;
-    justify-content: center;
-    align-items: flex-start;
-    gap: 40px;
-    width: 100%;
     display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 500px;
+    align-items: center;
 }
 
 .formContent {
-    flex-direction: column;
-    gap: 40px;
-    width: 100%;
     display: flex;
+    flex-direction: column;
+    gap: 28px;
+    width: 100%;
 }
 
 .inputGroup {
-    flex-direction: column;
-    gap: 4px;
-    width: 100%;
     display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
 }
 
 .inputLabel {
-    color: #000;
-    font-family: Roboto;
+    color: #333;
+    font-family: Roboto, sans-serif;
     font-size: 14px;
     font-weight: 500;
     line-height: 20px;
 }
 
 .inputField {
-    color: #00000080;
+    color: #333;
     background-color: #fff;
-    border-width: 1px;
-    border-color: #0000001a;
-    border-radius: 6px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
     width: 100%;
-    padding: 8px 12px;
-    font-size: 14px;
+    padding: 12px 16px;
+    font-size: 16px;
+    transition: border-color 0.2s;
+}
+
+.inputField:focus {
+    border-color: #27ae60;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(39, 174, 96, 0.1);
+}
+
+.inputField::placeholder {
+    color: #999;
 }
 
 .buttonGroup {
-    align-items: flex-start;
-    gap: 12px;
-    width: 100%;
     display: flex;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    margin-top: 12px;
 }
 
 .cancelButton {
-    color: #f5f5f5;
-    background-color: #27ae60;
-    border-width: 1px;
-    border-color: #f5f5f5;
+    color: #333;
+    background-color: #fff;
+    border: 1px solid #ddd;
     border-radius: 8px;
-    width: 240px;
+    flex: 1;
     padding: 12px;
-    font-family: Roboto;
+    font-family: Roboto, sans-serif;
     font-size: 16px;
     font-weight: 500;
     line-height: 24px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.cancelButton:hover {
+    background-color: #f5f5f5;
 }
 
 .submitButton {
     color: #fff;
     background-color: #27ae60;
+    border: none;
     border-radius: 8px;
-    width: 240px;
+    flex: 1;
     padding: 12px;
-    font-family: Roboto;
+    font-family: Roboto, sans-serif;
     font-size: 16px;
     font-weight: 500;
     line-height: 24px;
+    cursor: pointer;
+    transition: all 0.2s;
 }
 
-@media (width <= 991px) {
-    .container {
-        padding: 40px;
-    }
+.submitButton:hover {
+    background-color: #219653;
+}
 
+.submitButton:disabled {
+    background-color: #6fcf97;
+    cursor: not-allowed;
+}
+
+.successMessage {
+    color: #27ae60;
+    background-color: rgba(39, 174, 96, 0.1);
+    border: 1px solid #27ae60;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    text-align: center;
+    width: 100%;
+    font-family: Roboto, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.errorMessage {
+    color: #e74c3c;
+    background-color: rgba(231, 76, 60, 0.1);
+    border: 1px solid #e74c3c;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    text-align: center;
+    width: 100%;
+    font-family: Roboto, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+@media (max-width: 991px) {
+    .container {
+        padding: 80px 20px 40px;
+    }
+    
     .formWrapper {
-        gap: 40px;
+        padding: 0;
     }
-
+    
     .headerTitle {
-        font-size: 32px;
+        font-size: 24px;
+    }
+    
+    .tabSelector {
+        width: 80%;
     }
 }
 
-@media (width <= 640px) {
+@media (max-width: 640px) {
     .container {
-        padding: 20px;
+        padding: 70px 16px 20px;
     }
-
+    
+    .formWrapper {
+        padding: 0;
+    }
+    
     .headerTitle {
-        font-size: 28px;
+        font-size: 22px;
     }
-
+    
     .buttonGroup {
         flex-direction: column;
     }
-
+    
     .cancelButton,
     .submitButton {
         width: 100%;
+    }
+    
+    .tabSelector {
+        flex-direction: row;
+        width: 100%;
+    }
+    
+    .tabButton {
+        flex: 1;
+        padding: 8px;
+        font-size: 14px;
     }
 }

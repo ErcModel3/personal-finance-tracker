@@ -1,0 +1,212 @@
+/* FinanceTargets.module.css */
+.pageWrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: transparent;
+}
+
+.container {
+    flex: 1;
+    padding: 2rem;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.formWrapper {
+    background-color: transparent;
+    box-shadow: none;
+    padding: 0;
+    width: 100%;
+}
+
+.formSection {
+    margin-bottom: 2.5rem;
+    width: 100%;
+    background-color: transparent;
+}
+
+.headerTitle {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    color: #333;
+    font-weight: 700;
+}
+
+.formContent {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    width: 100%;
+}
+
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.inputLabel {
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.inputField, .selectField {
+    padding: 0.875rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    width: 100%;
+    transition: all 0.3s ease;
+    background-color: inherit;
+}
+
+/* Targeted Light Mode for Specific Inputs */
+input[name="goal"], 
+input[name="amount"] {
+    background-color: white !important;
+    color: black !important;
+    border: 1px solid #ddd !important;
+}
+
+.inputField:focus, .selectField:focus {
+    outline: none;
+    border-color: #4a90e2;
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+}
+
+.buttonGroup {
+    grid-column: span 2;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1.5rem;
+}
+
+.submitButton {
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    padding: 0.875rem 1.75rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-weight: 600;
+}
+
+.submitButton:hover {
+    background-color: #357abd;
+}
+
+.cancelButton {
+    background-color: #f4f4f4;
+    color: #333;
+    border: 1px solid #ddd;
+    padding: 0.875rem 1.75rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-weight: 600;
+}
+
+.cancelButton:hover {
+    background-color: #e0e0e0;
+}
+
+.targetsSection {
+    margin-top: 2.5rem;
+    width: 100%;
+}
+
+.targetCard {
+    background-color: #f9f9f9;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    width: 100%;
+}
+
+.progressContainer {
+    background-color: #e0e0e0;
+    border-radius: 6px;
+    height: 25px;
+    margin: 1rem 0;
+    overflow: hidden;
+    width: 100%;
+}
+
+.progressBar {
+    background-color: #4a90e2;
+    height: 100%;
+    transition: width 0.5s ease;
+}
+
+.progressText {
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 1rem;
+}
+
+.successMessage {
+    background-color: #dff0d8;
+    color: #3c763d;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    width: 100%;
+}
+
+.errorMessage {
+    background-color: #f2dede;
+    color: #a94442;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    width: 100%;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .formContent {
+        grid-template-columns: 1fr;
+    }
+
+    .buttonGroup {
+        grid-column: span 1;
+        flex-direction: column;
+    }
+
+    .submitButton, .cancelButton {
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+}
+/* Targeted Light Mode for Specific Inputs */
+input[name="goal"], 
+input[name="amount"],
+select[name="targetId"] {
+    background-color: white !important;
+    color: black !important;
+    border: 1px solid #ddd !important;
+}
+
+/* Ensure select options are readable */
+select option {
+    background-color: white !important;
+    color: black !important;
+}
+
+/* Additional select styling to match other inputs */
+select {
+    padding: 0.875rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    width: 100%;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M1 4l5 5 5-5z' fill='%23333'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.7rem top 50%;
+    background-size: 12px;
+}
