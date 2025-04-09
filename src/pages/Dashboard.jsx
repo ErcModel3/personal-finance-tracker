@@ -454,7 +454,7 @@ const Dashboard = () => {
                         <h2 className={styles.metricsTitle}>Upcoming Bills</h2>
                         <p className={styles.metricsDescription}>Don't miss your payments</p>
                     </div>
-                    <div className={`${styles.tableComponentContainer} ${styles.billsTableContainer} ${styles.fullHeightContainer}`}>
+                    <div className={`${styles.tableComponentContainer} ${styles.billsTableContainer}`}>
                         {loading ? (
                             <div className={styles.loadingMessage}>Loading bills...</div>
                         ) : upcomingBills.length === 0 ? (
@@ -489,13 +489,13 @@ const Dashboard = () => {
                     </div>
                 </div>
 
-                {/* Savings Goals */}
+                {/* Savings Goals - Restyled to match upcoming bills */}
                 <div className={styles.columnContainer}>
                     <div className={styles.metricsHeader}>
                         <h2 className={styles.metricsTitle}>Savings Goals</h2>
                         <p className={styles.metricsDescription}>Track your progress</p>
                     </div>
-                    <div className={`${styles.tableComponentContainer} ${styles.savingsTableContainer} ${styles.fullHeightContainer}`}>
+                    <div className={`${styles.tableComponentContainer} ${styles.billsTableContainer}`}>
                         {loading ? (
                             <div className={styles.loadingMessage}>Loading goals...</div>
                         ) : savingsGoals.length === 0 ? (
@@ -508,26 +508,19 @@ const Dashboard = () => {
                                 </div>
                             </div>
                         ) : (
-                            savingsGoals.map(goal => {
-                                const progressPercentage = (goal.current / goal.target) * 100;
-                                return (
-                                    <div key={goal.id} className={styles.savingsGoalItem}>
-                                        <div className={styles.savingsGoalHeader}>
-                                            <div className={styles.savingsGoalTitle}>{goal.name}</div>
-                                            <div>{`£${goal.current.toFixed(2)} / £${goal.target.toFixed(2)}`}</div>
+                            savingsGoals.map(goal => (
+                                <div key={goal.id} className={styles.billItem}>
+                                    <div className={styles.billItemContent}>
+                                        <div>
+                                            <div className={styles.billTitle}>{goal.name}</div>
+                                            <div className={styles.billDate}>Target date: {new Date(goal.deadline).toLocaleDateString()}</div>
                                         </div>
-                                        <div className={styles.progressBarBackground}>
-                                            <div
-                                                className={styles.progressBarFill}
-                                                style={{ width: `${progressPercentage}%` }}
-                                            ></div>
-                                        </div>
-                                        <div className={styles.savingsGoalDate}>
-                                            Target date: {new Date(goal.deadline).toLocaleDateString()}
+                                        <div className={styles.billAmount}>
+                                            £{goal.current.toFixed(2)} / £{goal.target.toFixed(2)}
                                         </div>
                                     </div>
-                                );
-                            })
+                                </div>
+                            ))
                         )}
                         {savingsGoals.length > 0 && (
                             <div className={styles.viewAllContainer}>
