@@ -1,163 +1,418 @@
-import React, { useState } from 'react';
-import './FinanceTargets.css';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import supabaseClient from '../auth/Client.js';
+import styles from './FinanceTargets.module.css'; 
 import AuthenticatedNavbar from "../components/AuthenticatedNavbar.jsx";
 import Footer from "../components/Footer.jsx";
+import InputField2 from "./InputField2.jsx"; 
 
-const FinanceTargets = () => {
-    const [targetName, setTargetName] = useState('');
-    const [targetAmount, setTargetAmount] = useState('');
-    const [targetDate, setTargetDate] = useState('');
+function FinanceTargets() {
+    const navigate = useNavigate();
+    
+    // State for user and form data
+    const [userId, setUserId] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
+    
+    // Form data state for new target
+    const [targetData, setTargetData] = useState({
+        name: '',
+        goal: '',
+        startDate: new Date().toISOString().split('T')[0],
+        targetDate: '',
+        currentCompletion: '0'
+    });
 
-    const handleSubmit = (e) => {
+    // State for contribution
+    const [contributionData, setContributionData] = useState({
+        targetId: '',
+        amount: ''
+    });
+
+    // Fetch current user on component mount
+    useEffect(() => {
+        async function getCurrentUser() {
+            try {
+                const { data, error } = await supabaseClient.auth.getUser();
+                
+                if (error) {
+                    console.error("Error fetching user:", error);
+                    return;
+                }
+                
+                if (data && data.user) {
+                    setUserId(data.user.id);
+                }
+            } catch (e) {
+                console.error("Exception in getCurrentUser:", e);
+            }
+        }
+        
+        getCurrentUser();
+    }, []);
+
+    // Fetch existing targets
+    const [targets, setTargets] = useState([]);
+    useEffect(() => {
+        async function fetchTargets() {
+            if (!userId) return;
+
+            try {
+                const { data, error } = await supabaseClient
+                    .from('Targets')
+                    .select('*')
+                    .eq('User_id', userId);
+
+                if (error) throw error;
+
+                setTargets(data || []);
+            } catch (err) {
+                console.error('Error fetching targets:', err);
+                setError(err.message || 'Failed to fetch targets');
+            }
+        }
+
+        fetchTargets();
+    }, [userId]);
+
+    // Handle input changes for new target
+    const handleTargetChange = (e) => {
+        const { name, value } = e.target;
+        setTargetData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+
+    // Handle input changes for contribution
+    const handleContributionChange = (e) => {
+        const { name, value } = e.target;
+        setContributionData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+
+    // Handle form submission for new target
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('New target:', { targetName, targetAmount, targetDate });
-        // To do: Add target creation logic here
-        alert('Financial target created!');
-        // Reset form
-        setTargetName('');
-        setTargetAmount('');
-        setTargetDate('');
+        
+        // Reset messages
+        setError('');
+        setSuccessMessage('');
+        setIsLoading(true);
+
+        // Validate inputs
+        if (!userId) {
+            setError("You must be logged in to add a financial target");
+            setIsLoading(false);
+            return;
+        }
+
+        if (!targetData.name || !targetData.goal) {
+            setError("Please fill in all required fields");
+            setIsLoading(false);
+            return;
+        }
+
+        try {
+            // Prepare submission data
+            const submitData = {
+                User_id: userId,
+                Name: targetData.name,
+                Goal: parseFloat(targetData.goal),
+                Start_date: targetData.startDate,
+                Target_date: targetData.targetDate,
+                Current_completion: 0 // Start at 0
+            };
+
+            // Insert target
+            const { data, error } = await supabaseClient
+                .from('Targets')
+                .insert([submitData]);
+
+            if (error) throw error;
+
+            // Update local state
+            setTargets(prev => [...prev, submitData]);
+
+            // Reset form
+            setTargetData({
+                name: '',
+                goal: '',
+                startDate: new Date().toISOString().split('T')[0],
+                targetDate: '',
+                currentCompletion: '0'
+            });
+
+            setSuccessMessage("Financial target added successfully!");
+        } catch (err) {
+            console.error('Error adding target:', err);
+            setError(err.message || "Error adding financial target. Please try again.");
+        } finally {
+            setIsLoading(false);
+
+            // Auto-clear messages
+            setTimeout(() => {
+                setSuccessMessage('');
+                setError('');
+            }, 5000);
+        }
+    };
+
+    // Handle adding contribution to a target
+    const handleAddContribution = async (e) => {
+        e.preventDefault();
+        
+        // Reset messages
+        setError('');
+        setSuccessMessage('');
+        setIsLoading(true);
+
+        // Validate inputs
+        if (!contributionData.targetId || !contributionData.amount) {
+            setError("Please select a target and enter an amount");
+            setIsLoading(false);
+            return;
+        }
+
+        try {
+            // Find the selected target
+            const selectedTarget = targets.find(t => t.id === parseInt(contributionData.targetId));
+            
+            if (!selectedTarget) {
+                throw new Error("Selected target not found");
+            }
+
+            // Calculate new completion amount
+            const contributionAmount = parseFloat(contributionData.amount);
+            const newCompletion = Math.min(
+                selectedTarget.Current_completion + contributionAmount, 
+                selectedTarget.Goal
+            );
+
+            // Update target in database
+            const { data, error } = await supabaseClient
+                .from('Targets')
+                .update({ Current_completion: newCompletion })
+                .eq('id', contributionData.targetId)
+                .select();
+
+            if (error) throw error;
+
+            // Update local state
+            setTargets(prev => prev.map(target => 
+                target.id === parseInt(contributionData.targetId)
+                    ? {...target, Current_completion: newCompletion}
+                    : target
+            ));
+
+            // Reset contribution form
+            setContributionData({
+                targetId: '',
+                amount: ''
+            });
+
+            setSuccessMessage("Contribution added successfully!");
+        } catch (err) {
+            console.error('Error adding contribution:', err);
+            setError(err.message || "Error adding contribution. Please try again.");
+        } finally {
+            setIsLoading(false);
+
+            // Auto-clear messages
+            setTimeout(() => {
+                setSuccessMessage('');
+                setError('');
+            }, 5000);
+        }
+    };
+
+    // Calculate progress percentage
+    const calculateProgress = (current, goal) => {
+        return Math.min(Math.round((current / goal) * 100), 100);
     };
 
     return (
-        <div className="finance-targets-page">
+        <div className={styles.pageWrapper}>
             <AuthenticatedNavbar />
-
-            <div className="content-section">
-                <h2 className="section-title">Your Financial Targets</h2>
-                <p className="section-description">Track your progress towards your financial goals</p>
-
-                <div className="targets-grid">
-                    <div className="target-card">
-                        <h3>Savings Goals</h3>
-                        <p className="target-amount">£5,000</p>
-                        <p className="target-description">Building an emergency fund</p>
-                        <div className="progress-container">
-                            <div className="progress-bar" style={{width: '65%'}}></div>
+            
+            <main className={styles.container}>
+                <div className={styles.formWrapper}>
+                    {successMessage && (
+                        <div className={styles.successMessage}>
+                            {successMessage}
                         </div>
-                        <p className="progress-text">65%</p>
-                    </div>
-
-                    <div className="target-card">
-                        <h3>Long-Term Goal</h3>
-                        <p className="target-amount">£15,000</p>
-                        <p className="target-description">Home down payment</p>
-                        <div className="progress-container">
-                            <div className="progress-bar" style={{width: '35%'}}></div>
+                    )}
+                    
+                    {error && (
+                        <div className={styles.errorMessage}>
+                            {error}
                         </div>
-                        <p className="progress-text">35%</p>
-                    </div>
+                    )}
 
-                    <div className="target-card">
-                        <h3>Purchase Goal</h3>
-                        <p className="target-amount">£1,200</p>
-                        <p className="target-description">New laptop</p>
-                        <div className="progress-container">
-                            <div className="progress-bar" style={{width: '90%'}}></div>
-                        </div>
-                        <p className="progress-text">90%</p>
-                    </div>
-                </div>
-            </div>
-
-            <div className="content-section">
-                <h2 className="section-title">Set New Financial Target</h2>
-                <p className="section-description">Set your financial target, set your date, and we'll help you update it weekly.</p>
-
-                <form className="new-target-form" onSubmit={handleSubmit}>
-                    <div className="form-group">
-                        <label htmlFor="targetName">Target Name</label>
-                        <input
-                            type="text"
-                            id="targetName"
-                            value={targetName}
-                            onChange={(e) => setTargetName(e.target.value)}
-                            placeholder="What are you saving for?"
-                            required
-                        />
-                    </div>
-
-                    <div className="form-row">
-                        <div className="form-group">
-                            <label htmlFor="targetAmount">Amount (£)</label>
-                            <input
+                    {/* New Target Section */}
+                    <section className={styles.formSection}>
+                        <header className={styles.headerTitle}>Add Financial Target</header>
+                        <form className={styles.formContent} onSubmit={handleSubmit}>
+                            <InputField2
+                                label="Target Name"
+                                placeholder="What are you saving for?"
+                                type="text"
+                                name="name"
+                                value={targetData.name}
+                                onChange={handleTargetChange}
+                                required
+                            />
+                            <InputField2
+                                label="Goal Amount" 
+                                placeholder="Enter target amount" 
                                 type="number"
-                                id="targetAmount"
-                                value={targetAmount}
-                                onChange={(e) => setTargetAmount(e.target.value)}
-                                placeholder="0.00"
-                                min="0"
+                                name="goal"
                                 step="0.01"
+                                min="0"
+                                value={targetData.goal}
+                                onChange={handleTargetChange}
                                 required
                             />
-                        </div>
-
-                        <div className="form-group">
-                            <label htmlFor="targetDate">Target Date</label>
-                            <input
+                            <InputField2 
+                                label="Start Date" 
                                 type="date"
-                                id="targetDate"
-                                value={targetDate}
-                                onChange={(e) => setTargetDate(e.target.value)}
+                                name="startDate"
+                                value={targetData.startDate}
+                                onChange={handleTargetChange}
                                 required
                             />
-                        </div>
-                    </div>
+                            <InputField2 
+                                label="Target Date" 
+                                type="date"
+                                name="targetDate"
+                                value={targetData.targetDate}
+                                onChange={handleTargetChange}
+                                required
+                            />
 
-                    <button type="submit" className="create-target-btn">Create Target</button>
-                </form>
-            </div>
+                            <div className={styles.buttonGroup}>
+                                <button 
+                                    type="button" 
+                                    className={styles.cancelButton}
+                                    onClick={() => setTargetData({
+                                        name: '',
+                                        goal: '',
+                                        startDate: new Date().toISOString().split('T')[0],
+                                        targetDate: '',
+                                        currentCompletion: '0'
+                                    })}
+                                >
+                                    Cancel
+                                </button>
+                                <button 
+                                    type="submit" 
+                                    className={styles.submitButton}
+                                    disabled={isLoading}
+                                >
+                                    {isLoading ? "Adding..." : "Add Target"}
+                                </button>
+                            </div>
+                        </form>
+                    </section>
 
-            <div className="content-section">
-                <h2 className="section-title">Monthly Contributions</h2>
-                <p className="section-description">An overview of your monthly contributions towards your goals</p>
+                    {/* Add Contribution Section */}
+                    <section className={styles.formSection}>
+                        <header className={styles.headerTitle}>Add Contribution</header>
+                        <form className={styles.formContent} onSubmit={handleAddContribution}>
+                            <div className={styles.inputGroup}>
+                                <label htmlFor="targetId" className={styles.inputLabel}>
+                                    Select Target
+                                </label>
+                                <select
+                                    id="targetId"
+                                    name="targetId"
+                                    value={contributionData.targetId}
+                                    onChange={handleContributionChange}
+                                    className={styles.inputField}
+                                    required
+                                >
+                                    <option value="">Choose a target</option>
+                                    {targets.map((target) => (
+                                        <option key={target.id} value={target.id}>
+                                            {target.Name} (Goal: £{target.Goal.toFixed(2)})
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
 
-                <div className="contributions-grid">
-                    <div className="contribution-card">
-                        <p className="contribution-month">JAN</p>
-                        <p className="contribution-amount">£600</p>
-                    </div>
+                            <InputField2
+                                label="Contribution Amount" 
+                                placeholder="Enter contribution amount" 
+                                type="number"
+                                name="amount"
+                                step="0.01"
+                                min="0"
+                                value={contributionData.amount}
+                                onChange={handleContributionChange}
+                                required
+                            />
 
-                    <div className="contribution-card">
-                        <p className="contribution-month">FEB</p>
-                        <p className="contribution-amount">£550</p>
-                    </div>
+                            <div className={styles.buttonGroup}>
+                                <button 
+                                    type="button" 
+                                    className={styles.cancelButton}
+                                    onClick={() => setContributionData({
+                                        targetId: '',
+                                        amount: ''
+                                    })}
+                                >
+                                    Cancel
+                                </button>
+                                <button 
+                                    type="submit" 
+                                    className={styles.submitButton}
+                                    disabled={isLoading}
+                                >
+                                    {isLoading ? "Adding..." : "Add Contribution"}
+                                </button>
+                            </div>
+                        </form>
+                    </section>
 
-                    <div className="contribution-card">
-                        <p className="contribution-month">MAR</p>
-                        <p className="contribution-amount">£650</p>
-                    </div>
+                    {/* Targets Display Section */}
+                    <section className={styles.targetsSection}>
+                        <header className={styles.headerTitle}>Your Financial Targets</header>
+                        {targets.length === 0 ? (
+                            <p>No targets yet. Create your first target!</p>
+                        ) : (
+                            targets.map((target) => (
+                                <div key={target.id} className={styles.targetCard}>
+                                    <h3>{target.Name}</h3>
+                                    <p>Goal: £{target.Goal.toFixed(2)}</p>
+                                    <p>Start Date: {new Date(target.Start_date).toLocaleDateString()}</p>
+                                    <p>Target Date: {new Date(target.Target_date).toLocaleDateString()}</p>
+                                    
+                                    <div className={styles.progressContainer}>
+                                        <div 
+                                            className={styles.progressBar}
+                                            style={{
+                                                width: `${calculateProgress(target.Current_completion, target.Goal)}%`
+                                            }}
+                                        ></div>
+                                    </div>
+                                    
+                                    <p className={styles.progressText}>
+                                        {calculateProgress(target.Current_completion, target.Goal)}%
+                                        ({target.Current_completion.toFixed(2)} / {target.Goal.toFixed(2)})
+                                    </p>
+                                </div>
+                            ))
+                        )}
+                    </section>
                 </div>
-            </div>
-
-            <div className="info-section">
-                <div className="info-card">
-                    <h3>Set a Goal</h3>
-                    <p>Define clear savings targets</p>
-                </div>
-
-                <div className="info-card">
-                    <h3>Track Progress</h3>
-                    <p>Monitor your journey to success</p>
-                </div>
-            </div>
-
-            <div className="content-section">
-                <h2 className="section-title">Upcoming Deadlines</h2>
-                <p className="section-description">Stay on track with your financial goals</p>
-
-                <div className="deadline-card">
-                    <div className="deadline-icon-custom"></div>
-                    <div className="deadline-info">
-                        <h3>Vacation Fund</h3>
-                        <p>Target deadline: June 15, 2025</p>
-                    </div>
-                </div>
-            </div>
-
+            </main>
+            
             <Footer />
         </div>
     );
-};
+}
 
 export default FinanceTargets;
