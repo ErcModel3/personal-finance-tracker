@@ -78,12 +78,7 @@ function MonthlySalary() {
         e.preventDefault();
         setLoading(true);
         setError(null);
-        
-        if (!user) {
-            setError("You must be logged in to set your salary information.");
-            setLoading(false);
-            return;
-        }
+        const sessionID = await userID;
 
         try {
             let result;
@@ -95,13 +90,13 @@ function MonthlySalary() {
                     .update({ 
                         Salary: parseFloat(monthlySalary)
                     })
-                    .eq('userID', user);
+                    .eq('userID', sessionID);
             } else {
                 // Create new salary record
                 result = await supabaseClient
                     .from('Monthly_Salary')
                     .insert([{ 
-                        userID: user,
+                        userID: sessionID,
                         Salary: parseFloat(monthlySalary)
                     }]);
             }
