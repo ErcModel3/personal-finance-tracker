@@ -37,12 +37,12 @@ const SignUp = () => {
       });
 
       if (error) {
-        alert('Signup error: ' + error);
+        alert('Signup error 1: ' + error);
+        console.log(error);
         return;
       }
 
       if (data?.user) {
-        alert("User successfully signed up! Please validate your email before you sign in.");
 
         // Small delay to ensure the trigger has completed
         await new Promise(resolve => setTimeout(resolve, 500));
@@ -57,14 +57,15 @@ const SignUp = () => {
               country: formData.country
             })
             .eq('id', data.user.id)
-            .select(); // Add this to return the updated data
+            .select();
 
-        if (profileError) {
-          alert('Signup error: ' + error);
+        if (profileError !== null) {
+          alert('Signup error 2: ' + profileError);
+          console.log(profileError);
         }
-
-        if (profileData) {
-          alert('Signup error: ' + error);
+        if (profileData){
+          console.log("Data input to db correctly");
+          alert("User successfully signed up! Please validate your email before you sign in.");
         }
       }
     }else {
