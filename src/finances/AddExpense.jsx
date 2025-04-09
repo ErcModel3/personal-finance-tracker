@@ -340,7 +340,7 @@ const AddExpense = () => {
                             ) : availableCards.length === 0 ? (
                                 <div className={styles.noCardsMessage}>
                                     No payment cards available.
-                                    <a href="/add-card" className={styles.addCardLink}>
+                                    <a href="/manage-cards" className={styles.addCardLink}>
                                         Add a card
                                     </a>
                                 </div>
