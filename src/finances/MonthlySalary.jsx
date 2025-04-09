@@ -122,7 +122,7 @@ function MonthlySalary() {
             <div className={styles.pageContainer}>
                 <div className={styles.formContainer}>
                     <h1 className={styles.pageTitle}>
-                        {currentSalary ? 'Update Your Monthly Salary' : 'Set Your Monthly Salary'}
+                        {currentSalary ? 'Update Your Monthly Balance' : 'Set Your Monthly Balance'}
                     </h1>
                     
                     {currentSalary && (
@@ -133,20 +133,20 @@ function MonthlySalary() {
                     
                     <p className={styles.pageDescription}>
                         {currentSalary 
-                            ? 'You can update your monthly salary if it has changed.'
-                            : 'Please set your monthly salary to help us personalize your budget recommendations.'}
+                            ? 'You can update your monthly balance if it has changed.'
+                            : 'Please set your monthly balance to help us personalize your budget recommendations.'}
                     </p>
 
                     {submitted ? (
                         <div className={styles.successMessage}>
-                            <h3>Salary information saved successfully!</h3>
+                            <h3>Balance information saved successfully!</h3>
                             <p>Redirecting you to the dashboard...</p>
                         </div>
                     ) : (
                         <form onSubmit={handleSubmit} className={styles.form}>
                             <div className={styles.formGroup}>
                                 <label htmlFor="monthlySalary" className={styles.formLabel}>
-                                    Monthly Salary
+                                    Monthly Balance
                                 </label>
                                 <input
                                     type="number"
@@ -169,7 +169,7 @@ function MonthlySalary() {
                                 style={greenButtonStyle}
                                 disabled={loading || !monthlySalary}
                             >
-                                {loading ? 'Saving...' : (currentSalary ? 'Update Salary' : 'Save Salary')}
+                                {loading ? 'Saving...' : (currentSalary ? 'Update Balance' : 'Save Balance')}
                             </button>
                         </form>
                     )}

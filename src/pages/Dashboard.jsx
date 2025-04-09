@@ -299,7 +299,7 @@ const Dashboard = () => {
 
                 <div className={styles.metricsCards}>
                     <div className={styles.metricCard}>
-                        <div className={styles.metricLabel}>Monthly Income</div>
+                        <div className={styles.metricLabel}>Monthly Balance</div>
                         {loading ? (
                             <div className={styles.metricValue}>
                                 <span className={styles.loadingText}>Loading...</span>
