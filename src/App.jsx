@@ -28,7 +28,7 @@ import FinanceTargets from "./finances/FinanceTargets.jsx";
 import Transactions from "./finances/Transactions.jsx";
 import MonthlySalary from './finances/MonthlySalary.jsx';
 import FinancialForms from './Features/FinancialForms.jsx';
-import DirectDebitsList from './Features/DirectDebitForm.module.css'; 
+import DirectDebitsList from './Features/DirectDebitList.jsx'; 
 
 // Imports all graphics and other
 import AccountInformation from "./Features/AccountDetailsComponents/AccountInformation.jsx";
