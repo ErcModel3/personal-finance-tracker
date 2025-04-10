@@ -1,51 +1,54 @@
 .signup-page {
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - 62px);
-  background-color: #f5f5f5;
+  min-height: 100vh;
+  background-color: white;
   width: 100%;
+}
+
+/* Added a main content wrapper */
+.signup-main {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem 2rem 0 2rem; /* Removed bottom padding */
 }
 
 .signup-container {
-  position: absolute;
-  top: 60px; /* Adjust this value to match your navbar height */
-  left: 0;
   width: 100%;
-  height: calc(100vh - 60px); /* Subtract navbar height */
-  background-color: white;
+  max-width: 800px;
+  margin-bottom: 3rem; /* Add space between container and footer */
 }
-.signup-left {
+
+.signup-form-container {
+  width: 100%;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+}
+
+.create-account-title {
   text-align: center;
+  font-size: 2rem;
+  color: #333;
   margin-bottom: 2rem;
 }
 
-.signup-title {
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: #333;
-  margin-bottom: 0.5rem;
-}
-
-.signup-subtitle {
-  font-size: 1.1rem;
-  color: #666;
-}
-
-.signup-right {
-  width: 100%;
-  display: flex;
-  justify-content: center; /* Center horizontally */
-  align-items: center;     /* Center vertically */
-}
-
 .signup-form {
+  width: 100%;
+}
+
+.form-row {
   display: flex;
-  flex-direction: column;
   gap: 1.5rem;
-  max-width: 500px;
+  margin-bottom: 1.5rem;
 }
 
 .form-group {
+  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -56,14 +59,31 @@
   color: #333;
 }
 
-.form-group input {
+.form-group input,
+.form-group select {
   padding: 0.75rem;
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 1rem;
   background-color: white;
   width: 100%;
-  color: black;
+  color: #333;
+}
+
+/* Country dropdown styles */
+.country-dropdown {
+  cursor: pointer;
+  appearance: none; /* Remove default arrow in some browsers */
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.7rem center;
+  background-size: 1em;
+  padding-right: 2rem; /* Space for the arrow */
+  max-height: 300px; /* For scrolling */
+}
+
+.country-dropdown option {
+  padding: 0.5rem;
 }
 
 /* Date input specific styling to match other inputs */
@@ -89,14 +109,17 @@ input[type="date"]:invalid {
   color: #999;
 }
 
-.form-group input::placeholder {
+.form-group input::placeholder,
+.form-group select::placeholder {
   color: #999;
 }
 
-.form-button-container {
+.buttons-section {
   display: flex;
-  justify-content: flex-start;
-  margin-top: 1rem;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
 }
 
 .signup-button {
@@ -110,45 +133,78 @@ input[type="date"]:invalid {
   transition: background-color 0.2s;
   display: flex;
   justify-content: center;
+  width: 200px;
 }
 
-.footer-link {
-  color: #666;
-  text-decoration: none;
+.signup-button:hover {
+  background-color: #1a9c60;
 }
 
-.footer-link:hover {
-  text-decoration: underline;
-}
-
-.existing-user-container {
+.account-row {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  margin-top: 20px;
-  gap: 10px;
+  gap: 15px;
+  margin-top: 1rem;
+  width: 360px; /* Match the width of the Sign Up button area */
 }
 
-.existing-user-container p {
+.account-text {
   margin: 0;
   font-size: 14px;
+  margin-right: 15px;
 }
 
-.signin-account-button {
-  min-width: 180px;
+.signin-button {
   padding: 0.6rem 1.5rem;
-  font-size: 0.95rem;
   background-color: #22b573;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  min-width: 90px;
+}
+
+.signin-button:hover {
+  background-color: #1a9c60;
+}
+
+/* Footer styling - ensure it's visible */
+footer {
+  width: 100%;
+  padding: 1rem;
+  margin-top: auto;
+  background-color: #f5f5f5;
+  text-align: center;
+  display: block !important; /* Force display */
+  visibility: visible !important; /* Ensure visibility */
 }
 
 @media (max-width: 768px) {
-  .signup-container {
-    flex-direction: column;
-    padding: 1rem;
-    width: 90%;
+  .signup-main {
+    padding: 1rem 1rem 0 1rem;
   }
-
-  .form-button-container {
-    justify-content: center;
+  
+  .signup-form-container {
+    box-shadow: none;
+    padding: 1rem;
+  }
+  
+  .form-row {
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .account-row {
+    width: 100%;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .account-text {
+    margin-right: 0;
   }
 }
