@@ -9,12 +9,8 @@ import Footer from "../components/Footer.jsx";
 const SignIn = () => {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
-        fullName: '',
         email: '',
-        country: '',
-        phoneNumber: '',
-        password: '',
-        confirmPassword: ''
+        password: ''
     });
 
     const handleChange = (e) => {
@@ -45,7 +41,6 @@ const SignIn = () => {
     const handleForgotPassword = () => {
         // You can implement password reset functionality here
         alert("Password reset functionality will be implemented soon!");
-
     };
 
     const handleNavigateToSignUp = () => {
@@ -53,18 +48,15 @@ const SignIn = () => {
     };
 
     return (
-        <div className="signup-page">
+        <div className="signin-page">
             <Navbar/>
-            <div className="signup-container">
-                <div className="signup-left">
-                    <h1 className="signup-title">Sign In</h1>
-                    <p className="signup-subtitle">Sign into your account</p>
-                </div>
-
-                <div className="signup-right">
-                    <form className="signup-form" onSubmit={handleSubmit}>
-
-                        <div className="form-group">
+            <div className="signin-main-container">
+                <div className="signin-content">
+                    <h1 className="signin-title">Sign In</h1>
+                    <p className="signin-subtitle">Sign into your account</p>
+                    
+                    <form className="signin-form" onSubmit={handleSubmit}>
+                        <div className="form-field">
                             <label htmlFor="email">Email</label>
                             <input
                                 type="email"
@@ -73,10 +65,11 @@ const SignIn = () => {
                                 value={formData.email}
                                 onChange={handleChange}
                                 placeholder="Enter your email"
+                                required
                             />
                         </div>
 
-                        <div className="form-group">
+                        <div className="form-field">
                             <label htmlFor="password">Password</label>
                             <input
                                 type="password"
@@ -85,27 +78,29 @@ const SignIn = () => {
                                 value={formData.password}
                                 onChange={handleChange}
                                 placeholder="Enter your password"
+                                required
                             />
-                            <div className="forgot-password-container">
-                                <button 
-                                    type="button" 
-                                    className="forgot-password-button" 
-                                    onClick={handleForgotPassword}
-                                >
-                                    Forgot your password?
-                                </button>
-                            </div>
-                        </div>
-
-                        <div className="form-button-container">
-                            <button type="submit" className="signup-button">Sign In</button>
                         </div>
                         
-                        <div className="new-user-container">
+                        <div className="forgot-password-container">
+                            <button 
+                                type="button" 
+                                className="forgot-password-link" 
+                                onClick={handleForgotPassword}
+                            >
+                                Forgot your password?
+                            </button>
+                        </div>
+
+                        <div className="signin-button-container">
+                            <button type="submit" className="signin-button">Sign In</button>
+                        </div>
+                        
+                        <div className="new-account-container">
                             <p>First time here?</p>
                             <button 
                                 type="button" 
-                                className="signup-button create-account-button" 
+                                className="create-account-button" 
                                 onClick={handleNavigateToSignUp}
                             >
                                 Create an account
@@ -113,8 +108,14 @@ const SignIn = () => {
                         </div>
                     </form>
                 </div>
-                <Footer/>
+                
+                <div className="footer-links">
+                    <a href="#">Contact Us</a>
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms & Conditions</a>
+                </div>
             </div>
+            {/* Removed the Footer component to prevent duplicate footers */}
         </div>
     );
 };

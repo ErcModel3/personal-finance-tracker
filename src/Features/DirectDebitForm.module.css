@@ -258,3 +258,85 @@
         font-size: 14px;
     }
 }
+/* Add these styles to your DirectDebitForm.module.css file */
+
+.tableContainer {
+    overflow-x: auto;
+    margin-bottom: 20px;
+}
+
+.dataTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.dataTable th, 
+.dataTable td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+}
+
+.dataTable th {
+    font-weight: bold;
+    background-color: #f8f9fa;
+}
+
+.amountCell {
+    text-align: right;
+    font-weight: 500;
+}
+
+.deleteButton {
+    padding: 6px 12px;
+    border-radius: 4px;
+    border: none;
+    background-color: #ff6b6b;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.cancelButton {
+    padding: 6px 12px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    background-color: #f0f0f0;
+    color: #333;
+    cursor: pointer;
+    font-size: 14px;
+    margin-left: 8px;
+}
+
+.confirmDeleteActions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.confirmDeleteActions span {
+    font-size: 14px;
+    color: #666;
+}
+
+.emptyState {
+    text-align: center;
+    padding: 30px;
+}
+
+.loadingState {
+    text-align: center;
+    padding: 30px;
+    color: #666;
+    font-style: italic;
+}
+
+/* Green button styling */
+.greenButton {
+    background-color: #27ae60 !important;
+    color: white !important;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+}

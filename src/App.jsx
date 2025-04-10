@@ -28,6 +28,7 @@ import FinanceTargets from "./finances/FinanceTargets.jsx";
 import Transactions from "./finances/Transactions.jsx";
 import MonthlySalary from './finances/MonthlySalary.jsx';
 import FinancialForms from './Features/FinancialForms.jsx';
+import DirectDebitsList from './Features/DirectDebitList.jsx'; 
 
 // Imports all graphics and other
 import AccountInformation from "./Features/AccountDetailsComponents/AccountInformation.jsx";
@@ -132,13 +133,16 @@ function App() {
                         <MonthlySalary />
                     </SessionWrapper>
                 }/>
-                {/* Comment out this route to see if it's causing the issue*/}
                 <Route path="/financial-forms" element={
                     <SessionWrapper>
                         <FinancialForms />
                     </SessionWrapper>
                 }/>
-                
+                <Route path="/direct-debits" element={
+                    <SessionWrapper>
+                        <DirectDebitsList />
+                    </SessionWrapper>
+                }/>
                 
                 {/* 404 route */}
                 <Route path="*" element={<NotFound />} />

@@ -2,85 +2,101 @@
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    background-color: #f5f5f5;
+    background-color: white;
     width: 100%;
-}
-
-.signin-container {
-    display: flex;
-    flex: 1;
-    padding: 2rem 4rem;
-    width: 80%;
-    min-width: 800px; /* To do: fix issue with scaling*/
-    margin: 0 auto; /* Center the container */
-}
-
-.signin-left {
-    flex: 1;
-    padding: 2rem;
+  }
+  
+  .signin-main-container {
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
-    margin-top: 2rem;
-}
-
-.signin-title {
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    padding: 2rem;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  .signin-content {
+    width: 100%;
+    text-align: center;
+  }
+  
+  .signin-title {
     font-size: 2.5rem;
     font-weight: 700;
     color: #333;
     margin-bottom: 0.5rem;
-}
-
-.signin-subtitle {
+  }
+  
+  .signin-subtitle {
     font-size: 1.1rem;
     color: #666;
-}
-
-.signin-right {
-    flex: 2;
-    padding: 2rem;
-}
-
-.signin-form {
+    margin-bottom: 2rem;
+  }
+  
+  .signin-form {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
-    max-width: 500px;
-}
-
-.form-group {
+    width: 100%;
+  }
+  
+  .form-field {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
-}
-
-.form-group label {
+    margin-bottom: 1.5rem;
+    text-align: left;
+  }
+  
+  .form-field label {
     font-weight: 500;
     color: #333;
-}
-
-.form-group input {
+    margin-bottom: 0.5rem;
+  }
+  
+  .form-field input {
     padding: 0.75rem;
     border: 1px solid #ddd;
     border-radius: 4px;
     font-size: 1rem;
-    background-color: white;
+    background-color: white; /* Changed from #f0f0f0 to white to match signup */
     width: 100%;
-    color: black;
-}
-
-.form-group input::placeholder {
+    color: #333;
+  }
+  
+  .form-field input::placeholder {
     color: #999;
-}
-
-.form-button-container {
+  }
+  
+  .forgot-password-container {
     display: flex;
-    justify-content: center; 
-    margin-top: 1rem;
-}
-
-.signin-button {
+    justify-content: center;
+    margin-bottom: 1.5rem;
+  }
+  
+  .forgot-password-link {
+    background: none;
+    border: none;
+    color: #4a6cf7;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 0;
+    text-decoration: underline;
+  }
+  
+  .forgot-password-link:hover {
+    color: #2845c7;
+  }
+  
+  .signin-button-container {
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .signin-button {
+    width: 200px;
     padding: 0.75rem 2rem;
     background-color: #22b573;
     color: white;
@@ -89,73 +105,67 @@
     font-size: 1rem;
     cursor: pointer;
     transition: background-color 0.2s;
-}
-
-.footer-link {
-    color: #666;
-    text-decoration: none;
-}
-
-.footer-link:hover {
-    text-decoration: underline;
-}
-
-@media (max-width: 768px) {
-    .signin-container {
-        flex-direction: column;
-        padding: 1rem;
-        width: 90%;
-    }
-
-    .form-button-container {
-        justify-content: center;
-    }
-}
-.forgot-password-container {
-    display: flex;
-    justify-content: center;
-    margin-top: 10px;
   }
   
-  .forgot-password-button {
-    background: none;
-    border: none;
-    color: #4a6cf7;
-    cursor: pointer;
-    font-size: 14px;
-    padding: 0;
-    text-align: center;
-    text-decoration: underline;
+  .signin-button:hover {
+    background-color: #1a9c60;
   }
   
-  .forgot-password-button:hover {
-    color: #2845c7;
-  }
-  
-  .new-user-container {
+  .new-account-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 20px;
     gap: 10px;
+    margin-top: 1rem;
   }
   
-  .new-user-container p {
+  .new-account-container p {
     margin: 0;
     font-size: 14px;
+    color: #666;
   }
   
   .create-account-button {
-    min-width: 180px;
-    padding: 0.6rem 1.5rem;  
-  font-size: 0.95rem;      
-  background-color: #22b573;
+    min-width: 200px;
+    padding: 0.75rem 1.5rem;
+    background-color: #22b573;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
   }
-
-.footer {
-    text-align: center;
-    padding: 1rem;
-    background-color: #f5f5f5;
-    width: 100%;
-    margin-top: auto; 
-}
+  
+  .create-account-button:hover {
+    background-color: #1a9c60;
+  }
+  
+  .footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 3rem;
+  }
+  
+  .footer-links a {
+    color: #666;
+    text-decoration: none;
+    font-size: 0.9rem;
+  }
+  
+  .footer-links a:hover {
+    text-decoration: underline;
+  }
+  
+  @media (max-width: 600px) {
+    .signin-main-container {
+      padding: 1rem;
+    }
+    
+    .footer-links {
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+  }

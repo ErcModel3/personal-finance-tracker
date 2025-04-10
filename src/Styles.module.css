@@ -994,3 +994,32 @@ input[type="text"], .formInput, .formSelect,
 .monthColumn {
     font-weight: bold;
 }
+
+/* Fix for the custom category input and button spacing */
+.customCategoryContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.customCategoryInput {
+    width: 100%;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+}
+
+.customCategoryButton {
+    width: 100%;
+    max-width: 200px;
+    margin: 0 auto;
+    padding: 10px;
+    background-color: #27ae60;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+}

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Chart, ArcElement, Tooltip, Legend } from 'chart.js/auto';
+import { Link } from 'react-router-dom';
 
 // Import Components
 import styles from "../Styles.module.css";
@@ -25,12 +26,15 @@ const DataAnalysis = () => {
     const [currentMonth, setCurrentMonth] = useState('');
     const [currentYear, setCurrentYear] = useState('');
     const [amountSpent, setAmountSpent] = useState(0);
+    const [userSalary, setUserSalary] = useState(0);
+    const [hasSalarySet, setHasSalarySet] = useState(false);
 
     // Budget data with dynamic amountSpent
     const [budgetData, setBudgetData] = useState({
-        monthlySalary: 4000,
+        monthlySalary: 0, // Will be updated from the user's salary
         amountSpent: 0, // Will be updated from the database
-        budgetSet: 3000,
+        bonus: 500,
+        budgetSet: 0, // Will be updated to match the salary
     });
 
     // Function to get month name from month number
@@ -62,6 +66,32 @@ const DataAnalysis = () => {
                 const startDate = `${year}-${month.toString().padStart(2, '0')}-01T00:00:00.000Z`;
                 const lastDay = new Date(year, month, 0).getDate(); // Get last day of current month
                 const endDate = `${year}-${month.toString().padStart(2, '0')}-${lastDay}T23:59:59.999Z`;
+
+                // Fetch user's salary data from Monthly_Salary table
+                const { data: salaryData, error: salaryError } = await supabaseClient
+                    .from('Monthly_Salary')
+                    .select('Salary')
+                    .eq('userID', userId)
+                    .single();
+
+                if (salaryError && salaryError.code !== 'PGRST116') {
+                    console.error('Error fetching user salary:', salaryError);
+                } else if (salaryData && salaryData.Salary) {
+                    // Update the salary if it exists
+                    const salary = parseFloat(salaryData.Salary);
+                    setUserSalary(salary);
+                    setHasSalarySet(true);
+                    
+                    // Update budget data with user's salary
+                    setBudgetData(prevData => ({
+                        ...prevData,
+                        monthlySalary: salary,
+                        budgetSet: salary // Set budget to match salary
+                    }));
+                } else {
+                    // No salary set yet
+                    setHasSalarySet(false);
+                }
 
                 // Get all expenses with category information
                 const { data: expensesData, error: expensesError } = await supabaseClient
@@ -153,6 +183,10 @@ const DataAnalysis = () => {
         fetchData().then(r => null);
     }, []);
 
+    const calculateRemainingBudget = () => {
+        return budgetData.budgetSet - budgetData.amountSpent;
+    };
+
     return (
         <div className={styles.app}>
             <AuthenticatedNavbar />
@@ -164,7 +198,7 @@ const DataAnalysis = () => {
                 </div>
             </div>
 
-            {/*Financial breakdown components*/}
+            {/* Financial Summary Section - using Dashboard style */}
             <div className={styles.metricsSection}>
                 <div className={styles.metricsHeader}>
                     <h2 className={styles.metricsTitle}>Financial Summary - {currentMonth} {currentYear}</h2>
@@ -173,12 +207,30 @@ const DataAnalysis = () => {
 
                 <div className={styles.metricsCards}>
                     <div className={styles.metricCard}>
-                        <div className={styles.metricLabel}>Monthly Salary</div>
-                        <div className={styles.metricValue}>£{budgetData.monthlySalary}</div>
+                        <div className={styles.metricLabel}>Monthly Balance</div>
+                        {loading ? (
+                            <div className={styles.metricValue}>
+                                <span className={styles.loadingText}>Loading...</span>
+                            </div>
+                        ) : hasSalarySet ? (
+                            <div className={styles.metricValueContainer}>
+                                <div className={styles.metricValue}>£{userSalary.toFixed(2)}</div>
+                                <Link to="/monthly-salary" className={styles.linkNoDecoration}>
+                                    <button className={`${styles.smallButton} ${styles.salaryButton}`}>Update</button>
+                                </Link>
+                            </div>
+                        ) : (
+                            <div className={styles.metricValueContainer}>
+                                <div className={styles.metricValue}>Not set</div>
+                                <Link to="/monthly-salary" className={styles.linkNoDecoration}>
+                                    <button className={`${styles.smallButton} ${styles.salaryButton}`}>Set Salary</button>
+                                </Link>
+                            </div>
+                        )}
                     </div>
 
                     <div className={styles.metricCard}>
-                        <div className={styles.metricLabel}>Amount Spent</div>
+                        <div className={styles.metricLabel}>Total Spent</div>
                         <div className={styles.metricValue}>
                             {loading ? (
                                 <span className={styles.loadingText}>Loading...</span>
@@ -189,28 +241,60 @@ const DataAnalysis = () => {
                     </div>
 
                     <div className={styles.metricCard}>
-                        <div className={styles.metricLabel}>Budget Set</div>
-                        <div className={styles.metricValue}>£{budgetData.budgetSet}</div>
+                        <div className={styles.metricLabel}>Remaining Budget</div>
+                        <div className={`${styles.metricValue} ${calculateRemainingBudget() >= 0 ? styles.positiveAmount : styles.negativeAmount}`}>
+                            {loading ? (
+                                <span className={styles.loadingText}>Loading...</span>
+                            ) : hasSalarySet ? (
+                                `£${calculateRemainingBudget().toFixed(2)}`
+                            ) : (
+                                "Set salary first"
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>
 
-            {/*Pie chart bit*/}
+            {/* Budget Visualization Section - Only show if salary is set */}
+            {hasSalarySet && (
+                <div className={styles.metricsSection}>
+                    <div className={styles.metricsHeader}>
+                        <h2 className={styles.metricsTitle}>Spending Overview - {currentMonth} {currentYear}</h2>
+                        <p className={styles.metricsDescription}>How much money you've spent, at a glance</p>
+                    </div>
+                    <div className={styles.chartContainer}>
+                        {loading ? (
+                            <div className={styles.loadingMessage}>Loading budget data...</div>
+                        ) : (
+                            <BudgetPieChart budgetData={budgetData} />
+                        )}
+                    </div>
+                </div>
+            )}
+
+            {/* Salary Notice - Show if no salary is set */}
+            {!hasSalarySet && !loading && (
+                <div className={styles.metricsSection}>
+                    <div className={`${styles.chartContainer} ${styles.salaryNoticeContainer}`}>
+                        <div className={styles.salaryNotice}>
+                            <h3>Set Your Monthly Salary</h3>
+                            <p>
+                                To get the most out of your financial dashboard, please set your monthly salary.
+                                This will help us provide accurate budget visualizations and financial insights.
+                            </p>
+                            <Link to="/monthly-salary" className={styles.linkNoDecoration}>
+                                <button className={`${styles.primaryButton} ${styles.salaryButton}`}>Set Your Salary</button>
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Category Spending Section */}
             <div className={styles.metricsSection}>
                 <div className={styles.metricsHeader}>
-                    <h2 className={styles.metricsTitle}>Spending Overview - {currentMonth} {currentYear}</h2>
-                    <p className={styles.metricsDescription}>How much money you've spent, at a glance</p>
-                </div>
-                <div className={styles.chartContainer}>
-                    {loading ? (
-                        <div className={styles.loadingMessage}>Loading budget data...</div>
-                    ) : (
-                        <BudgetPieChart budgetData={budgetData} />
-                    )}
-                </div>
-                <div className={styles.metricsHeader}>
                     <h2 className={styles.metricsTitle}>Spending Per Category - {currentMonth} {currentYear}</h2>
-                    <p className={styles.metricsDescription}>How much money you've spent per spending category, as a pie chart or a bar chart</p>
+                    <p className={styles.metricsDescription}>How your money is distributed across categories this month</p>
                 </div>
                 <div className={styles.chartContainer}>
                     {loading ? (
@@ -234,6 +318,10 @@ const DataAnalysis = () => {
                         <SpendingCategoryBarChart SpendingCategoryData={spendingCategoryData} />
                     )}
                 </div>
+            </div>
+
+            {/* Monthly Spending Section */}
+            <div className={styles.metricsSection}>
                 <div className={styles.metricsHeader}>
                     <h2 className={styles.metricsTitle}>Spending Per Month - {currentYear}</h2>
                     <p className={styles.metricsDescription}>How much money you've spent per month, broken down</p>
