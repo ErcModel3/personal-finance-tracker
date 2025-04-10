@@ -402,18 +402,18 @@ const AddExpense = () => {
                             </div>
 
                             {showCustomInput && (
-                                <div className={`${styles.formGroup} `}>
+                                <div className={styles.customCategoryContainer}>
                                     <input
                                         type="text"
                                         placeholder="Enter custom category"
                                         value={customCategory}
                                         onChange={(e) => setCustomCategory(e.target.value)}
-                                        className={styles.formInput}
+                                        className={styles.customCategoryInput}
                                         disabled={submitting}
                                     />
                                     <button
                                         onClick={handleAddCustomCategory}
-                                        className={`${styles.primaryButton} `}
+                                        className={styles.customCategoryButton}
                                         disabled={submitting}
                                     >
                                         Add
