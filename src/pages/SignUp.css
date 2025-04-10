@@ -206,3 +206,10 @@ footer {
     gap: 10px;
   }
 }
+.age-error {
+  color: #ff0000;
+  font-size: 0.8em;
+  margin-top: 5px;
+  text-align: left;
+  width: 100%;
+}

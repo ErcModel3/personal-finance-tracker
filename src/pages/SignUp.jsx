@@ -48,9 +48,39 @@ const SignUp = () => {
     password: '',
     confirmPassword: ''
   });
+  const [ageError, setAgeError] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    
+    // Phone number validation: only allow + and numbers
+    if (name === 'phoneNumber') {
+      const sanitizedValue = value.replace(/[^\d+]/g, '');
+      setFormData({
+        ...formData,
+        [name]: sanitizedValue
+      });
+      return;
+    }
+
+    // Age validation for date of birth
+    if (name === 'dateOfBirth') {
+      const dob = new Date(value);
+      const today = new Date();
+      let age = today.getFullYear() - dob.getFullYear();
+      const monthDiff = today.getMonth() - dob.getMonth();
+      
+      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+        age--;
+      }
+
+      if (age < 16) {
+        setAgeError('You must be at least 16 years old to use this app.');
+      } else {
+        setAgeError('');
+      }
+    }
+
     setFormData({
       ...formData,
       [name]: value
@@ -59,6 +89,21 @@ const SignUp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Check age requirement
+    const dob = new Date(formData.dateOfBirth);
+    const today = new Date();
+    let age = today.getFullYear() - dob.getFullYear();
+    const monthDiff = today.getMonth() - dob.getMonth();
+    
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+      age--;
+    }
+
+    if (age < 16) {
+      setAgeError('You must be at least 16 years old to use this app.');
+      return;
+    }
 
     if (formData.password === formData.confirmPassword) {
       let { data, error } = await supabaseClient.auth.signUp({
@@ -128,12 +173,13 @@ const SignUp = () => {
                 <div className="form-group">
                   <label htmlFor="phoneNumber">Phone Number</label>
                   <input
-                    type="number"
+                    type="tel"
                     id="phoneNumber"
                     name="phoneNumber"
                     value={formData.phoneNumber}
                     onChange={handleChange}
                     placeholder="Enter your phone number"
+                    pattern="[+\d]+"
                     required
                   />
                 </div>
@@ -164,6 +210,7 @@ const SignUp = () => {
                     placeholder="DD/MM/YYYY"
                     required
                   />
+                  {ageError && <div className="age-error">{ageError}</div>}
                 </div>
               </div>
 

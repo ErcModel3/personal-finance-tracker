@@ -461,7 +461,7 @@ const Dashboard = () => {
                             <div className={styles.noDataMessage}>
                                 No upcoming bills found. Add direct debits to track your bills.
                                 <div className={styles.viewAllContainer} style={{ marginTop: '16px' }}>
-                                    <Link to="/financial-forms" className={styles.linkNoDecoration}>
+                                    <Link to="/direct-debits" className={styles.linkNoDecoration}>
                                         <button className={styles.primaryButton}>Add Direct Debits</button>
                                     </Link>
                                 </div>

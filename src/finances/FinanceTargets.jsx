@@ -30,6 +30,9 @@ function FinanceTargets() {
         amount: ''
     });
 
+    // State for contribution validation
+    const [contributionError, setContributionError] = useState('');
+
     // Fetch current user on component mount
     useEffect(() => {
         async function getCurrentUser() {
@@ -92,6 +95,36 @@ function FinanceTargets() {
             ...prev,
             [name]: value
         }));
+
+        // Clear contribution error when amount changes
+        if (name === 'amount') {
+            setContributionError('');
+        }
+
+        // Validate contribution amount if target is selected
+        if (name === 'amount' && contributionData.targetId) {
+            const selectedTarget = targets.find(t => t.id === parseInt(contributionData.targetId));
+            if (selectedTarget) {
+                const contributionAmount = parseFloat(value);
+                const remainingGoal = selectedTarget.Goal - selectedTarget.Current_completion;
+
+                if (contributionAmount > remainingGoal) {
+                    setContributionError(`Maximum contribution is £${remainingGoal.toFixed(2)}`);
+                }
+            }
+        }
+    };
+
+    // Handle target selection for contribution
+    const handleTargetSelect = (e) => {
+        const { name, value } = e.target;
+        setContributionData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+        
+        // Clear previous contribution error
+        setContributionError('');
     };
 
     // Handle form submission for new target
@@ -169,6 +202,7 @@ function FinanceTargets() {
         setError('');
         setSuccessMessage('');
         setIsLoading(true);
+        setContributionError('');
 
         // Validate inputs
         if (!contributionData.targetId || !contributionData.amount) {
@@ -185,8 +219,18 @@ function FinanceTargets() {
                 throw new Error("Selected target not found");
             }
 
-            // Calculate new completion amount
+            // Calculate new contribution amount
             const contributionAmount = parseFloat(contributionData.amount);
+            const remainingGoal = selectedTarget.Goal - selectedTarget.Current_completion;
+
+            // Validate contribution amount
+            if (contributionAmount > remainingGoal) {
+                setContributionError(`Maximum contribution is £${remainingGoal.toFixed(2)}`);
+                setIsLoading(false);
+                return;
+            }
+
+            // Calculate new completion amount
             const newCompletion = Math.min(
                 selectedTarget.Current_completion + contributionAmount, 
                 selectedTarget.Goal
@@ -330,7 +374,7 @@ function FinanceTargets() {
                                     id="targetId"
                                     name="targetId"
                                     value={contributionData.targetId}
-                                    onChange={handleContributionChange}
+                                    onChange={handleTargetSelect}
                                     className={styles.inputField}
                                     required
                                 >
@@ -343,33 +387,47 @@ function FinanceTargets() {
                                 </select>
                             </div>
 
-                            <InputField2
-                                label="Contribution Amount" 
-                                placeholder="Enter contribution amount" 
-                                type="number"
-                                name="amount"
-                                step="0.01"
-                                min="0"
-                                value={contributionData.amount}
-                                onChange={handleContributionChange}
-                                required
-                            />
+                            <div className={styles.inputGroup}>
+                                <label htmlFor="amount" className={styles.inputLabel}>
+                                    Contribution Amount
+                                </label>
+                                <input
+                                    type="number"
+                                    id="amount"
+                                    name="amount"
+                                    placeholder="Enter contribution amount"
+                                    step="0.01"
+                                    min="0"
+                                    value={contributionData.amount}
+                                    onChange={handleContributionChange}
+                                    className={`${styles.inputField} ${contributionError ? styles.inputError : ''}`}
+                                    required
+                                />
+                                {contributionError && (
+                                    <div className={styles.contributionErrorMessage}>
+                                        {contributionError}
+                                    </div>
+                                )}
+                            </div>
 
                             <div className={styles.buttonGroup}>
                                 <button 
                                     type="button" 
                                     className={styles.cancelButton}
-                                    onClick={() => setContributionData({
-                                        targetId: '',
-                                        amount: ''
-                                    })}
+                                    onClick={() => {
+                                        setContributionData({
+                                            targetId: '',
+                                            amount: ''
+                                        });
+                                        setContributionError('');
+                                    }}
                                 >
                                     Cancel
                                 </button>
                                 <button 
                                     type="submit" 
                                     className={styles.submitButton}
-                                    disabled={isLoading}
+                                    disabled={isLoading || !!contributionError}
                                 >
                                     {isLoading ? "Adding..." : "Add Contribution"}
                                 </button>
