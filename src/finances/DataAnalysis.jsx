@@ -194,7 +194,6 @@ const DataAnalysis = () => {
                 <div className={styles.heroContent}>
                     <h1 className={styles.heroTitle}>Budget Report</h1>
                     <p className={styles.heroDescription}>Details of your net income after deductions.</p>
-                    <button className={styles.primaryButton}>Download Report</button>
                 </div>
             </div>
 
